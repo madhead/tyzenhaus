@@ -1,0 +1,3 @@
+= Tyzenhaus Heroku runner
+
+Perfect for small loads or testing.
