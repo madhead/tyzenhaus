@@ -16,6 +16,7 @@ dependencies {
 }
 
 application {
+    applicationName = "tyzenhaus"
     mainClassName = "io.ktor.server.netty.EngineMain"
 }
 
