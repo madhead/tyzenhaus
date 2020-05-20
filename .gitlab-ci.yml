@@ -1,0 +1,56 @@
+stages:
+  - build
+  - docker
+  - deploy
+
+runner-heroku:
+  stage: build
+  image: openjdk:13
+  script:
+    - ./gradlew clean :runners:heroku:installDist
+  artifacts:
+    paths:
+      - runners/heroku/build/install/tyzenhaus
+
+runner-heroku-docker:
+  stage: docker
+  image: docker:stable
+  services:
+    - docker:stable-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build runners/heroku -t $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+
+runner-heroku-deploy-production:
+  stage: deploy
+  image: docker:stable
+  services:
+    - docker:stable-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u _                 -p $HEROKU_API_KEY       registry.heroku.com
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/web:latest
+    - docker tag $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA registry.heroku.com/tyzenhaus/web
+
+    - docker push $CI_REGISTRY_IMAGE/web:latest
+
+    - apk add --no-cache curl
+    - docker push registry.heroku.com/tyzenhaus/web
+    - docker inspect registry.heroku.com/tyzenhaus/web --format={{.Id}} > imageid
+    - >-
+      curl
+      -X PATCH
+      https://api.heroku.com/apps/tyzenhaus/formation
+      --header "Content-Type: application/json"
+      --header "Accept: application/vnd.heroku+json; version=3.docker-releases"
+      --header "Authorization: Bearer $HEROKU_API_KEY"
+      --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid)'" } ] }'
+  only:
+    - master
+  environment:
+    name: production-heroku
+    url: https://tyzenhaus.herokuapp.com
