@@ -11,6 +11,8 @@ dependencies {
 
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.ktor:ktor-server-netty")
+    implementation("org.koin:koin-ktor:2.1.5")
+    implementation("com.github.insanusmokrassar:TelegramBotAPI-all:0.27.3")
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl")
 }
