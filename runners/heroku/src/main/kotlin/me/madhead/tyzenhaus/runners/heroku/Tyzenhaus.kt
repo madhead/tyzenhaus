@@ -1,8 +1,5 @@
-package by.dev.madhead.tyzenhaus.runners.heroku
+package me.madhead.tyzenhaus.runners.heroku
 
-import by.dev.madhead.tyzenhaus.runners.heroku.koin.jsonModule
-import by.dev.madhead.tyzenhaus.runners.heroku.koin.telegramModule
-import by.dev.madhead.tyzenhaus.runners.heroku.routes.webhook
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -11,6 +8,9 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.serialization.UnstableDefault
+import me.madhead.tyzenhaus.runners.heroku.koin.jsonModule
+import me.madhead.tyzenhaus.runners.heroku.koin.telegramModule
+import me.madhead.tyzenhaus.runners.heroku.routes.webhook
 import org.koin.ktor.ext.Koin
 
 @UnstableDefault
