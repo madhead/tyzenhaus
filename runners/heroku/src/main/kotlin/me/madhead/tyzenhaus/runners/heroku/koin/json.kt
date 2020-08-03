@@ -1,4 +1,4 @@
-package by.dev.madhead.tyzenhaus.runners.heroku.koin
+package me.madhead.tyzenhaus.runners.heroku.koin
 
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json

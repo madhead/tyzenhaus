@@ -1,4 +1,4 @@
-package by.dev.madhead.tyzenhaus.runners.heroku.routes
+package me.madhead.tyzenhaus.runners.heroku.routes
 
 import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
 import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.send.sendMessage
@@ -18,7 +18,7 @@ import org.koin.ktor.ext.inject
 
 @KtorExperimentalAPI
 fun Route.webhook() {
-    val logger = LogManager.getLogger("by.dev.madhead.tyzenhaus.runners.heroku.routes.Webhook")
+    val logger = LogManager.getLogger("me.madhead.tyzenhaus.runners.heroku.routes.Webhook")
     val bot by inject<RequestsExecutor>()
     val json by inject<Json>()
 
