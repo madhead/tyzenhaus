@@ -1,1 +1,1 @@
-web: runners/heroku/build/install/tyzenhaus/bin/tyzenhaus
+web: runner/heroku/build/install/tyzenhaus/bin/tyzenhaus

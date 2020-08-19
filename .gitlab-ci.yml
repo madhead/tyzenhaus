@@ -7,10 +7,10 @@ runner-heroku:
   stage: build
   image: openjdk:13
   script:
-    - ./gradlew clean :runners:heroku:installDist
+    - ./gradlew clean :runner:heroku:installDist
   artifacts:
     paths:
-      - runners/heroku/build/install/tyzenhaus
+      - runner/heroku/build/install/tyzenhaus
 
 runner-heroku-docker:
   stage: docker
@@ -20,7 +20,7 @@ runner-heroku-docker:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker build runners/heroku -t $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+    - docker build runner/heroku -t $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
 
 runner-heroku-deploy-production:

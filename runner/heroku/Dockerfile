@@ -1,7 +1,7 @@
 FROM openjdk:13-alpine
 
 RUN addgroup -S tyzenhaus && \
-	adduser -S -G tyzenhaus tyzenhaus
+    adduser -S -G tyzenhaus tyzenhaus
 USER tyzenhaus
 
 ADD --chown=tyzenhaus:tyzenhaus ./build/install/tyzenhaus/ /opt/tyzenhaus/

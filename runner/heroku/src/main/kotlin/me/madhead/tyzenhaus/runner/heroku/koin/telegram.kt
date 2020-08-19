@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.runners.heroku.koin
+package me.madhead.tyzenhaus.runner.heroku.koin
 
 import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.telegramBot
 import org.koin.dsl.module

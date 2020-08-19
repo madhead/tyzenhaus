@@ -10,7 +10,7 @@ Don't bother with Heroku, Docker and all that tricky stuff, just run it as (from
 
 [source,bash]
 ----
-./gradlew :runners:heroku:clean :runners:heroku:run
+./gradlew :runner:heroku:clean :runner:heroku:run
 ----
 
 Don't forget https://12factor.net/config[about the environment variables]!
@@ -21,7 +21,7 @@ Run this from the root of the repo:
 
 [source,bash]
 ----
-./gradlew :runners:heroku:clean :runners:heroku:installDist
+./gradlew :runner:heroku:clean :runner:heroku:installDist
 heroku config -s > .env
 heroku local
 ----
@@ -34,14 +34,14 @@ Build the app:
 
 [source,bash]
 ----
-./gradlew :runners:heroku:clean :runners:heroku:installDist
+./gradlew :runner:heroku:clean :runner:heroku:installDist
 ----
 
 Pack it in Docker image:
 
 [source,bash]
 ----
-cd runners/heroku
+cd runner/heroku
 docker build . -t web
 ----
 

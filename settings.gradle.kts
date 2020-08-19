@@ -1,3 +1,3 @@
 rootProject.name = "tyzenhaus"
 
-include(":runners:heroku")
+include(":runner:heroku")
