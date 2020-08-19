@@ -1,0 +1,3 @@
+= Tyzenhaus i18n strings
+
+This directory contains all the UI strings used across the app.
