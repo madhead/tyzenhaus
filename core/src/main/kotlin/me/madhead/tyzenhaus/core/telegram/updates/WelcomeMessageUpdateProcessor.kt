@@ -8,7 +8,7 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.message.ChatEvents.NewCh
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.ChatEventMessage
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
-import me.madhead.tyzenhaus.entity.groupstates.GroupState
+import me.madhead.tyzenhaus.entity.groupstate.GroupState
 import me.madhead.tyzenhaus.i18.I18N
 
 class WelcomeMessageUpdateProcessor(
