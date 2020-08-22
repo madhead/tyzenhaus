@@ -13,5 +13,5 @@ object I18N {
         })
     }
 
-    fun messages(locale: Locale = Locale("en")): Messages = C10N.get(Messages::class.java, locale)
+    fun messages(locale: Locale? = null): Messages = C10N.get(Messages::class.java, locale ?: Locale("en"))
 }
