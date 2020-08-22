@@ -8,4 +8,8 @@ interface Messages {
     fun welcome(): String
 
     fun help(): String
+
+    fun language(): String
+    fun languageOk(): String
+    fun languageWrongUser(): String
 }

@@ -5,6 +5,8 @@ import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.serialization.UnstableDefault
 import me.madhead.tyzenhaus.core.telegram.updates.HelpCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.LangCommandCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.repository.postgresql.groupconfig.GroupConfigRepository
@@ -26,10 +28,23 @@ val pipelineModule = module {
         )
     }
     single {
+        LangCommandUpdateProcessor(
+                requestsExecutor = get(),
+        )
+    }
+    single {
+        LangCommandCallbackQueryUpdateProcessor(
+                requestsExecutor = get(),
+                groupConfigRepository = get<GroupConfigRepository>(),
+        )
+    }
+    single {
         UpdateProcessingPipeline(
                 listOf(
                         get<WelcomeMessageUpdateProcessor>(),
                         get<HelpCommandUpdateProcessor>(),
+                        get<LangCommandUpdateProcessor>(),
+                        get<LangCommandCallbackQueryUpdateProcessor>(),
                 ),
                 get<GroupConfigRepository>(),
                 get<GroupStateRepository>(),

@@ -1,5 +1,7 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
+import com.github.insanusmokrassar.TelegramBotAPI.types.CallbackQuery.MessageCallbackQuery
+import com.github.insanusmokrassar.TelegramBotAPI.types.update.CallbackQueryUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.BaseMessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
@@ -69,6 +71,12 @@ class UpdateProcessingPipeline(
         return when (update) {
             is BaseMessageUpdate -> {
                 update.data.chat.id.chatId
+            }
+            is CallbackQueryUpdate -> {
+                when (val callbackQuery = update.data) {
+                    is MessageCallbackQuery -> callbackQuery.message.chat.id.chatId
+                    else -> throw IllegalArgumentException("Unknown update type")
+                }
             }
             else -> throw IllegalArgumentException("Unknown update type")
         }
