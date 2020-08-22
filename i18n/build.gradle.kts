@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation("com.github.rodionmoiseev.c10n:c10n-core:1.3")
+    implementation("com.github.rodionmoiseev.c10n:c10n-core:${Versions.Dependencies.C10N}")
 }

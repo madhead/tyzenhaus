@@ -1,10 +1,13 @@
 package me.madhead.tyzenhaus.runner.heroku.koin
 
 import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.telegramBot
+import io.ktor.config.ApplicationConfig
+import io.ktor.util.KtorExperimentalAPI
 import org.koin.dsl.module
 
-fun telegramModule(token: String) = module {
+@KtorExperimentalAPI
+val telegramModule = module {
     single {
-        telegramBot(token)
+        telegramBot(get<ApplicationConfig>().property("telegram.token").getString())
     }
 }

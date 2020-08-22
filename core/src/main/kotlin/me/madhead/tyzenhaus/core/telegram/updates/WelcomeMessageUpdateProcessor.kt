@@ -8,14 +8,20 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.message.ChatEvents.NewCh
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.ChatEventMessage
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
-import me.madhead.tyzenhaus.entity.groupstates.GroupState
+import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
+import me.madhead.tyzenhaus.entity.groupstate.GroupState
 import me.madhead.tyzenhaus.i18.I18N
+import org.apache.logging.log4j.LogManager
 
 class WelcomeMessageUpdateProcessor(
         private val id: ChatIdentifier,
         private val requestsExecutor: RequestsExecutor,
 ) : UpdateProcessor {
-    override suspend fun accepts(update: Update, groupState: GroupState?): Boolean {
+    companion object {
+        val logger = LogManager.getLogger(WelcomeMessageUpdateProcessor::class.java)!!
+    }
+
+    override suspend fun accept(update: Update, groupConfig: GroupConfig?, groupState: GroupState?): Boolean {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return false
         val message = update.data as? ChatEventMessage ?: return false
@@ -24,11 +30,13 @@ class WelcomeMessageUpdateProcessor(
         return event.members.any { it.id == id }
     }
 
-    override suspend fun process(update: Update, groupState: GroupState?) {
+    override suspend fun process(update: Update, groupConfig: GroupConfig?, groupState: GroupState?) {
+        logger.debug("Saying welcome in {}", (update as MessageUpdate).data.chat.id.chatId)
+
         requestsExecutor.sendMessage(
-                chatId = (update as MessageUpdate).data.chat.id,
+                chatId = update.data.chat.id,
                 text = I18N.messages().welcome(),
-                parseMode = MarkdownV2
+                parseMode = MarkdownV2,
         )
     }
 }

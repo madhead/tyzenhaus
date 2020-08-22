@@ -1,0 +1,7 @@
+= Group configs
+
+Per-group configurations stored in the DB.
+Tyzenhaus allows to configure these values for groups:
+
+- Language.
+Messages sent to the group will respect this setting.

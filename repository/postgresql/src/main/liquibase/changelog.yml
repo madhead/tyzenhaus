@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../../../group-config/src/main/liquibase/sql/group-config.init.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../../../group-config/src/main/liquibase/sql/group-config.deinit.sql
+            relativeToChangelogFile: true
