@@ -12,7 +12,7 @@ dependencies {
     implementation("com.github.insanusmokrassar:TelegramBotAPI-all:0.27.11")
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl")
-    implementation(project(":repository:postgresql:group-states"))
+    implementation(project(":repository:postgresql:group-state"))
     implementation(project(":core"))
 }
 

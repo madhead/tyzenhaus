@@ -1,7 +1,31 @@
 stages:
+  - test
   - build
   - docker
   - deploy
+
+test:
+  stage: test
+  image: openjdk:13
+  script:
+    - ./gradlew check
+
+db-test:
+  stage: test
+  image: openjdk:13
+  variables:
+    POSTGRES_HOST: postgres
+    POSTGRES_USER: tyzenhaus
+    POSTGRES_PASSWORD: tyzenhaus
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: tyzenhaus
+    POSTGRES_HOST_AUTH_METHOD: trust
+  services:
+    - postgres:12
+  script:
+    - echo "DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}" > .env
+    - ./gradlew :repository:postgresql:update
+    - ./gradlew dbTest
 
 runner-heroku:
   stage: build
