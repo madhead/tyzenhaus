@@ -13,6 +13,9 @@ import me.madhead.tyzenhaus.entity.groupstate.GroupState
 import me.madhead.tyzenhaus.i18.I18N
 import org.apache.logging.log4j.LogManager
 
+/**
+ * /help command handler.
+ */
 class HelpCommandUpdateProcessor(
         private val requestsExecutor: RequestsExecutor,
 ) : UpdateProcessor {

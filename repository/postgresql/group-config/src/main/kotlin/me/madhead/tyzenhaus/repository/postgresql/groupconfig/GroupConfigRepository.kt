@@ -6,13 +6,16 @@ import org.apache.logging.log4j.LogManager
 import java.sql.Types
 import javax.sql.DataSource
 
+/**
+ * PostgreSQL repository for [group configs][GroupConfig].
+ */
 class GroupConfigRepository(dataSource: DataSource) : PostgreSqlRepository<Long, GroupConfig>(dataSource) {
     companion object {
         val logger = LogManager.getLogger(GroupConfigRepository::class.java)!!
     }
 
-    fun save(groupConfig: GroupConfig) {
-        logger.debug("save {}", groupConfig)
+    override fun save(entity: GroupConfig) {
+        logger.debug("save {}", entity)
 
         dataSource.connection.use { connection ->
             connection
@@ -23,8 +26,8 @@ class GroupConfigRepository(dataSource: DataSource) : PostgreSqlRepository<Long,
                             DO UPDATE SET "language" = EXCLUDED."language";
                     """.trimIndent())
                     .use { preparedStatement ->
-                        preparedStatement.setLong(1, groupConfig.id)
-                        groupConfig.language?.let {
+                        preparedStatement.setLong(1, entity.id)
+                        entity.language?.let {
                             preparedStatement.setString(2, it.language)
                         } ?: run {
                             preparedStatement.setNull(2, Types.VARCHAR)

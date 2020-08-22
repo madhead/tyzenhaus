@@ -22,6 +22,9 @@ import me.madhead.tyzenhaus.runner.heroku.routes.webhook
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 
+/**
+ * [Ktor-based](https://ktor.io) Tyzenhaus runner.
+ */
 @UnstableDefault
 @KtorExperimentalAPI
 fun Application.main() {

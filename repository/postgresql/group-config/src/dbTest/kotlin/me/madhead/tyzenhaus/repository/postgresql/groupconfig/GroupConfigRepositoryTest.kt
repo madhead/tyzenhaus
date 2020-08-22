@@ -16,7 +16,8 @@ class GroupConfigRepositoryTest {
     fun setUp() {
         groupConfigRepository = GroupConfigRepository(
                 PGSimpleDataSource().apply {
-                    setUrl("jdbc:postgresql://${System.getenv("POSTGRES_HOST")!!}:${System.getenv("POSTGRES_PORT")!!}/${System.getenv("POSTGRES_DB")!!}")
+                    setUrl("jdbc:postgresql:" +
+                            "//${System.getenv("POSTGRES_HOST")!!}:${System.getenv("POSTGRES_PORT")!!}/${System.getenv("POSTGRES_DB")!!}")
                     user = System.getenv("POSTGRES_USER")!!
                     password = System.getenv("POSTGRES_PASSWORD")!!
                 }

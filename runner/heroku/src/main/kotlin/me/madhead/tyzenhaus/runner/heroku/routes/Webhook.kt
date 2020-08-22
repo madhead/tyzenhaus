@@ -14,6 +14,9 @@ import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import org.apache.logging.log4j.LogManager
 import org.koin.ktor.ext.inject
 
+/**
+ * Routes for [Telegram Bot API webhooks](https://core.telegram.org/bots/api#setwebhook).
+ */
 @KtorExperimentalAPI
 fun Route.webhook() {
     val logger = LogManager.getLogger("me.madhead.tyzenhaus.runner.heroku.routes.Webhook")
@@ -31,8 +34,8 @@ fun Route.webhook() {
 
         try {
             pipeline.process(update)
-        } catch (e: Exception) {
-            logger.error("Failed to handle the request", e)
+        } catch (ignored: Exception) {
+            logger.error("Failed to handle the request", ignored)
         }
 
         call.respond(HttpStatusCode.OK)
