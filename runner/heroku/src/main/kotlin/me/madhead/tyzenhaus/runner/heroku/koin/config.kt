@@ -5,6 +5,7 @@ import io.ktor.util.KtorExperimentalAPI
 import org.koin.dsl.module
 
 @KtorExperimentalAPI
+@Suppress("UndocumentedPublicFunction")
 fun configModule(config: ApplicationConfig) = module {
     single {
         config

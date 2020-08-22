@@ -4,6 +4,9 @@ import com.github.rodionmoiseev.c10n.C10N
 import com.github.rodionmoiseev.c10n.C10NConfigBase
 import java.util.Locale
 
+/**
+ * I18N entry point.
+ */
 object I18N {
     init {
         C10N.configure(object : C10NConfigBase() {

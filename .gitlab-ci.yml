@@ -4,7 +4,7 @@ stages:
   - docker
   - deploy
 
-test:
+check:
   stage: test
   image: openjdk:13
   script:
