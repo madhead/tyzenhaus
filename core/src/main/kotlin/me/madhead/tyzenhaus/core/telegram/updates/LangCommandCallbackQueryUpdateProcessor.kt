@@ -53,13 +53,13 @@ class LangCommandCallbackQueryUpdateProcessor(
             requestsExecutor.deleteMessage(callbackQuery.message)
             requestsExecutor.sendMessage(
                     chatId = callbackQuery.message.chat.id,
-                    text = I18N.messages(newGroupConfig.language).languageOk(),
+                    text = I18N(newGroupConfig.language)["language.response.ok"],
                     parseMode = MarkdownV2,
             )
         } else {
             requestsExecutor.answerCallbackQuery(
                     callbackQuery = callbackQuery,
-                    text = I18N.messages(groupConfig?.language).languageWrongUser(),
+                    text = I18N(groupConfig?.language)["language.response.wrongUser"],
             )
         }
     }

@@ -38,7 +38,7 @@ class WelcomeMessageUpdateProcessor(
 
         requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
-                text = I18N.messages().welcome(),
+                text = I18N()["welcome"],
                 parseMode = MarkdownV2,
         )
     }

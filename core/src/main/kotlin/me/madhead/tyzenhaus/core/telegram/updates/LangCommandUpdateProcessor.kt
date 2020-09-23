@@ -47,7 +47,7 @@ class LangCommandUpdateProcessor(
 
         requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
-                text = I18N.messages(groupConfig?.language).language(),
+                text = I18N(groupConfig?.language)["language"],
                 parseMode = MarkdownV2,
                 replyMarkup = InlineKeyboardMarkup(
                         listOf(
