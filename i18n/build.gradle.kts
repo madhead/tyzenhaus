@@ -3,5 +3,10 @@ plugins {
 }
 
 dependencies {
-    implementation("com.github.rodionmoiseev.c10n:c10n-core:${Versions.Dependencies.C10N}")
+    testImplementation(platform("org.junit:junit-bom:${Versions.Dependencies.JUNIT}"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+
+    testRuntimeOnly(platform("org.junit:junit-bom:${Versions.Dependencies.JUNIT}"))
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

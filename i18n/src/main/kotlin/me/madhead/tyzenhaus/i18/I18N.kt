@@ -1,20 +1,38 @@
 package me.madhead.tyzenhaus.i18
 
-import com.github.rodionmoiseev.c10n.C10N
-import com.github.rodionmoiseev.c10n.C10NConfigBase
+import java.text.MessageFormat
 import java.util.Locale
+import java.util.ResourceBundle
 
 /**
  * I18N entry point.
  */
-object I18N {
-    init {
-        C10N.configure(object : C10NConfigBase() {
-            override fun configure() {
-                bindBundle("i18n")
-            }
-        })
+open class I18N(
+        private val locale: Locale,
+        private val resourceBundle: ResourceBundle,
+) {
+    companion object {
+        /**
+         * Get an I18N instance for a given locale. [Default locale][Locale.getDefault] is used, when null passed.
+         */
+        operator fun invoke(locale: Locale? = null): I18N {
+            val theLocale = locale ?: Locale.getDefault()
+
+            return I18N(
+                    locale = theLocale,
+                    resourceBundle = ResourceBundle.getBundle("i18n", theLocale)
+            )
+        }
     }
 
-    fun messages(locale: Locale? = null): Messages = C10N.get(Messages::class.java, locale ?: Locale("en"))
+    /**
+     * Get a string for a given key.
+     */
+    operator fun get(key: String): String = resourceBundle.getString(key)
+
+    /**
+     * Get a string for template for a given key and a set of arguments.
+     */
+    operator fun get(key: String, vararg arguments: Any?): String =
+            MessageFormat(this[key], this.locale).format(arguments, StringBuffer(), null).toString()
 }

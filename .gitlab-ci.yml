@@ -9,6 +9,17 @@ check:
   image: openjdk:13
   script:
     - ./gradlew check
+  artifacts:
+    name: $CI_COMMIT_SHA-$CI_JOB_NAME
+    when: always
+    expire_in: 1 day
+    paths:
+      - "**/build/reports"
+      - "**/build/test-results"
+      - "**/build/jacoco"
+    reports:
+      junit:
+        - "**/build/test-results/test/TEST-*.xml"
 
 db-test:
   stage: test

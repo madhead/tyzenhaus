@@ -41,7 +41,7 @@ class HelpCommandUpdateProcessor(
 
         requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
-                text = I18N.messages(groupConfig?.language).help(),
+                text = I18N(groupConfig?.language)["help"],
                 parseMode = MarkdownV2
         )
     }
