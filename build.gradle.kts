@@ -5,11 +5,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm").version(Versions.Plugins.KOTLIN).apply(false)
     id("org.liquibase.gradle").version(Versions.Plugins.LIQUIBASE).apply(false)
-    id("io.gitlab.arturbosch.detekt").version(Versions.Plugins.DETEKT)
+    id("io.gitlab.arturbosch.detekt").version(Versions.Plugins.DETEKT).apply(false)
 }
 
 allprojects {
     apply<DetektPlugin>()
+    apply<JacocoPlugin>()
 
     repositories {
         jcenter()
@@ -20,6 +21,10 @@ allprojects {
         config = files("$rootDir/detekt.yml")
         buildUponDefaultConfig = false
         input = files(projectDir)
+    }
+
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.6"
     }
 
     tasks {
