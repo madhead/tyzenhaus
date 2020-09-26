@@ -24,15 +24,15 @@ fun Route.webhook() {
     val pipeline by inject<UpdateProcessingPipeline>()
 
     post(application.environment.config.property("telegram.token").getString()) {
-        val payload = call.receiveText()
-
-        logger.debug("Request payload: {}", payload)
-
-        val update = json.parse(UpdateDeserializationStrategy, payload)
-
-        logger.info("Update object: {}", update)
-
         try {
+            val payload = call.receiveText()
+
+            logger.debug("Request payload: {}", payload)
+
+            val update = json.decodeFromString(UpdateDeserializationStrategy, payload)
+
+            logger.info("Update object: {}", update)
+
             pipeline.process(update)
         } catch (ignored: Exception) {
             logger.error("Failed to handle the request", ignored)

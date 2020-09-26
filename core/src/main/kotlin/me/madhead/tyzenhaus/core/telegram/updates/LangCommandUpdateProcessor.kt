@@ -6,13 +6,16 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.MessageEntity.textsource
 import com.github.insanusmokrassar.TelegramBotAPI.types.ParseMode.MarkdownV2
 import com.github.insanusmokrassar.TelegramBotAPI.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import com.github.insanusmokrassar.TelegramBotAPI.types.buttons.InlineKeyboardMarkup
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.CommonMessageImpl
+import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.CommonMessage
+import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.FromUserMessage
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.content.TextContent
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
+import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
-import me.madhead.tyzenhaus.entity.group.state.GroupState
 import me.madhead.tyzenhaus.i18.I18N
+import me.madhead.tyzenhaus.repository.DialogStateRepository
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -20,44 +23,40 @@ import org.apache.logging.log4j.LogManager
  */
 class LangCommandUpdateProcessor(
         private val requestsExecutor: RequestsExecutor,
+        private val dialogStateRepository: DialogStateRepository,
 ) : UpdateProcessor {
     companion object {
-        val logger = LogManager.getLogger(LangCommandUpdateProcessor::class.java)!!
+        private val logger = LogManager.getLogger(LangCommandUpdateProcessor::class.java)!!
     }
 
-    override suspend fun accept(update: Update, groupConfig: GroupConfig?, groupState: GroupState?): Boolean {
+    override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
-        val update = update as? MessageUpdate ?: return false
-        val message = update.data as? CommonMessageImpl<*> ?: return false
-        val content = (message as? CommonMessageImpl<*>)?.content as? TextContent ?: return false
+        val update = update as? MessageUpdate ?: return null
+        val message = update.data as? CommonMessage<*> ?: return null
+        val user = (message as? FromUserMessage)?.user ?: return null
+        val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
-        return content
-                .entities
-                .any {
-                    "lang" == (it.source as? BotCommandTextSource)?.command
-                }
-    }
+        return if (content.entities.any { "lang" == (it.source as? BotCommandTextSource)?.command }) {
+            {
+                logger.debug("Changing language in {}", update.data.chat.id.chatId)
 
-    override suspend fun process(update: Update, groupConfig: GroupConfig?, groupState: GroupState?) {
-        logger.debug("Initiating language change in {}", (update as MessageUpdate).data.chat.id.chatId)
+                dialogStateRepository.save(ChangingLanguage(update.data.chat.id.chatId, user.id.chatId))
 
-        @Suppress("NAME_SHADOWING")
-        val update = update as? MessageUpdate ?: return
-        val message = update.data as? CommonMessageImpl<*> ?: return
-
-        requestsExecutor.sendMessage(
-                chatId = update.data.chat.id,
-                text = I18N(groupConfig?.language)["language"],
-                parseMode = MarkdownV2,
-                replyMarkup = InlineKeyboardMarkup(
-                        listOf(
+                requestsExecutor.sendMessage(
+                        chatId = update.data.chat.id,
+                        text = I18N(groupConfig?.language)["language.action.choose"],
+                        parseMode = MarkdownV2,
+                        replyMarkup = InlineKeyboardMarkup(
                                 listOf(
-                                        CallbackDataInlineKeyboardButton("BY", "lang:by:${message.user.id.chatId}"),
-                                        CallbackDataInlineKeyboardButton("EN", "lang:en:${message.user.id.chatId}"),
-                                        CallbackDataInlineKeyboardButton("RU", "lang:ru:${message.user.id.chatId}"),
+                                        listOf(
+                                                CallbackDataInlineKeyboardButton("BY", "lang:by"),
+                                                CallbackDataInlineKeyboardButton("EN", "lang:en"),
+                                                CallbackDataInlineKeyboardButton("RU", "lang:ru"),
+                                        )
                                 )
                         )
                 )
-        )
+            }
+        } else null
     }
 }
