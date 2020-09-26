@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.repository.postgresql.groupconfig
+package me.madhead.tyzenhaus.repository.postgresql.group.config
 
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import java.sql.ResultSet

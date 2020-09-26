@@ -1,3 +1,0 @@
-= PostgreSQL group configs repository
-
-PostgreSQL repository for group configs.

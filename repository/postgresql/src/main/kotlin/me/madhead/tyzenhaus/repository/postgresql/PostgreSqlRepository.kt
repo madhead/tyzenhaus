@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.repository.postgres
+package me.madhead.tyzenhaus.repository.postgresql
 
 import me.madhead.tyzenhaus.repository.Repository
 import javax.sql.DataSource

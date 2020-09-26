@@ -2,8 +2,8 @@ package me.madhead.tyzenhaus.runner.heroku.koin
 
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
-import me.madhead.tyzenhaus.repository.postgresql.groupconfig.GroupConfigRepository
-import me.madhead.tyzenhaus.repository.postgresql.groupstate.GroupStateRepository
+import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
+import me.madhead.tyzenhaus.repository.postgresql.group.state.GroupStateRepository
 import org.koin.dsl.module
 import org.postgresql.ds.PGSimpleDataSource
 import java.net.URI

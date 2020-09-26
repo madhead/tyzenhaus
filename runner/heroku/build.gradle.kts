@@ -13,8 +13,7 @@ dependencies {
     implementation("org.postgresql:postgresql:${Versions.Dependencies.POSTGRESQL}")
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl")
-    implementation(project(":repository:postgresql:group-config"))
-    implementation(project(":repository:postgresql:group-state"))
+    implementation(project(":repository:postgresql"))
     implementation(project(":core"))
 }
 

@@ -1,7 +1,7 @@
-package me.madhead.tyzenhaus.repository.postgresql.groupconfig
+package me.madhead.tyzenhaus.repository.postgresql.group.config
 
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
-import me.madhead.tyzenhaus.repository.postgres.PostgreSqlRepository
+import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
 import org.apache.logging.log4j.LogManager
 import java.sql.Types
 import javax.sql.DataSource

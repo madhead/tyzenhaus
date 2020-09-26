@@ -1,25 +1,26 @@
 package me.madhead.tyzenhaus.repository.postgresql.groupconfig
 
-import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
+import org.junit.jupiter.api.*
 import org.postgresql.ds.PGSimpleDataSource
-import java.util.Locale
+import java.net.URI
+import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("db")
 class GroupConfigRepositoryTest {
     lateinit var groupConfigRepository: GroupConfigRepository
 
     @BeforeAll
     fun setUp() {
+        val databaseUri = URI(System.getenv("DATABASE_URL")!!)
+
         groupConfigRepository = GroupConfigRepository(
                 PGSimpleDataSource().apply {
-                    setUrl("jdbc:postgresql:" +
-                            "//${System.getenv("POSTGRES_HOST")!!}:${System.getenv("POSTGRES_PORT")!!}/${System.getenv("POSTGRES_DB")!!}")
-                    user = System.getenv("POSTGRES_USER")!!
-                    password = System.getenv("POSTGRES_PASSWORD")!!
+                    setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
+                    user = databaseUri.userInfo.split(":")[0]
+                    password = databaseUri.userInfo.split(":")[1]
                 }
         )
     }
