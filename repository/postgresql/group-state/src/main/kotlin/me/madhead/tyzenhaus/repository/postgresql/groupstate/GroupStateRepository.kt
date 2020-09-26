@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.groupstate
 
-import me.madhead.tyzenhaus.entity.groupstate.GroupState
+import me.madhead.tyzenhaus.entity.group.state.GroupState
 import me.madhead.tyzenhaus.repository.Repository
 import org.apache.logging.log4j.LogManager
 import javax.sql.DataSource

@@ -4,8 +4,8 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.CallbackQuery.MessageCal
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.CallbackQueryUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.BaseMessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
-import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
-import me.madhead.tyzenhaus.entity.groupstate.GroupState
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.entity.group.state.GroupState
 import me.madhead.tyzenhaus.repository.Repository
 import org.apache.logging.log4j.LogManager
 

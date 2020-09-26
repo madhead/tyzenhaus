@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.entity.groupconfig
+package me.madhead.tyzenhaus.entity.group.config
 
 import java.util.Locale
 

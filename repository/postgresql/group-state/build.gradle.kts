@@ -1,3 +1,3 @@
 dependencies {
-    api(project(":entity:group-state"))
+    api(project(":entity"))
 }

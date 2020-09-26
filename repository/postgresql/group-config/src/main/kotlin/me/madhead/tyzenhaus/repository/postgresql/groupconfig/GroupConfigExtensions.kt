@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.groupconfig
 
-import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import java.sql.ResultSet
 import java.util.Locale
 

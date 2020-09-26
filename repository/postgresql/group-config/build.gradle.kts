@@ -1,3 +1,3 @@
 dependencies {
-    api(project(":entity:group-config"))
+    api(project(":entity"))
 }
