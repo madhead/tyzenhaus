@@ -10,8 +10,8 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.message.CommonMessageImp
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.content.TextContent
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
-import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
-import me.madhead.tyzenhaus.entity.groupstate.GroupState
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.entity.group.state.GroupState
 import me.madhead.tyzenhaus.i18.I18N
 import org.apache.logging.log4j.LogManager
 

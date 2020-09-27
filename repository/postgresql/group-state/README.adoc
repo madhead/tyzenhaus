@@ -1,3 +1,0 @@
-= PostgreSQL group states repository
-
-PostgreSQL repositories for group states.

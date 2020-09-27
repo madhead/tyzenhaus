@@ -9,8 +9,8 @@ import me.madhead.tyzenhaus.core.telegram.updates.LangCommandCallbackQueryUpdate
 import me.madhead.tyzenhaus.core.telegram.updates.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
-import me.madhead.tyzenhaus.repository.postgresql.groupconfig.GroupConfigRepository
-import me.madhead.tyzenhaus.repository.postgresql.groupstate.GroupStateRepository
+import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
+import me.madhead.tyzenhaus.repository.postgresql.group.state.GroupStateRepository
 import org.koin.dsl.module
 
 @KtorExperimentalAPI

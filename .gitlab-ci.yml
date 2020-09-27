@@ -31,12 +31,26 @@ db-test:
     POSTGRES_PORT: 5432
     POSTGRES_DB: tyzenhaus
     POSTGRES_HOST_AUTH_METHOD: trust
+    DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
   services:
     - postgres:12
+  before_script:
+    - yum install -y postgresql
   script:
-    - echo "DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}" > .env
-    - ./gradlew :repository:postgresql:update
+    - ./gradlew :repository:postgresql:liquibaseUpdate
+    - psql -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} <repository/postgresql/src/test/sql/seed.sql
     - ./gradlew dbTest
+  artifacts:
+    name: $CI_COMMIT_SHA-$CI_JOB_NAME
+    when: always
+    expire_in: 1 day
+    paths:
+      - "**/build/reports"
+      - "**/build/test-results"
+      - "**/build/jacoco"
+    reports:
+      junit:
+        - "**/build/test-results/dbTest/TEST-*.xml"
 
 runner-heroku:
   stage: build

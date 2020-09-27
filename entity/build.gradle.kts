@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
-
-subprojects {
-    apply<KotlinPluginWrapper>()
+plugins {
+    kotlin("jvm")
 }

@@ -4,9 +4,9 @@ databaseChangeLog:
       author: madhead
       changes:
         - sqlFile:
-            path: ../../../group-config/src/main/liquibase/sql/group-config.init.sql
+            path: ../sql/group-config.init.sql
             relativeToChangelogFile: true
       rollback:
         - sqlFile:
-            path: ../../../group-config/src/main/liquibase/sql/group-config.deinit.sql
+            path: ../sql/group-config.deinit.sql
             relativeToChangelogFile: true

@@ -1,8 +1,8 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
-import me.madhead.tyzenhaus.entity.groupconfig.GroupConfig
-import me.madhead.tyzenhaus.entity.groupstate.GroupState
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.entity.group.state.GroupState
 
 /**
  * Telegram updates (messages, callbacks, etc.) processor.
