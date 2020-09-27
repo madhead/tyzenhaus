@@ -5,11 +5,11 @@ import java.sql.ResultSet
 import java.util.Locale
 
 internal fun ResultSet.toGroupConfig(): GroupConfig? {
-    if (this.next()) {
-        return GroupConfig(
-                id = this.getLong(1),
+    return if (this.next()) {
+        GroupConfig(
+                id = this.getLong(@Suppress("MagicNumber") 1),
                 language = run {
-                    val value = this.getString(2)
+                    val value = this.getString(@Suppress("MagicNumber") 2)
 
                     if (this.wasNull()) {
                         null
@@ -19,6 +19,6 @@ internal fun ResultSet.toGroupConfig(): GroupConfig? {
                 }
         )
     } else {
-        return null
+        null
     }
 }

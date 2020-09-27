@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm").version(Versions.Plugins.KOTLIN).apply(false)
+    kotlin("plugin.serialization").version(Versions.Plugins.KOTLIN).apply(false)
     id("org.liquibase.gradle").version(Versions.Plugins.LIQUIBASE).apply(false)
     id("io.gitlab.arturbosch.detekt").version(Versions.Plugins.DETEKT).apply(false)
 }

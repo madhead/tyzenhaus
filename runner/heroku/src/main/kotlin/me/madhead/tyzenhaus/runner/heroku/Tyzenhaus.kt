@@ -12,7 +12,6 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.UnstableDefault
 import me.madhead.tyzenhaus.runner.heroku.koin.configModule
 import me.madhead.tyzenhaus.runner.heroku.koin.dbModule
 import me.madhead.tyzenhaus.runner.heroku.koin.jsonModule
@@ -25,7 +24,6 @@ import org.koin.ktor.ext.inject
 /**
  * [Ktor-based](https://ktor.io) Tyzenhaus runner.
  */
-@UnstableDefault
 @KtorExperimentalAPI
 fun Application.main() {
     install(DefaultHeaders)

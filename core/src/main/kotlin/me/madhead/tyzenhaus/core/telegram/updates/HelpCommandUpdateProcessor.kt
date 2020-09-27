@@ -8,8 +8,8 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.Common
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.content.TextContent
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
-import me.madhead.tyzenhaus.entity.group.state.GroupState
 import me.madhead.tyzenhaus.i18.I18N
 import org.apache.logging.log4j.LogManager
 
@@ -20,29 +20,25 @@ class HelpCommandUpdateProcessor(
         private val requestsExecutor: RequestsExecutor,
 ) : UpdateProcessor {
     companion object {
-        val logger = LogManager.getLogger(HelpCommandUpdateProcessor::class.java)!!
+        private val logger = LogManager.getLogger(HelpCommandUpdateProcessor::class.java)!!
     }
 
-    override suspend fun accept(update: Update, groupConfig: GroupConfig?, groupState: GroupState?): Boolean {
+    override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
-        val update = update as? MessageUpdate ?: return false
-        val message = update.data as? CommonMessage<*> ?: return false
-        val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return false
+        val update = update as? MessageUpdate ?: return null
+        val message = update.data as? CommonMessage<*> ?: return null
+        val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
-        return content
-                .entities
-                .any {
-                    "help" == (it.source as? BotCommandTextSource)?.command
-                }
-    }
+        return if (content.entities.any { "help" == (it.source as? BotCommandTextSource)?.command }) {
+            {
+                logger.debug("Helping in {}", update.data.chat.id.chatId)
 
-    override suspend fun process(update: Update, groupConfig: GroupConfig?, groupState: GroupState?) {
-        logger.debug("Helping in {}", (update as MessageUpdate).data.chat.id.chatId)
-
-        requestsExecutor.sendMessage(
-                chatId = update.data.chat.id,
-                text = I18N(groupConfig?.language)["help"],
-                parseMode = MarkdownV2
-        )
+                requestsExecutor.sendMessage(
+                        chatId = update.data.chat.id,
+                        text = I18N(groupConfig?.language)["help"],
+                        parseMode = MarkdownV2
+                )
+            }
+        } else null
     }
 }

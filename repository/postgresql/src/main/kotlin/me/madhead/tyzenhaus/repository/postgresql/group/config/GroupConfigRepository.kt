@@ -9,9 +9,25 @@ import javax.sql.DataSource
 /**
  * PostgreSQL repository for [group configs][GroupConfig].
  */
-class GroupConfigRepository(dataSource: DataSource) : PostgreSqlRepository<Long, GroupConfig>(dataSource) {
+class GroupConfigRepository(dataSource: DataSource)
+    : me.madhead.tyzenhaus.repository.GroupConfigRepository, PostgreSqlRepository(dataSource) {
     companion object {
-        val logger = LogManager.getLogger(GroupConfigRepository::class.java)!!
+        private val logger = LogManager.getLogger(GroupConfigRepository::class.java)!!
+    }
+
+    override fun get(id: Long): GroupConfig? {
+        logger.debug("get {}", id)
+
+        dataSource.connection.use { connection ->
+            connection
+                    .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
+                    .use { preparedStatement ->
+                        preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
+                        preparedStatement.executeQuery().use { resultSet ->
+                            return@get resultSet.toGroupConfig()
+                        }
+                    }
+        }
     }
 
     override fun save(entity: GroupConfig) {
@@ -26,28 +42,13 @@ class GroupConfigRepository(dataSource: DataSource) : PostgreSqlRepository<Long,
                             DO UPDATE SET "language" = EXCLUDED."language";
                     """.trimIndent())
                     .use { preparedStatement ->
-                        preparedStatement.setLong(1, entity.id)
+                        preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.id)
                         entity.language?.let {
-                            preparedStatement.setString(2, it.language)
+                            preparedStatement.setString(@Suppress("MagicNumber") 2, it.language)
                         } ?: run {
-                            preparedStatement.setNull(2, Types.VARCHAR)
+                            preparedStatement.setNull(@Suppress("MagicNumber") 2, Types.VARCHAR)
                         }
                         preparedStatement.executeUpdate()
-                    }
-        }
-    }
-
-    override fun get(id: Long): GroupConfig? {
-        logger.debug("get {}", id)
-
-        dataSource.connection.use { connection ->
-            connection
-                    .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(1, id)
-                        preparedStatement.executeQuery().use { resultSet ->
-                            return@get resultSet.toGroupConfig()
-                        }
                     }
         }
     }

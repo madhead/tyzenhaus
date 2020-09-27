@@ -10,3 +10,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/group-config.deinit.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/dialog-state.init.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/dialog-state.deinit.sql
+            relativeToChangelogFile: true

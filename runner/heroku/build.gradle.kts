@@ -9,7 +9,8 @@ dependencies {
 
     implementation("io.ktor:ktor-server-netty")
     implementation("org.koin:koin-ktor:${Versions.Dependencies.KOIN}")
-    implementation("com.github.insanusmokrassar:TelegramBotAPI-all:${Versions.Dependencies.TELEGRAM_BOT_API}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Dependencies.KOTLINX_SERIALIZATION}")
+    implementation("com.github.insanusmokrassar:TelegramBotAPI:${Versions.Dependencies.TELEGRAM_BOT_API}")
     implementation("org.postgresql:postgresql:${Versions.Dependencies.POSTGRESQL}")
     implementation("org.apache.logging.log4j:log4j-core")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl")
