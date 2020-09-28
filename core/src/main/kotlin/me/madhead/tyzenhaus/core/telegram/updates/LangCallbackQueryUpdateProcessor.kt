@@ -18,7 +18,7 @@ import org.apache.logging.log4j.LogManager
 import java.util.Locale
 
 /**
- * /lang command handler.
+ * Language change callback handler.
  */
 class LangCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,

@@ -9,6 +9,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.ParticipateCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ExpenseCommandUpdateProcessor
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
 import org.koin.dsl.module
@@ -25,6 +26,12 @@ val pipelineModule = module {
     single {
         HelpCommandUpdateProcessor(
             requestsExecutor = get(),
+        )
+    }
+    single {
+        ExpenseCommandUpdateProcessor(
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
         )
     }
     single {
@@ -51,6 +58,7 @@ val pipelineModule = module {
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
                 get<HelpCommandUpdateProcessor>(),
+                get<ExpenseCommandUpdateProcessor>(),
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
