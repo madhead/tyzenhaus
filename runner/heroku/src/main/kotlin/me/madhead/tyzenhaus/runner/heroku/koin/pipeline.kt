@@ -18,6 +18,7 @@ val pipelineModule = module {
         WelcomeMessageUpdateProcessor(
                 id = ChatId(get<ApplicationConfig>().property("telegram.botId").getString().toLong()),
                 requestsExecutor = get(),
+                groupConfigRepository = get<GroupConfigRepository>(),
         )
     }
     single {

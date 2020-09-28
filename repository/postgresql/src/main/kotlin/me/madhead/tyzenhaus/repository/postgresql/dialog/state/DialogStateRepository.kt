@@ -18,7 +18,7 @@ class DialogStateRepository(dataSource: DataSource)
     }
 
     override fun get(groupId: Long, userId: Long): DialogState? {
-        logger.debug("get {}×{}", groupId, userId)
+        logger.debug("get {}@{}", userId, groupId)
 
         dataSource.connection.use { connection ->
             connection
@@ -57,7 +57,7 @@ class DialogStateRepository(dataSource: DataSource)
     }
 
     override fun delete(groupId: Long, userId: Long) {
-        logger.debug("get {}×{}", groupId, userId)
+        logger.debug("get {}@{}", userId, groupId)
 
         dataSource
                 .connection

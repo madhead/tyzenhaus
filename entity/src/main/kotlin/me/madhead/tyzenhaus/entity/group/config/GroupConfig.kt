@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.entity.group.config
 
+import java.time.Instant
 import java.util.Locale
 
 /**
@@ -8,5 +9,7 @@ import java.util.Locale
  */
 data class GroupConfig(
         val id: Long,
+        val invitedBy: Long? = null,
+        val invitedAt: Instant? = null,
         val language: Locale? = null,
 )

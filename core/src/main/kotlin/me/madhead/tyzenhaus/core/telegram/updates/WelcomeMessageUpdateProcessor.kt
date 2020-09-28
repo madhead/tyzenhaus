@@ -11,7 +11,9 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
+import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import org.apache.logging.log4j.LogManager
+import java.time.Instant
 
 /**
  * Sends welcome message whenever the bot is added to a group.
@@ -19,6 +21,7 @@ import org.apache.logging.log4j.LogManager
 class WelcomeMessageUpdateProcessor(
         private val id: ChatIdentifier,
         private val requestsExecutor: RequestsExecutor,
+        private val groupConfigRepository: GroupConfigRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(WelcomeMessageUpdateProcessor::class.java)!!
@@ -34,6 +37,12 @@ class WelcomeMessageUpdateProcessor(
             {
                 logger.debug("Saying welcome in {}", update.data.chat.id.chatId)
 
+                val newGroupConfig = (groupConfig ?: GroupConfig(update.groupId)).copy(
+                        invitedBy = update.userId,
+                        invitedAt = Instant.now()
+                )
+
+                groupConfigRepository.save(newGroupConfig)
                 requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,
                         text = I18N()["welcome"],
