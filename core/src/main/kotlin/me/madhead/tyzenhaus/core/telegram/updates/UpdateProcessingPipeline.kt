@@ -39,10 +39,10 @@ class UpdateProcessingPipeline(
     suspend fun process(update: Update) {
         logger.debug("Processing update: {}", update)
 
-        val groupConfig = groupConfigRepository.get(update.chatId)
-        val dialogState = dialogStateRepository.get(update.chatId, update.userId)
+        val groupConfig = groupConfigRepository.get(update.groupId)
+        val dialogState = dialogStateRepository.get(update.groupId, update.userId)
 
-        logger.info("Chat ID: {}", update.chatId)
+        logger.info("Chat ID: {}", update.groupId)
         logger.info("Config: {}", groupConfig)
         logger.info("Dialog state: {}", dialogState)
 

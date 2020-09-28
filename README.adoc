@@ -1,1 +1,3 @@
+image:https://codecov.io/gl/madhead/tyzenhaus/branch/master/graph/badge.svg?token=N2XLBHVEJD[Code coverage,link=https://codecov.io/gl/madhead/tyzenhaus]
+
 = Tyzenhaus

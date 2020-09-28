@@ -31,7 +31,7 @@ class HelpCommandUpdateProcessor(
 
         return if (content.entities.any { "help" == (it.source as? BotCommandTextSource)?.command }) {
             {
-                logger.debug("Helping in {}", update.data.chat.id.chatId)
+                logger.debug("{} asked for help in {}", update.userId, update.groupId)
 
                 requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,

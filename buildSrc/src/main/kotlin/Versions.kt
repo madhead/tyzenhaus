@@ -22,7 +22,7 @@ object Versions {
     object Dependencies {
         const val KTOR = "1.4.0"
         const val KOIN = "2.1.6"
-        const val TELEGRAM_BOT_API = "0.28.3"
+        const val TELEGRAM_BOT_API = "0.28.4"
         const val POSTGRESQL = "42.2.16"
         const val KOTLINX_SERIALIZATION = "1.0.0-RC2"
         const val LOG4J = "2.13.3"

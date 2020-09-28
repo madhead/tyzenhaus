@@ -7,7 +7,6 @@ import com.github.insanusmokrassar.TelegramBotAPI.types.ParseMode.MarkdownV2
 import com.github.insanusmokrassar.TelegramBotAPI.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import com.github.insanusmokrassar.TelegramBotAPI.types.buttons.InlineKeyboardMarkup
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.CommonMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.FromUserMessage
 import com.github.insanusmokrassar.TelegramBotAPI.types.message.content.TextContent
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
 import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
@@ -33,15 +32,13 @@ class LangCommandUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
-        val user = (message as? FromUserMessage)?.user ?: return null
         val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
         return if (content.entities.any { "lang" == (it.source as? BotCommandTextSource)?.command }) {
             {
-                logger.debug("Changing language in {}", update.data.chat.id.chatId)
+                logger.debug("{} initiated a language change in {}", update.userId, update.groupId)
 
-                dialogStateRepository.save(ChangingLanguage(update.data.chat.id.chatId, user.id.chatId))
-
+                dialogStateRepository.save(ChangingLanguage(update.groupId, update.userId))
                 requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,
                         text = I18N(groupConfig?.language)["language.action.choose"],

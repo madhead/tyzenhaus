@@ -38,7 +38,7 @@ class LangCallbackQueryUpdateProcessor(
             {
                 val (_, language) = callbackQuery.data.split(":")
 
-                logger.debug("Changing language in {} to {}", callbackQuery.message.chat.id.chatId, language)
+                logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
 
                 val newGroupConfig = (groupConfig ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
 
