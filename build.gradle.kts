@@ -41,9 +41,6 @@ allprojects {
             testLogging {
                 showStandardStreams = true
             }
-            systemProperties = mapOf(
-                    "user.timezone" to "GMT"
-            )
         }
         withType<JacocoReport> {
             reports {
