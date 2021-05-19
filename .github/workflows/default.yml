@@ -1,0 +1,12 @@
+name: Default
+on:
+  - push
+  - pull_request
+jobs:
+  check-gradle-version:
+    name: Check Gradle version
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: madhead/check-gradle-version@v1
+    continue-on-error: true
