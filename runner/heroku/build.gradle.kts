@@ -4,21 +4,18 @@ plugins {
 }
 
 dependencies {
-    implementation(platform("io.ktor:ktor-bom:${Versions.Dependencies.KTOR}"))
-    implementation(platform("org.apache.logging.log4j:log4j-bom:${Versions.Dependencies.LOG4J}"))
-
-    implementation("io.ktor:ktor-server-netty")
-    implementation("org.koin:koin-ktor:${Versions.Dependencies.KOIN}")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Dependencies.KOTLINX_SERIALIZATION}")
-    implementation("com.github.insanusmokrassar:TelegramBotAPI:${Versions.Dependencies.TELEGRAM_BOT_API}")
-    implementation("org.postgresql:postgresql:${Versions.Dependencies.POSTGRESQL}")
-    implementation("org.apache.logging.log4j:log4j-core")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl")
-    implementation(project(":repository:postgresql"))
-    implementation(project(":core"))
+    implementation(libs.ktor.server.netty)
+    implementation(libs.koin.ktor)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.tgbotapi)
+    implementation(libs.postgresql)
+    implementation(libs.log4j.core)
+    implementation(libs.log4j.slf4j.impl)
+    implementation(projects.repository.postgresql)
+    implementation(projects.core)
 }
 
 application {
     applicationName = "tyzenhaus"
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
