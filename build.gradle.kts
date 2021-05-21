@@ -13,10 +13,6 @@ allprojects {
     apply<DetektPlugin>()
     apply<JacocoPlugin>()
 
-    repositories {
-        jcenter()
-    }
-
     configure<DetektExtension> {
         parallel = true
         config = files("$rootDir/detekt.yml")

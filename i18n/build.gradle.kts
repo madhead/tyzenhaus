@@ -3,10 +3,8 @@ plugins {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:${Versions.Dependencies.JUNIT}"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
 
-    testRuntimeOnly(platform("org.junit:junit-bom:${Versions.Dependencies.JUNIT}"))
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }

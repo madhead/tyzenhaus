@@ -1,0 +1,31 @@
+[versions]
+ktor = "1.4.0"
+koin = "2.1.6"
+kotlinx-serialization = "1.0.0-RC2"
+tgbotapi = "0.28.4"
+postgresql = "42.2.16"
+log4j = "2.13.3"
+
+junit = "5.6.2"
+
+liquibase = "3.10.2"
+snakeyaml = "1.26"
+
+[libraries]
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+koin-ktor = { module = "org.koin:koin-ktor", version.ref = "koin" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+tgbotapi = { module = "com.github.insanusmokrassar:TelegramBotAPI", version.ref = "tgbotapi" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+
+liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+
+[bundles]
