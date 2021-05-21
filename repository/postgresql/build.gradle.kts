@@ -6,17 +6,22 @@ plugins {
 }
 
 dependencies {
+    libs.bundles.boms.orNull?.forEach {
+        api(platform(it))
+    }
+
     api(projects.repository)
     api(projects.entity)
 
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.log4j.core)
+    implementation(libs.log4j.api)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.postgresql)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.log4j.core)
 
     liquibaseRuntime(libs.liquibase.core)
     liquibaseRuntime(libs.snakeyaml)

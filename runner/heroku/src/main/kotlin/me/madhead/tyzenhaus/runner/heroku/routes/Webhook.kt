@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.runner.heroku.routes
 
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.UpdateDeserializationStrategy
+import dev.inmo.tgbotapi.types.update.abstracts.UpdateDeserializationStrategy
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveText

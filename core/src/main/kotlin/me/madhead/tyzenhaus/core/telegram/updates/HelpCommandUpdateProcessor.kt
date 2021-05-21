@@ -1,13 +1,13 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
-import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.send.sendMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.MessageEntity.textsources.BotCommandTextSource
-import com.github.insanusmokrassar.TelegramBotAPI.types.ParseMode.MarkdownV2
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.CommonMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.content.TextContent
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import dev.inmo.tgbotapi.bot.RequestsExecutor
+import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.MessageEntity.textsources.BotCommandTextSource
+import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
+import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
+import dev.inmo.tgbotapi.types.message.content.TextContent
+import dev.inmo.tgbotapi.types.update.MessageUpdate
+import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
@@ -29,7 +29,7 @@ class HelpCommandUpdateProcessor(
         val message = update.data as? CommonMessage<*> ?: return null
         val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
-        return if (content.entities.any { "help" == (it.source as? BotCommandTextSource)?.command }) {
+        return if (content.textSources.any { "help" == (it as? BotCommandTextSource)?.command }) {
             {
                 logger.debug("{} asked for help in {}", update.userId, update.groupId)
 

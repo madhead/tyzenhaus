@@ -1,26 +1,36 @@
 [versions]
-ktor = "1.4.0"
-koin = "2.1.6"
-kotlinx-serialization = "1.0.0-RC2"
-tgbotapi = "0.28.4"
-postgresql = "42.2.16"
-log4j = "2.13.3"
+kotlin = "1.5.0"
+ktor = "1.5.4"
+koin = "3.0.2"
+kotlinx-serialization = "1.2.1"
+tgbotapi = "0.34.1"
+postgresql = "42.2.20"
+log4j = "2.14.1"
 
-junit = "5.6.2"
+junit = "5.7.2"
 
 liquibase = "3.10.2"
-snakeyaml = "1.26"
+#liquibase = "4.3.5"
+snakeyaml = "1.28"
+
+jacoco = "0.8.7"
 
 [libraries]
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlin" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-koin-ktor = { module = "org.koin:koin-ktor", version.ref = "koin" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-tgbotapi = { module = "com.github.insanusmokrassar:TelegramBotAPI", version.ref = "tgbotapi" }
+tgbotapi = { module = "dev.inmo:tgbotapi", version.ref = "tgbotapi" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+log4j-bom = { module = "org.apache.logging.log4j:log4j-bom", version.ref = "log4j" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
 
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
@@ -29,3 +39,4 @@ liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liqui
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [bundles]
+boms = ["kotlin-bom", "kotlinx-serialization-bom", "kotlinx-coroutines-bom", "log4j-bom", "junit-bom"]

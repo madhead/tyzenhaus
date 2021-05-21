@@ -1,13 +1,13 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
-import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.answers.answerCallbackQuery
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.deleteMessage
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.send.sendMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.CallbackQuery.MessageDataCallbackQuery
-import com.github.insanusmokrassar.TelegramBotAPI.types.ParseMode.MarkdownV2
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.CallbackQueryUpdate
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import dev.inmo.tgbotapi.bot.RequestsExecutor
+import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
+import dev.inmo.tgbotapi.extensions.api.deleteMessage
+import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
+import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
+import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
+import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig

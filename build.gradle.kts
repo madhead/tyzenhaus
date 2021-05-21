@@ -21,7 +21,7 @@ allprojects {
     }
 
     configure<JacocoPluginExtension> {
-        toolVersion = "0.8.6"
+        toolVersion = Versions.Plugins.JACOCO
     }
 
     tasks {

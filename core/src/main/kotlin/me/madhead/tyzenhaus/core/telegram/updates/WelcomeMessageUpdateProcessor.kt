@@ -1,13 +1,13 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
-import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.send.sendMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.ChatIdentifier
-import com.github.insanusmokrassar.TelegramBotAPI.types.ParseMode.MarkdownV2
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.ChatEvents.NewChatMembers
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.ChatEventMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.MessageUpdate
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import dev.inmo.tgbotapi.bot.RequestsExecutor
+import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.ChatIdentifier
+import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
+import dev.inmo.tgbotapi.types.message.ChatEvents.NewChatMembers
+import dev.inmo.tgbotapi.types.message.abstracts.ChatEventMessage
+import dev.inmo.tgbotapi.types.update.MessageUpdate
+import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
@@ -30,7 +30,7 @@ class WelcomeMessageUpdateProcessor(
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
-        val message = update.data as? ChatEventMessage ?: return null
+        val message = update.data as? ChatEventMessage<*> ?: return null
         val event = message.chatEvent as? NewChatMembers ?: return null
 
         return if (event.members.any { it.id == id }) {
