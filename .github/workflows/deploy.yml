@@ -1,0 +1,13 @@
+name: Master
+
+on:
+  registry_package:
+    types:
+      - published
+
+jobs:
+  heroku:
+    name: Assemble Heroku runner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v2
