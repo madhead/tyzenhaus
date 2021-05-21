@@ -16,7 +16,7 @@ import org.koin.dsl.module
 val pipelineModule = module {
     single {
         WelcomeMessageUpdateProcessor(
-                id = ChatId(get<ApplicationConfig>().property("telegram.botId").getString().toLong()),
+                id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
                 requestsExecutor = get(),
                 groupConfigRepository = get<GroupConfigRepository>(),
         )
