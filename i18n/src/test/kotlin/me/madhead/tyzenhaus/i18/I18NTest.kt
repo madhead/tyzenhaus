@@ -8,8 +8,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.Instant
-import java.util.*
+import java.util.Locale
 
 @TestInstance(Lifecycle.PER_CLASS)
 class I18NTest {
@@ -59,20 +58,20 @@ class I18NTest {
             Arguments.of(
                     "message.formatted",
                     Locale("en"),
-                    arrayOf(3, Date.from(Instant.ofEpochMilli(808185600000)), "a disturbance in the Force"),
-                    "At 12:00:00 AM on Aug 12, 1995, there was a disturbance in the Force on planet 3"
+                    arrayOf(3, "a disturbance in the Force"),
+                    "There was a disturbance in the Force on planet 3"
             ),
             Arguments.of(
                     "message.formatted",
                     Locale("de"),
-                    arrayOf(3, Date.from(Instant.ofEpochMilli(808185600000)), "a disturbance in the Force"),
-                    "At 00:00:00 on 12.08.1995, there was a disturbance in the Force on planet 3"
+                    arrayOf(3, "a disturbance in the Force"),
+                    "There was a disturbance in the Force on planet 3"
             ),
             Arguments.of(
                     "message.formatted",
                     Locale("ru"),
-                    arrayOf(3, Date.from(Instant.ofEpochMilli(808185600000)), "возмущение в Силе"),
-                    "В 00:00:00 12 авг. 1995 г. на планете 3 было возмущение в Силе"
+                    arrayOf(3, "возмущение в Силе"),
+                    "На планете 3 было возмущение в Силе"
             ),
     ).stream()
 }

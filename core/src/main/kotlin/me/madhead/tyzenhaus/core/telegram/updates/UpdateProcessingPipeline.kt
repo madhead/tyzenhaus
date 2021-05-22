@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
@@ -46,12 +46,12 @@ class UpdateProcessingPipeline(
         logger.info("Config: {}", groupConfig)
         logger.info("Dialog state: {}", dialogState)
 
-        processors.mapNotNull { it.process(update, groupConfig, dialogState) }.firstOrNull()?.let { reaction ->
+        processors.mapNotNull { it.process(update, groupConfig, dialogState) }.singleOrNull()?.let { reaction ->
             logger.debug("Found single suitable processor. Reaction: {}", reaction::class)
 
             reaction.invoke()
         } ?: run {
-            logger.debug("No suitable processors found")
+            logger.warn("No suitable processor found or found more that one")
         }
     }
 }

@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.runner.heroku.koin
 
-import com.github.insanusmokrassar.TelegramBotAPI.types.ChatId
+import dev.inmo.tgbotapi.types.ChatId
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.core.telegram.updates.HelpCommandUpdateProcessor

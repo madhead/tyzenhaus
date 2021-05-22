@@ -1,8 +1,8 @@
 package me.madhead.tyzenhaus.runner.heroku
 
-import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
-import com.github.insanusmokrassar.TelegramBotAPI.extensions.api.bot.setMyCommands
-import com.github.insanusmokrassar.TelegramBotAPI.types.BotCommand
+import dev.inmo.tgbotapi.bot.RequestsExecutor
+import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
+import dev.inmo.tgbotapi.types.BotCommand
 import io.ktor.application.Application
 import io.ktor.application.ApplicationStarted
 import io.ktor.application.install

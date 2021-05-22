@@ -1,10 +1,10 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
-import com.github.insanusmokrassar.TelegramBotAPI.types.CallbackQuery.MessageCallbackQuery
-import com.github.insanusmokrassar.TelegramBotAPI.types.message.abstracts.FromUserMessage
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.CallbackQueryUpdate
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.BaseMessageUpdate
-import com.github.insanusmokrassar.TelegramBotAPI.types.update.abstracts.Update
+import dev.inmo.tgbotapi.types.CallbackQuery.MessageCallbackQuery
+import dev.inmo.tgbotapi.types.message.abstracts.FromUserMessage
+import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
+import dev.inmo.tgbotapi.types.update.abstracts.BaseMessageUpdate
+import dev.inmo.tgbotapi.types.update.abstracts.Update
 
 val Update.groupId: Long
     get() = when (this) {
