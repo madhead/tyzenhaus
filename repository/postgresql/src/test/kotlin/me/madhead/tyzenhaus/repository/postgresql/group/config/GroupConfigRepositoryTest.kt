@@ -21,11 +21,11 @@ class GroupConfigRepositoryTest {
         val databaseUri = URI(System.getenv("DATABASE_URL")!!)
 
         groupConfigRepository = GroupConfigRepository(
-                PGSimpleDataSource().apply {
-                    setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
-                    user = databaseUri.userInfo.split(":")[0]
-                    password = databaseUri.userInfo.split(":")[1]
-                }
+            PGSimpleDataSource().apply {
+                setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
+                user = databaseUri.userInfo.split(":")[0]
+                password = databaseUri.userInfo.split(":")[1]
+            }
         )
     }
 

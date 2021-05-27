@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ChangingLanguage")
 data class ChangingLanguage(
-        override val groupId: Long,
-        override val userId: Long
+    override val groupId: Long,
+    override val userId: Long
 ) : DialogState

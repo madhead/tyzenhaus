@@ -21,8 +21,8 @@ import org.apache.logging.log4j.LogManager
  * /lang command handler.
  */
 class LangCommandUpdateProcessor(
-        private val requestsExecutor: RequestsExecutor,
-        private val dialogStateRepository: DialogStateRepository,
+    private val requestsExecutor: RequestsExecutor,
+    private val dialogStateRepository: DialogStateRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(LangCommandUpdateProcessor::class.java)!!
@@ -40,17 +40,17 @@ class LangCommandUpdateProcessor(
 
                 dialogStateRepository.save(ChangingLanguage(update.groupId, update.userId))
                 requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["language.action.choose"],
-                        parseMode = MarkdownV2,
-                        replyMarkup = InlineKeyboardMarkup(
-                                listOf(
-                                        listOf(
-                                                CallbackDataInlineKeyboardButton("EN", "lang:en"),
-                                                CallbackDataInlineKeyboardButton("RU", "lang:ru"),
-                                        )
-                                )
+                    chatId = update.data.chat.id,
+                    text = I18N(groupConfig?.language)["language.action.choose"],
+                    parseMode = MarkdownV2,
+                    replyMarkup = InlineKeyboardMarkup(
+                        listOf(
+                            listOf(
+                                CallbackDataInlineKeyboardButton("EN", "lang:en"),
+                                CallbackDataInlineKeyboardButton("RU", "lang:ru"),
+                            )
                         )
+                    )
                 )
             }
         } else null

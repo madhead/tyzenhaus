@@ -21,13 +21,13 @@ class GroupConfigRepository(dataSource: DataSource)
 
         dataSource.connection.use { connection ->
             connection
-                    .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
-                        preparedStatement.executeQuery().use { resultSet ->
-                            return@get resultSet.toGroupConfig()
-                        }
+                .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
+                    preparedStatement.executeQuery().use { resultSet ->
+                        return@get resultSet.toGroupConfig()
                     }
+                }
         }
     }
 
@@ -37,7 +37,7 @@ class GroupConfigRepository(dataSource: DataSource)
 
         dataSource.connection.use { connection ->
             connection
-                    .prepareStatement("""
+                .prepareStatement("""
                         INSERT INTO "group_config" ("id", "invited_by", "invited_at", "language", "members")
                         VALUES (?, ?, ?, ?, ?)
                         ON CONFLICT ("id")
@@ -46,33 +46,33 @@ class GroupConfigRepository(dataSource: DataSource)
                                           "language" = EXCLUDED."language",
                                           "members" = EXCLUDED."members";
                     """.trimIndent())
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.id)
-                        entity.invitedBy?.let {
-                            preparedStatement.setLong(@Suppress("MagicNumber") 2, it)
-                        } ?: run {
-                            preparedStatement.setNull(@Suppress("MagicNumber") 2, Types.BIGINT)
-                        }
-                        entity.invitedAt?.let {
-                            preparedStatement.setTimestamp(@Suppress("MagicNumber") 3, Timestamp.from(it))
-                        } ?: run {
-                            preparedStatement.setNull(@Suppress("MagicNumber") 3, Types.TIMESTAMP)
-                        }
-                        entity.language?.let {
-                            preparedStatement.setString(@Suppress("MagicNumber") 4, it.language)
-                        } ?: run {
-                            preparedStatement.setNull(@Suppress("MagicNumber") 4, Types.VARCHAR)
-                        }
-                        entity.members.takeIf { it.isNotEmpty() }?.let {
-                            preparedStatement.setArray(
-                                @Suppress("MagicNumber") 5,
-                                connection.createArrayOf("bigint", it.toTypedArray())
-                            )
-                        } ?: run {
-                            preparedStatement.setNull(@Suppress("MagicNumber") 5, Types.ARRAY)
-                        }
-                        preparedStatement.executeUpdate()
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.id)
+                    entity.invitedBy?.let {
+                        preparedStatement.setLong(@Suppress("MagicNumber") 2, it)
+                    } ?: run {
+                        preparedStatement.setNull(@Suppress("MagicNumber") 2, Types.BIGINT)
                     }
+                    entity.invitedAt?.let {
+                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 3, Timestamp.from(it))
+                    } ?: run {
+                        preparedStatement.setNull(@Suppress("MagicNumber") 3, Types.TIMESTAMP)
+                    }
+                    entity.language?.let {
+                        preparedStatement.setString(@Suppress("MagicNumber") 4, it.language)
+                    } ?: run {
+                        preparedStatement.setNull(@Suppress("MagicNumber") 4, Types.VARCHAR)
+                    }
+                    entity.members.takeIf { it.isNotEmpty() }?.let {
+                        preparedStatement.setArray(
+                            @Suppress("MagicNumber") 5,
+                            connection.createArrayOf("bigint", it.toTypedArray())
+                        )
+                    } ?: run {
+                        preparedStatement.setNull(@Suppress("MagicNumber") 5, Types.ARRAY)
+                    }
+                    preparedStatement.executeUpdate()
+                }
         }
     }
 }

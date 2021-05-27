@@ -17,46 +17,46 @@ import org.koin.dsl.module
 val pipelineModule = module {
     single {
         WelcomeMessageUpdateProcessor(
-                id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
-                requestsExecutor = get(),
-                groupConfigRepository = get<GroupConfigRepository>(),
+            id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
+            requestsExecutor = get(),
+            groupConfigRepository = get<GroupConfigRepository>(),
         )
     }
     single {
         HelpCommandUpdateProcessor(
-                requestsExecutor = get(),
+            requestsExecutor = get(),
         )
     }
     single {
         LangCommandUpdateProcessor(
-                requestsExecutor = get(),
-                dialogStateRepository = get<DialogStateRepository>(),
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
         )
     }
     single {
         LangCallbackQueryUpdateProcessor(
-                requestsExecutor = get(),
-                dialogStateRepository = get<DialogStateRepository>(),
-                groupConfigRepository = get<GroupConfigRepository>(),
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
+            groupConfigRepository = get<GroupConfigRepository>(),
         )
     }
     single {
         ParticipateCommandUpdateProcessor(
-                requestsExecutor = get(),
-                groupConfigRepository = get<GroupConfigRepository>(),
+            requestsExecutor = get(),
+            groupConfigRepository = get<GroupConfigRepository>(),
         )
     }
     single {
         UpdateProcessingPipeline(
-                listOf(
-                        get<WelcomeMessageUpdateProcessor>(),
-                        get<HelpCommandUpdateProcessor>(),
-                        get<LangCommandUpdateProcessor>(),
-                        get<LangCallbackQueryUpdateProcessor>(),
-                        get<ParticipateCommandUpdateProcessor>(),
-                ),
-                get<GroupConfigRepository>(),
-                get<DialogStateRepository>(),
+            listOf(
+                get<WelcomeMessageUpdateProcessor>(),
+                get<HelpCommandUpdateProcessor>(),
+                get<LangCommandUpdateProcessor>(),
+                get<LangCallbackQueryUpdateProcessor>(),
+                get<ParticipateCommandUpdateProcessor>(),
+            ),
+            get<GroupConfigRepository>(),
+            get<DialogStateRepository>(),
         )
     }
 }

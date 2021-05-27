@@ -12,9 +12,9 @@ import org.apache.logging.log4j.LogManager
  * of the [UpdateProcessor]s, the first whose [UpdateProcessor.process] returned non-null [UpdateReaction].
  */
 class UpdateProcessingPipeline(
-        private val processors: List<UpdateProcessor>,
-        private val groupConfigRepository: GroupConfigRepository,
-        private val dialogStateRepository: DialogStateRepository,
+    private val processors: List<UpdateProcessor>,
+    private val groupConfigRepository: GroupConfigRepository,
+    private val dialogStateRepository: DialogStateRepository,
 ) {
     companion object {
         private val logger = LogManager.getLogger(UpdateProcessingPipeline::class.java)!!

@@ -21,9 +21,9 @@ import java.util.Locale
  * /lang command handler.
  */
 class LangCallbackQueryUpdateProcessor(
-        private val requestsExecutor: RequestsExecutor,
-        private val dialogStateRepository: DialogStateRepository,
-        private val groupConfigRepository: GroupConfigRepository,
+    private val requestsExecutor: RequestsExecutor,
+    private val dialogStateRepository: DialogStateRepository,
+    private val groupConfigRepository: GroupConfigRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(LangCallbackQueryUpdateProcessor::class.java)!!
@@ -40,23 +40,24 @@ class LangCallbackQueryUpdateProcessor(
 
                 logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
 
-                val newGroupConfig = (groupConfig ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
+                val newGroupConfig = (groupConfig
+                    ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
 
                 groupConfigRepository.save(newGroupConfig)
                 requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
                 requestsExecutor.deleteMessage(callbackQuery.message)
                 requestsExecutor.sendMessage(
-                        chatId = callbackQuery.message.chat.id,
-                        text = I18N(newGroupConfig.language)["language.response.ok"],
-                        parseMode = MarkdownV2,
+                    chatId = callbackQuery.message.chat.id,
+                    text = I18N(newGroupConfig.language)["language.response.ok"],
+                    parseMode = MarkdownV2,
                 )
                 dialogStateRepository.delete(callbackQuery.message.chat.id.chatId, callbackQuery.user.id.chatId)
             }
         } else if (callbackQuery.data.startsWith("lang:") && (dialogState !is ChangingLanguage)) {
             {
                 requestsExecutor.answerCallbackQuery(
-                        callbackQuery = callbackQuery,
-                        text = I18N(groupConfig?.language)["language.response.wrongUser"],
+                    callbackQuery = callbackQuery,
+                    text = I18N(groupConfig?.language)["language.response.wrongUser"],
                 )
             }
         } else null

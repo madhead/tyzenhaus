@@ -17,7 +17,7 @@ import org.apache.logging.log4j.LogManager
  * /help command handler.
  */
 class HelpCommandUpdateProcessor(
-        private val requestsExecutor: RequestsExecutor,
+    private val requestsExecutor: RequestsExecutor,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(HelpCommandUpdateProcessor::class.java)!!
@@ -34,9 +34,9 @@ class HelpCommandUpdateProcessor(
                 logger.debug("{} asked for help in {}", update.userId, update.groupId)
 
                 requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["help"],
-                        parseMode = MarkdownV2
+                    chatId = update.data.chat.id,
+                    text = I18N(groupConfig?.language)["help"],
+                    parseMode = MarkdownV2
                 )
             }
         } else null

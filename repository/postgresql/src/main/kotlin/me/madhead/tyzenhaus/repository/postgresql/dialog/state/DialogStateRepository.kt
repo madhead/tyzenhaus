@@ -22,14 +22,14 @@ class DialogStateRepository(dataSource: DataSource)
 
         dataSource.connection.use { connection ->
             connection
-                    .prepareStatement("SELECT * FROM dialog_state WHERE group_id = ? AND user_id = ?;")
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
-                        preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
-                        preparedStatement.executeQuery().use { resultSet ->
-                            return@get resultSet.toDialogState(json)
-                        }
+                .prepareStatement("SELECT * FROM dialog_state WHERE group_id = ? AND user_id = ?;")
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                    preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
+                    preparedStatement.executeQuery().use { resultSet ->
+                        return@get resultSet.toDialogState(json)
                     }
+                }
         }
     }
 
@@ -37,22 +37,22 @@ class DialogStateRepository(dataSource: DataSource)
         logger.debug("save {}", entity)
 
         dataSource
-                .connection
-                .use { connection ->
-                    connection
-                            .prepareStatement("""
+            .connection
+            .use { connection ->
+                connection
+                    .prepareStatement("""
                                 INSERT INTO dialog_state ("group_id", "user_id", "state")
                                 VALUES (?, ?, ?::jsonb)
                                 ON CONFLICT ("group_id", "user_id")
                                     DO UPDATE SET "state" = EXCLUDED."state";
                             """.trimIndent())
-                            .use { preparedStatement ->
-                                preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
-                                preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.userId)
-                                preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
-                                preparedStatement.executeUpdate()
-                            }
-                }
+                    .use { preparedStatement ->
+                        preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
+                        preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.userId)
+                        preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
+                        preparedStatement.executeUpdate()
+                    }
+            }
 
     }
 
@@ -60,15 +60,15 @@ class DialogStateRepository(dataSource: DataSource)
         logger.debug("get {}@{}", userId, groupId)
 
         dataSource
-                .connection
-                .use { connection ->
-                    connection
-                            .prepareStatement("DELETE FROM dialog_state WHERE group_id = ? AND user_id = ?;")
-                            .use { preparedStatement ->
-                                preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
-                                preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
-                                preparedStatement.executeUpdate()
-                            }
-                }
+            .connection
+            .use { connection ->
+                connection
+                    .prepareStatement("DELETE FROM dialog_state WHERE group_id = ? AND user_id = ?;")
+                    .use { preparedStatement ->
+                        preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                        preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
+                        preparedStatement.executeUpdate()
+                    }
+            }
     }
 }
