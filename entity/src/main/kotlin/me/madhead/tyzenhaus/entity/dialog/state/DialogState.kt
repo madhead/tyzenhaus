@@ -14,6 +14,7 @@ interface DialogState {
                 subclass(ChangingLanguage::class)
                 subclass(WaitingForAmount::class)
                 subclass(WaitingForCurrency::class)
+                subclass(WaitingForParticipants::class)
             }
         }
     }

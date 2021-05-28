@@ -38,20 +38,33 @@ class ExpenseCommandUpdateProcessor(
         val content = message.content as? TextContent ?: return null
 
         return if (content.textSources.any { "expense" == (it as? BotCommandTextSource)?.command }) {
-            {
-                logger.debug("{} initiated an expense in {}", update.userId, update.groupId)
+            if (groupConfig?.members?.isEmpty() == true) {
+                {
+                    logger.warn("No members participating in group expenses in in {}", update.groupId)
 
-                val amountRequestMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.action.amount"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
-                )
+                    requestsExecutor.sendMessage(
+                        chatId = update.data.chat.id,
+                        text = I18N(groupConfig.language)["expense.response.participants.empty"],
+                        parseMode = MarkdownV2,
+                        replyToMessageId = message.messageId,
+                    )
+                }
+            } else {
+                {
+                    logger.debug("{} initiated an expense in {}", update.userId, update.groupId)
 
-                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+                    val amountRequestMessage = requestsExecutor.sendMessage(
+                        chatId = update.data.chat.id,
+                        text = I18N(groupConfig?.language)["expense.action.amount"],
+                        parseMode = MarkdownV2,
+                        replyToMessageId = message.messageId,
+                        replyMarkup = ForceReply(
+                            selective = true,
+                        ),
+                    )
+
+                    dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+                }
             }
         } else null
     }

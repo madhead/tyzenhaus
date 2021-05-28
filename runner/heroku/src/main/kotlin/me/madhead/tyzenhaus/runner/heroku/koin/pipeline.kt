@@ -11,6 +11,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.ParticipateCommandUpdateProces
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expense.AmountReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.CurrencyReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expense.ExpenseCommandUpdateProcessor
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
@@ -44,6 +45,12 @@ val pipelineModule = module {
         )
     }
     single {
+        CurrencyReplyUpdateProcessor(
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
+        )
+    }
+    single {
         LangCommandUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
@@ -69,6 +76,7 @@ val pipelineModule = module {
                 get<HelpCommandUpdateProcessor>(),
                 get<ExpenseCommandUpdateProcessor>(),
                 get<AmountReplyUpdateProcessor>(),
+                get<CurrencyReplyUpdateProcessor>(),
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),

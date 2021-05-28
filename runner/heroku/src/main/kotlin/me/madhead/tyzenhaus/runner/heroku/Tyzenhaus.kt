@@ -50,7 +50,7 @@ fun Application.main() {
             bot.setMyCommands(
                 BotCommand("help", "How to use the bot"),
                 BotCommand("lang", "Change language"),
-                BotCommand("expense", "New expense"),
+                BotCommand("participate", "Register yourself for expense tracking in this group"),
             )
         }
     }
