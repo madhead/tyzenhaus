@@ -13,6 +13,7 @@ interface DialogState {
             polymorphic(DialogState::class) {
                 subclass(ChangingLanguage::class)
                 subclass(WaitingForAmount::class)
+                subclass(WaitingForCurrency::class)
             }
         }
     }
