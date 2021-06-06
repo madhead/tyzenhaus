@@ -31,18 +31,20 @@ class GroupConfigRepository(dataSource: DataSource)
         }
     }
 
+    @Suppress("ComplexMethod")
     override fun save(entity: GroupConfig) {
         logger.debug("save {}", entity)
 
         dataSource.connection.use { connection ->
             connection
                     .prepareStatement("""
-                        INSERT INTO "group_config" ("id", "invited_by", "invited_at", "language")
-                        VALUES (?, ?, ?, ?)
+                        INSERT INTO "group_config" ("id", "invited_by", "invited_at", "language", "members")
+                        VALUES (?, ?, ?, ?, ?)
                         ON CONFLICT ("id")
                             DO UPDATE SET "invited_by" = EXCLUDED."invited_by",
                                           "invited_at" = EXCLUDED."invited_at",
-                                          "language" = EXCLUDED."language";
+                                          "language" = EXCLUDED."language",
+                                          "members" = EXCLUDED."members";
                     """.trimIndent())
                     .use { preparedStatement ->
                         preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.id)
@@ -60,6 +62,14 @@ class GroupConfigRepository(dataSource: DataSource)
                             preparedStatement.setString(@Suppress("MagicNumber") 4, it.language)
                         } ?: run {
                             preparedStatement.setNull(@Suppress("MagicNumber") 4, Types.VARCHAR)
+                        }
+                        entity.members.takeIf { it.isNotEmpty() }?.let {
+                            preparedStatement.setArray(
+                                @Suppress("MagicNumber") 5,
+                                connection.createArrayOf("bigint", it.toTypedArray())
+                            )
+                        } ?: run {
+                            preparedStatement.setNull(@Suppress("MagicNumber") 5, Types.ARRAY)
                         }
                         preparedStatement.executeUpdate()
                     }

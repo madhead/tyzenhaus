@@ -12,4 +12,5 @@ data class GroupConfig(
         val invitedBy: Long? = null,
         val invitedAt: Instant? = null,
         val language: Locale? = null,
+        val members: Set<Long> = emptySet(),
 )

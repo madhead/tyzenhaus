@@ -35,6 +35,10 @@ class GroupConfigRepositoryTest {
         Assertions.assertEquals(GroupConfig(2, 2, Instant.ofEpochMilli(808174800000), null), groupConfigRepository.get(2))
         Assertions.assertEquals(GroupConfig(3, 3, null, null), groupConfigRepository.get(3))
         Assertions.assertEquals(GroupConfig(4, null, null, null), groupConfigRepository.get(4))
+        Assertions.assertEquals(
+            GroupConfig(5, 1, Instant.ofEpochMilli(808174800000), Locale("en"), setOf(1, 2, 3)),
+            groupConfigRepository.get(5)
+        )
     }
 
     @Test
@@ -44,9 +48,12 @@ class GroupConfigRepositoryTest {
 
     @Test
     fun save() {
-        groupConfigRepository.save(GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by")))
+        groupConfigRepository.save(GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)))
 
-        Assertions.assertEquals(GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by")), groupConfigRepository.get(-1))
+        Assertions.assertEquals(
+            GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)),
+            groupConfigRepository.get(-1)
+        )
     }
 
     @Test
@@ -66,5 +73,12 @@ class GroupConfigRepositoryTest {
         groupConfigRepository.save(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by")))
 
         Assertions.assertEquals(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by")), groupConfigRepository.get(-2))
+
+        groupConfigRepository.save(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)))
+
+        Assertions.assertEquals(
+            GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)),
+            groupConfigRepository.get(-2)
+        )
     }
 }
