@@ -46,7 +46,6 @@ class LangCommandUpdateProcessor(
                         replyMarkup = InlineKeyboardMarkup(
                                 listOf(
                                         listOf(
-                                                CallbackDataInlineKeyboardButton("BY", "lang:by"),
                                                 CallbackDataInlineKeyboardButton("EN", "lang:en"),
                                                 CallbackDataInlineKeyboardButton("RU", "lang:ru"),
                                         )

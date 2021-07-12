@@ -38,11 +38,7 @@ else
       sleep 1
     done
 
-    POSTGRES_HOST=localhost \
-      POSTGRES_PORT=5432 \
-      POSTGRES_DB=tyzenhaus \
-      POSTGRES_USER=tyzenhaus \
-      POSTGRES_PASSWORD=tyzenhaus \
+    DATABASE_URL=postgres://tyzenhaus:tyzenhaus@localhost:5432/tyzenhaus \
       "${dir}"/../../gradlew :repository:postgresql:liquibaseUpdate
 
     if [ $seedUnit = true ]; then

@@ -34,6 +34,15 @@ internal fun ResultSet.toGroupConfig(): GroupConfig? {
                     } else {
                         Locale(value)
                     }
+                },
+                members = run {
+                    val value = this.getArray("members")
+
+                    if (this.wasNull()) {
+                        emptySet()
+                    } else {
+                        (value.array as? Array<*>)?.filterIsInstance<Long>()?.toSet() ?: emptySet()
+                    }
                 }
         )
     } else {
