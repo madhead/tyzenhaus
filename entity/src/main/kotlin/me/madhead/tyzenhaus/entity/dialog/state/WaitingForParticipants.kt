@@ -13,7 +13,9 @@ import java.math.BigDecimal
 data class WaitingForParticipants(
     override val groupId: Long,
     override val userId: Long,
+    val messageId: Long,
     @Serializable(BigDecimalSerializer::class)
     val amount: BigDecimal,
     val currency: String,
+    val participants: Set<Long> = emptySet(),
 ) : DialogState

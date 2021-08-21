@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates
+package me.madhead.tyzenhaus.core.telegram.updates.lang
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
@@ -10,6 +10,11 @@ import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
+import me.madhead.tyzenhaus.core.telegram.updates.groupId
+import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor.Companion.CALLBACK_PREFIX
+import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
@@ -46,8 +51,8 @@ class LangCommandUpdateProcessor(
                     replyMarkup = InlineKeyboardMarkup(
                         listOf(
                             listOf(
-                                CallbackDataInlineKeyboardButton("EN", "lang:en"),
-                                CallbackDataInlineKeyboardButton("RU", "lang:ru"),
+                                CallbackDataInlineKeyboardButton("EN", "${CALLBACK_PREFIX}en"),
+                                CallbackDataInlineKeyboardButton("RU", "${CALLBACK_PREFIX}ru"),
                             )
                         )
                     )

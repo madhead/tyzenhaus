@@ -16,6 +16,8 @@ import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
+import me.madhead.tyzenhaus.core.telegram.updates.expense.DoneCallbackQueryUpdateProcessor.Companion.CALLBACK
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ParticipantCallbackQueryUpdateProcessor.Companion.CALLBACK_PREFIX
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
@@ -26,6 +28,7 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import org.apache.logging.log4j.LogManager
+import java.util.Locale
 
 /**
  * New expense flow: currency entered.
@@ -73,22 +76,18 @@ class CurrencyReplyUpdateProcessor(
 
                 logger.debug("Members of {}: {}", update.groupId, chatMembers)
 
-                requestsExecutor.sendMessage(
+                val participantsMessage = requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig.language)["expense.action.participants"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
-                    replyMarkup = InlineKeyboardMarkup(
-                        chatMembers
-                            .map {
-                                listOf(CallbackDataInlineKeyboardButton(it.callback(), it.callbackData()))
-                            }
-                    )
+                    replyMarkup = replyMarkup(chatMembers, emptySet(), groupConfig)
                 )
                 dialogStateRepository.save(
                     WaitingForParticipants(
                         update.groupId,
                         update.userId,
+                        participantsMessage.messageId,
                         dialogState.amount,
                         currency,
                     )
@@ -96,10 +95,5 @@ class CurrencyReplyUpdateProcessor(
             }
         } else null
     }
-
-    private fun ChatMember.callback(): String = user.firstName +
-        (user.lastName.takeUnless { it.isBlank() }?.let { " $it" } ?: "") +
-        (user.username?.username?.let { " ($it)" } ?: "")
-
-    private fun ChatMember.callbackData(): String = user.id.chatId.toString()
 }
+
