@@ -4,6 +4,7 @@ import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
+import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
 import org.koin.dsl.module
 import org.postgresql.ds.PGSimpleDataSource
 import java.net.URI
@@ -27,5 +28,9 @@ val dbModule = module {
 
     single {
         DialogStateRepository(get())
+    }
+
+    single {
+        TransactionRepository(get())
     }
 }

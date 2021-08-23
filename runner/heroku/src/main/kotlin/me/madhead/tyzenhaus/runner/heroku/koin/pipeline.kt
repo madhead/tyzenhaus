@@ -17,6 +17,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdatePr
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
+import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
 import org.koin.dsl.module
 
 @KtorExperimentalAPI
@@ -62,6 +63,7 @@ val pipelineModule = module {
         DoneCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
+            transactionRepository = get<TransactionRepository>(),
         )
     }
     single {
