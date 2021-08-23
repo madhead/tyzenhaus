@@ -46,3 +46,9 @@ jobs:
           --header "Accept: application/vnd.heroku+json; version=3.docker-releases"
           --header "Authorization: Bearer ${{ secrets.HEROKU_API_KEY }}"
           --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid)'" } ] }'
+      - run: >-
+          curl
+          -X POST
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/setWebhook
+          --header "Content-Type: application/json"
+          --data '{ "url": "https://tyzenhaus.herokuapp.com/${{ secrets.TELEGRAM_BOT_TOKEN }}" }'
