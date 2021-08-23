@@ -17,7 +17,7 @@ class UpdateProcessingPipeline(
         private val dialogStateRepository: DialogStateRepository,
 ) {
     companion object {
-        private val logger = LogManager.getLogger(WelcomeMessageUpdateProcessor::class.java)!!
+        private val logger = LogManager.getLogger(UpdateProcessingPipeline::class.java)!!
     }
 
     /**
