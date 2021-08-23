@@ -1,1 +1,11 @@
+ifdef::env-github[]
+++++
+<p align="center">
+  <img src="./assets/logo.svg">
+</p>
+++++
+endif::[]
+
+ifndef::env-github[]
 image::./assets/logo.svg[align="center"]
+endif::[]

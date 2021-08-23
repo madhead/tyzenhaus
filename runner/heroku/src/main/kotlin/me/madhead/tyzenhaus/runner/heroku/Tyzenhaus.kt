@@ -31,11 +31,11 @@ fun Application.main() {
     install(Compression)
     install(Koin) {
         modules(
-                configModule(environment.config),
-                telegramModule,
-                jsonModule,
-                pipelineModule,
-                dbModule,
+            configModule(environment.config),
+            telegramModule,
+            jsonModule,
+            pipelineModule,
+            dbModule,
         )
     }
 
@@ -48,9 +48,9 @@ fun Application.main() {
 
         runBlocking {
             bot.setMyCommands(
-                    BotCommand("help", "How to use the bot"),
-                    BotCommand("start", "Main menu"),
-                    BotCommand("lang", "Change language"),
+                BotCommand("help", "How to use the bot"),
+                BotCommand("lang", "Change language"),
+                BotCommand("participate", "Register yourself for expense tracking in this group"),
             )
         }
     }

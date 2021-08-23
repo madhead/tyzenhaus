@@ -4,11 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * User requested a language change.
+ * User initiated an expense flow.
  */
 @Serializable
-@SerialName("ChangingLanguage")
-data class ChangingLanguage(
+@SerialName("WaitingForAmount")
+data class WaitingForAmount(
     override val groupId: Long,
-    override val userId: Long
+    override val userId: Long,
+    val messageId: Long,
 ) : DialogState

@@ -32,3 +32,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/group-config-remove-members-column.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 4
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/transaction.init.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/transaction.deinit.sql
+            relativeToChangelogFile: true

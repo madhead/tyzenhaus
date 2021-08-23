@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates
+package me.madhead.tyzenhaus.core.telegram.updates.lang
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
@@ -8,6 +8,10 @@ import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
+import me.madhead.tyzenhaus.core.telegram.updates.groupId
+import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
@@ -18,14 +22,16 @@ import org.apache.logging.log4j.LogManager
 import java.util.Locale
 
 /**
- * /lang command handler.
+ * Language change callback handler.
  */
 class LangCallbackQueryUpdateProcessor(
-        private val requestsExecutor: RequestsExecutor,
-        private val dialogStateRepository: DialogStateRepository,
-        private val groupConfigRepository: GroupConfigRepository,
+    private val requestsExecutor: RequestsExecutor,
+    private val dialogStateRepository: DialogStateRepository,
+    private val groupConfigRepository: GroupConfigRepository,
 ) : UpdateProcessor {
     companion object {
+        const val CALLBACK_PREFIX = "lang:"
+
         private val logger = LogManager.getLogger(LangCallbackQueryUpdateProcessor::class.java)!!
     }
 
@@ -34,29 +40,30 @@ class LangCallbackQueryUpdateProcessor(
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
 
-        return if (callbackQuery.data.startsWith("lang:") && (dialogState is ChangingLanguage)) {
+        return if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState is ChangingLanguage)) {
             {
                 val (_, language) = callbackQuery.data.split(":")
 
                 logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
 
-                val newGroupConfig = (groupConfig ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
+                val newGroupConfig = (groupConfig
+                    ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
 
                 groupConfigRepository.save(newGroupConfig)
                 requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
                 requestsExecutor.deleteMessage(callbackQuery.message)
                 requestsExecutor.sendMessage(
-                        chatId = callbackQuery.message.chat.id,
-                        text = I18N(newGroupConfig.language)["language.response.ok"],
-                        parseMode = MarkdownV2,
+                    chatId = callbackQuery.message.chat.id,
+                    text = I18N(newGroupConfig.language)["language.response.ok"],
+                    parseMode = MarkdownV2,
                 )
                 dialogStateRepository.delete(callbackQuery.message.chat.id.chatId, callbackQuery.user.id.chatId)
             }
-        } else if (callbackQuery.data.startsWith("lang:") && (dialogState !is ChangingLanguage)) {
+        } else if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState !is ChangingLanguage)) {
             {
                 requestsExecutor.answerCallbackQuery(
-                        callbackQuery = callbackQuery,
-                        text = I18N(groupConfig?.language)["language.response.wrongUser"],
+                    callbackQuery = callbackQuery,
+                    text = I18N(groupConfig?.language)["language.response.wrongUser"],
                 )
             }
         } else null

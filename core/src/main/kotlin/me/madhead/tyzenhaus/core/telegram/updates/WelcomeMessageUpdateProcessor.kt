@@ -19,9 +19,9 @@ import java.time.Instant
  * Sends welcome message whenever the bot is added to a group.
  */
 class WelcomeMessageUpdateProcessor(
-        private val id: ChatIdentifier,
-        private val requestsExecutor: RequestsExecutor,
-        private val groupConfigRepository: GroupConfigRepository,
+    private val id: ChatIdentifier,
+    private val requestsExecutor: RequestsExecutor,
+    private val groupConfigRepository: GroupConfigRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(WelcomeMessageUpdateProcessor::class.java)!!
@@ -38,15 +38,15 @@ class WelcomeMessageUpdateProcessor(
                 logger.debug("Saying welcome in {}", update.data.chat.id.chatId)
 
                 val newGroupConfig = (groupConfig ?: GroupConfig(update.groupId)).copy(
-                        invitedBy = update.userId,
-                        invitedAt = Instant.now()
+                    invitedBy = update.userId,
+                    invitedAt = Instant.now()
                 )
 
                 groupConfigRepository.save(newGroupConfig)
                 requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N()["welcome"],
-                        parseMode = MarkdownV2,
+                    chatId = update.data.chat.id,
+                    text = I18N()["welcome"],
+                    parseMode = MarkdownV2,
                 )
             }
         } else null

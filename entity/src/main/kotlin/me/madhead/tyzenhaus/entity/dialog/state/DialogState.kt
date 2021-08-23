@@ -12,6 +12,9 @@ interface DialogState {
         val serializers = SerializersModule {
             polymorphic(DialogState::class) {
                 subclass(ChangingLanguage::class)
+                subclass(WaitingForAmount::class)
+                subclass(WaitingForCurrency::class)
+                subclass(WaitingForParticipants::class)
             }
         }
     }

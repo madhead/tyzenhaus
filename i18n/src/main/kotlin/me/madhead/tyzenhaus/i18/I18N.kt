@@ -8,8 +8,8 @@ import java.util.ResourceBundle
  * I18N entry point.
  */
 open class I18N(
-        private val locale: Locale,
-        private val resourceBundle: ResourceBundle,
+    private val locale: Locale,
+    private val resourceBundle: ResourceBundle,
 ) {
     companion object {
         /**
@@ -19,8 +19,8 @@ open class I18N(
             val theLocale = locale ?: Locale.getDefault()
 
             return I18N(
-                    locale = theLocale,
-                    resourceBundle = ResourceBundle.getBundle("i18n", theLocale)
+                locale = theLocale,
+                resourceBundle = ResourceBundle.getBundle("i18n", theLocale)
             )
         }
     }
@@ -34,5 +34,5 @@ open class I18N(
      * Get a string for template for a given key and a set of arguments.
      */
     operator fun get(key: String, vararg arguments: Any?): String =
-            MessageFormat(this[key], this.locale).format(arguments, StringBuffer(), null).toString()
+        MessageFormat(this[key], this.locale).format(arguments, StringBuffer(), null).toString()
 }
