@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.entity
+package me.madhead.tyzenhaus.entity.transaction
 
 import java.math.BigDecimal
 import java.time.Instant

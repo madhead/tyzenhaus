@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
-import me.madhead.tyzenhaus.entity.Transaction
+import me.madhead.tyzenhaus.entity.transaction.Transaction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag

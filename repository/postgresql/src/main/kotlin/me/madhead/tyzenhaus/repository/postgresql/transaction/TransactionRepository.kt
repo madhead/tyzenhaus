@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
-import me.madhead.tyzenhaus.entity.Transaction
+import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
 import org.apache.logging.log4j.LogManager
 import java.sql.Timestamp

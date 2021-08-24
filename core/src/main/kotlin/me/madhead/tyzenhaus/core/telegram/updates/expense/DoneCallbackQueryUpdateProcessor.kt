@@ -11,7 +11,7 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
-import me.madhead.tyzenhaus.entity.Transaction
+import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
