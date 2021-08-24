@@ -20,3 +20,21 @@ VALUES (1,
         42.99,
         'USD',
         '1995-08-12 00:00:00 +03:00');
+
+INSERT INTO balance ("group_id", "version", "balance")
+VALUES (1, 2, '{
+  "groupId": 1,
+  "balance": {
+    "EUR": {
+      "1": "42.99",
+      "2": "-42.99"
+    },
+    "USD": {
+      "1": "-42.99",
+      "2": "42.99"
+    }
+  }
+}'::JSONB)
+ON CONFLICT ("group_id", "version")
+    DO UPDATE SET "version" = excluded.version + 1,
+                  "balance" = EXCLUDED."balance";
