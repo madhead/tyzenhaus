@@ -5,6 +5,7 @@ import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.telegram.updates.HelpCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.IDCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.ParticipateCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
@@ -31,6 +32,11 @@ val pipelineModule = module {
     }
     single {
         HelpCommandUpdateProcessor(
+            requestsExecutor = get(),
+        )
+    }
+    single {
+        IDCommandUpdateProcessor(
             requestsExecutor = get(),
         )
     }
@@ -90,6 +96,7 @@ val pipelineModule = module {
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
                 get<HelpCommandUpdateProcessor>(),
+                get<IDCommandUpdateProcessor>(),
                 get<ExpenseCommandUpdateProcessor>(),
                 get<AmountReplyUpdateProcessor>(),
                 get<CurrencyReplyUpdateProcessor>(),
