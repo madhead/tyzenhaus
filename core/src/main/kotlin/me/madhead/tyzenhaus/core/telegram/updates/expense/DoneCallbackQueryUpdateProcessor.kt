@@ -11,14 +11,17 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
-import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.i18.I18N
+import me.madhead.tyzenhaus.repository.BalanceRepository
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.apache.logging.log4j.LogManager
+import java.math.BigDecimal
 import java.time.Instant
 
 /**
@@ -28,6 +31,7 @@ class DoneCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val dialogStateRepository: DialogStateRepository,
     private val transactionRepository: TransactionRepository,
+    private val balanceRepository: BalanceRepository,
 ) : UpdateProcessor {
     companion object {
         const val CALLBACK = "participants:done"
@@ -54,6 +58,18 @@ class DoneCallbackQueryUpdateProcessor(
 
                 logger.debug("Creating shared expense: {}", transaction)
 
+                val balance = balanceRepository.get(update.groupId) ?: Balance(update.groupId)
+                val groupBalance = balance.balance.toMutableMap()
+                val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
+                val share = transaction.amount / transaction.recipients.size.toBigDecimal()
+
+                currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
+                transaction.recipients.forEach { recipient ->
+                    currencyBalance[recipient] = (currencyBalance[recipient] ?: BigDecimal.ZERO) - share
+                }
+                groupBalance[transaction.currency] = currencyBalance
+
+                balanceRepository.save(balance.copy(balance = groupBalance))
                 transactionRepository.save(transaction)
                 dialogStateRepository.delete(update.groupId, dialogState.userId)
 

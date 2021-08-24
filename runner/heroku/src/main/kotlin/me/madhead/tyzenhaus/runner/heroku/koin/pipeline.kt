@@ -16,6 +16,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.expense.ExpenseCommandUpdatePr
 import me.madhead.tyzenhaus.core.telegram.updates.expense.ParticipantCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
+import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
 import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
@@ -70,6 +71,7 @@ val pipelineModule = module {
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
             transactionRepository = get<TransactionRepository>(),
+            balanceRepository = get<BalanceRepository>(),
         )
     }
     single {
