@@ -6,6 +6,7 @@ import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
+import dev.inmo.tgbotapi.types.titleField
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
@@ -53,6 +54,7 @@ class DoneCallbackQueryUpdateProcessor(
                     recipients = dialogState.participants,
                     amount = dialogState.amount,
                     currency = dialogState.currency,
+                    title = dialogState.title,
                     timestamp = Instant.now(),
                 )
 

@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.repository.postgresql.transaction
 
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import java.sql.ResultSet
+import java.util.Locale
 
 internal fun ResultSet.toTransaction(): Transaction? {
     return if (this.next()) {
@@ -20,6 +21,15 @@ internal fun ResultSet.toTransaction(): Transaction? {
             },
             amount = this.getBigDecimal("amount"),
             currency = this.getString("currency"),
+            title = run {
+                val value = this.getString("title")
+
+                if (this.wasNull()) {
+                    null
+                } else {
+                    value
+                }
+            },
             timestamp = this.getTimestamp("timestamp").toInstant(),
         )
     } else {

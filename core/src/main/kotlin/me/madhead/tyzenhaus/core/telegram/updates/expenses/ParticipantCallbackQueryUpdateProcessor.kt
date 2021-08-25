@@ -57,6 +57,7 @@ class ParticipantCallbackQueryUpdateProcessor(
                     )
 
                     dialogStateRepository.save(state)
+                    requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
                     requestsExecutor.editMessageReplyMarkup(
                         message = callbackQuery.message,
                         replyMarkup = replyMarkup(chatMembers, state.participants, groupConfig)

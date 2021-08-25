@@ -54,3 +54,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/balance.deinit.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 6
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/transaction-add-title-column.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/transaction-remove-title-column.sql
+            relativeToChangelogFile: true

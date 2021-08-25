@@ -31,7 +31,7 @@ class TransactionRepositoryTest {
     @Test
     fun get() {
         Assertions.assertEquals(
-            Transaction(1, 1, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", Instant.ofEpochMilli(808174800000)),
+            Transaction(1, 1, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", "Lunch", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(1)
         )
     }
@@ -44,11 +44,11 @@ class TransactionRepositoryTest {
     @Test
     fun save() {
         transactionRepository.save(
-            Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000))
+            Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
         Assertions.assertEquals(
-            Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000)),
+            Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-1)
         )
     }
@@ -56,20 +56,20 @@ class TransactionRepositoryTest {
     @Test
     fun update() {
         transactionRepository.save(
-            Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000))
+            Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
         Assertions.assertEquals(
-            Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000)),
+            Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-2)
         )
 
         transactionRepository.save(
-            Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000))
+            Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
         Assertions.assertEquals(
-            Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", Instant.ofEpochMilli(808174800000)),
+            Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-2)
         )
     }

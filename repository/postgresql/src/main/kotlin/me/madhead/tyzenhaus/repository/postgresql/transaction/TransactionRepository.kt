@@ -37,8 +37,8 @@ class TransactionRepository(dataSource: DataSource)
             if (entity.id == null) {
                 connection
                     .prepareStatement("""
-                            INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "timestamp")
-                            VALUES (DEFAULT, ?, ?, ?, ?, ?, ?);
+                            INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
+                            VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?);
                     """.trimIndent())
                     .use { preparedStatement ->
                         preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
@@ -49,21 +49,23 @@ class TransactionRepository(dataSource: DataSource)
                         )
                         preparedStatement.setBigDecimal(@Suppress("MagicNumber") 4, entity.amount)
                         preparedStatement.setString(@Suppress("MagicNumber") 5, entity.currency)
-                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 6, Timestamp.from(entity.timestamp))
+                        preparedStatement.setString(@Suppress("MagicNumber") 6, entity.title)
+                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 7, Timestamp.from(entity.timestamp))
 
                         preparedStatement.executeUpdate()
                     }
             } else {
                 connection
                     .prepareStatement("""
-                            INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "timestamp")
-                            VALUES (?, ?, ?, ?, ?, ?, ?)
+                            INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                             ON CONFLICT ("id")
                                 DO UPDATE SET "group_id"   = EXCLUDED."group_id",
                                               "payer"      = EXCLUDED."payer",
                                               "recipients" = EXCLUDED."recipients",
                                               "amount"     = EXCLUDED."amount",
                                               "currency"   = EXCLUDED."currency",
+                                              "title"      = EXCLUDED."title",
                                               "timestamp"  = EXCLUDED."timestamp";
                     """.trimIndent())
                     .use { preparedStatement ->
@@ -76,7 +78,8 @@ class TransactionRepository(dataSource: DataSource)
                         )
                         preparedStatement.setBigDecimal(@Suppress("MagicNumber") 5, entity.amount)
                         preparedStatement.setString(@Suppress("MagicNumber") 6, entity.currency)
-                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 7, Timestamp.from(entity.timestamp))
+                        preparedStatement.setString(@Suppress("MagicNumber") 7, entity.title)
+                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 8, Timestamp.from(entity.timestamp))
 
                         preparedStatement.executeUpdate()
                     }
