@@ -36,7 +36,6 @@ class CurrencyReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
-        val members = groupConfig?.members ?: return null
 
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
@@ -47,7 +46,7 @@ class CurrencyReplyUpdateProcessor(
             val content = message.content as? TextContent ?: return {
                 val currencyRequestMessage = requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = I18N(groupConfig.language)["expense.response.currency.textPlease"],
+                    text = I18N(groupConfig?.language)["expense.response.currency.textPlease"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
                     replyMarkup = ForceReply(
@@ -71,7 +70,7 @@ class CurrencyReplyUpdateProcessor(
 
                 val titleMessage = requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = I18N(groupConfig.language)["expense.action.title"],
+                    text = I18N(groupConfig?.language)["expense.action.title"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
                     replyMarkup = ForceReply(
