@@ -27,8 +27,14 @@ import org.koin.dsl.module
 @KtorExperimentalAPI
 val pipelineModule = module {
     single {
+        ChatCurrenciesService(
+            balanceRepository = get<BalanceRepository>(),
+        )
+    }
+    single {
         DebtsCalculator()
     }
+
     single {
         WelcomeMessageUpdateProcessor(
             id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
@@ -63,7 +69,7 @@ val pipelineModule = module {
         AmountReplyUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
-            chatCurrenciesService = ChatCurrenciesService(),
+            chatCurrenciesService = get(),
         )
     }
     single {
