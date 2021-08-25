@@ -40,7 +40,8 @@ class HelpCommandUpdateProcessor(
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig?.language)["help"],
-                    parseMode = MarkdownV2
+                    parseMode = MarkdownV2,
+                    disableWebPagePreview = true,
                 )
             }
         } else null
