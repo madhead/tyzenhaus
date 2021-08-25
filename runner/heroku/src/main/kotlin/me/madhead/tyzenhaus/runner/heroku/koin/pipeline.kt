@@ -13,6 +13,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.expenses.DoneCallbackQueryUpda
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ExpenseCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipantCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipateCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.TitleReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.HelpCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
@@ -79,6 +80,12 @@ val pipelineModule = module {
         )
     }
     single {
+        TitleReplyUpdateProcessor(
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
+        )
+    }
+    single {
         ParticipantCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
@@ -121,6 +128,7 @@ val pipelineModule = module {
                 get<DebtsCommandUpdateProcessor>(),
                 get<AmountReplyUpdateProcessor>(),
                 get<CurrencyReplyUpdateProcessor>(),
+                get<TitleReplyUpdateProcessor>(),
                 get<ParticipantCallbackQueryUpdateProcessor>(),
                 get<DoneCallbackQueryUpdateProcessor>(),
                 get<LangCommandUpdateProcessor>(),

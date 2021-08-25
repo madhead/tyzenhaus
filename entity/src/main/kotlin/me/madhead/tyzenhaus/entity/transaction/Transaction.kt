@@ -13,5 +13,6 @@ data class Transaction(
     val recipients: Set<Long>,
     val amount: BigDecimal,
     val currency: String,
+    val title: String? = null,
     val timestamp: Instant = Instant.now(),
 )

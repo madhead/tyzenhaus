@@ -12,13 +12,14 @@ VALUES (1, 1, '{
   "type": "ChangingLanguage"
 }'::JSONB);
 
-INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "timestamp")
+INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
 VALUES (1,
         1,
         1,
         '{1,2,3}',
         42.99,
         'USD',
+        'Lunch',
         '1995-08-12 00:00:00 +03:00');
 
 INSERT INTO balance ("group_id", "version", "balance")

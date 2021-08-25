@@ -6,17 +6,15 @@ import me.madhead.tyzenhaus.entity.serializers.BigDecimalSerializer
 import java.math.BigDecimal
 
 /**
- * Expense flow: waiting for currency input.
+ * Expense flow: waiting for title input.
  */
 @Serializable
-@SerialName("WaitingForParticipants")
-data class WaitingForParticipants(
+@SerialName("WaitingForTitle")
+data class WaitingForTitle(
     override val groupId: Long,
     override val userId: Long,
     val messageId: Long,
     @Serializable(BigDecimalSerializer::class)
     val amount: BigDecimal,
     val currency: String,
-    val title: String,
-    val participants: Set<Long> = emptySet(),
 ) : DialogState
