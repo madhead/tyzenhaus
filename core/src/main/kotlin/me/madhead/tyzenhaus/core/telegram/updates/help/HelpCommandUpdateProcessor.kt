@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates
+package me.madhead.tyzenhaus.core.telegram.updates.help
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
@@ -8,6 +8,10 @@ import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
+import me.madhead.tyzenhaus.core.telegram.updates.groupId
+import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N

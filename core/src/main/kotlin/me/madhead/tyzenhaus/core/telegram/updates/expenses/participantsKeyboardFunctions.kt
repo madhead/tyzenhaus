@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates.expense
+package me.madhead.tyzenhaus.core.telegram.updates.expenses
 
 import dev.inmo.tgbotapi.types.ChatMember.abstracts.ChatMember
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
