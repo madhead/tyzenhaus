@@ -2,7 +2,6 @@ package me.madhead.tyzenhaus.core.telegram.updates.expenses
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
-import dev.inmo.tgbotapi.extensions.utils.types.buttons.ReplyKeyboardMarkup
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.buttons.ForceReply
 import dev.inmo.tgbotapi.types.buttons.SimpleKeyboardButton
@@ -83,13 +82,12 @@ class AmountReplyUpdateProcessor(
                     text = I18N(groupConfig?.language)["expense.action.currency"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
-                    replyMarkup = ReplyKeyboardMarkup(
-                        buttons = chatCurrenciesService
+                    replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
+                        keyboard = chatCurrenciesService
                             .groupCurrencies(update.groupId)
-                            .map { SimpleKeyboardButton(it) }
-                            .toTypedArray(),
-                        oneTimeKeyboard = true,
+                            .map { listOf(SimpleKeyboardButton(it)) },
                         resizeKeyboard = true,
+                        oneTimeKeyboard = true,
                         selective = true,
                     )
                 )
