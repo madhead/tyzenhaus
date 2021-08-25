@@ -4,9 +4,11 @@ import dev.inmo.tgbotapi.types.ChatId
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
+import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.AmountReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.CurrencyReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.DebtsCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.DoneCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ExpenseCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipantCallbackQueryUpdateProcessor
@@ -24,6 +26,9 @@ import org.koin.dsl.module
 
 @KtorExperimentalAPI
 val pipelineModule = module {
+    single {
+        DebtsCalculator()
+    }
     single {
         WelcomeMessageUpdateProcessor(
             id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
@@ -45,6 +50,13 @@ val pipelineModule = module {
         ExpenseCommandUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
+        )
+    }
+    single {
+        DebtsCommandUpdateProcessor(
+            requestsExecutor = get(),
+            balanceRepository = get<BalanceRepository>(),
+            debtsCalculator = get(),
         )
     }
     single {
@@ -100,6 +112,7 @@ val pipelineModule = module {
                 get<HelpCommandUpdateProcessor>(),
                 get<IDCommandUpdateProcessor>(),
                 get<ExpenseCommandUpdateProcessor>(),
+                get<DebtsCommandUpdateProcessor>(),
                 get<AmountReplyUpdateProcessor>(),
                 get<CurrencyReplyUpdateProcessor>(),
                 get<ParticipantCallbackQueryUpdateProcessor>(),

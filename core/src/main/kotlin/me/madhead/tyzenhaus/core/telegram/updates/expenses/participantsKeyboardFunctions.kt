@@ -34,8 +34,6 @@ private fun ChatMember.callbackText(participants: Set<Long>, language: Locale?):
         I18N(language)["expense.response.participants.checked"]
     } else {
         I18N(language)["expense.response.participants.unchecked"]
-    } + (user.firstName +
-        (user.lastName.takeUnless { it.isBlank() }?.let { " $it" } ?: "") +
-        (user.username?.username?.let { " ($it)" } ?: ""))
+    } + this.displayNameWithId
 
 private fun ChatMember.callbackData(): String = "${ParticipantCallbackQueryUpdateProcessor.CALLBACK_PREFIX}${user.id.chatId}"

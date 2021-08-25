@@ -46,12 +46,15 @@ class UpdateProcessingPipeline(
         logger.info("Config: {}", groupConfig)
         logger.info("Dialog state: {}", dialogState)
 
-        processors.mapNotNull { it.process(update, groupConfig, dialogState) }.singleOrNull()?.let { reaction ->
-            logger.debug("Found single suitable processor. Reaction: {}", reaction::class)
-
-            reaction.invoke()
-        } ?: run {
-            logger.warn("No suitable processor found or found more that one")
-        }
+        processors
+            .mapNotNull { it.process(update, groupConfig, dialogState) }
+            .also { reactions ->
+                logger.debug("Reactions ({}): {}", reactions.size, reactions.map { it::class })
+                if (reactions.size != 1) {
+                    logger.warn("No suitable processor found or found more than one")
+                }
+            }
+            .singleOrNull()
+            ?.invoke()
     }
 }

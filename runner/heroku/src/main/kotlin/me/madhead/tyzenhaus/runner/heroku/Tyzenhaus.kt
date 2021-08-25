@@ -51,6 +51,8 @@ fun Application.main() {
                 BotCommand("help", "How to use the bot"),
                 BotCommand("lang", "Change language"),
                 BotCommand("participate", "Register yourself for expense tracking in this group"),
+                BotCommand("expense", "Add a shared expense"),
+                BotCommand("debts", "Show all the debts"),
             )
         }
     }
