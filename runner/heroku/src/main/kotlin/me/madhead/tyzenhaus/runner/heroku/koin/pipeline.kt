@@ -15,6 +15,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipantCallbackQu
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipateCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expenses.TitleReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.HelpCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.help.StartCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
@@ -41,6 +42,11 @@ val pipelineModule = module {
             id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
             requestsExecutor = get(),
             groupConfigRepository = get<GroupConfigRepository>(),
+        )
+    }
+    single {
+        StartCommandUpdateProcessor(
+            requestsExecutor = get(),
         )
     }
     single {
@@ -122,6 +128,7 @@ val pipelineModule = module {
         UpdateProcessingPipeline(
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
+                get<StartCommandUpdateProcessor>(),
                 get<HelpCommandUpdateProcessor>(),
                 get<IDCommandUpdateProcessor>(),
                 get<ExpenseCommandUpdateProcessor>(),
