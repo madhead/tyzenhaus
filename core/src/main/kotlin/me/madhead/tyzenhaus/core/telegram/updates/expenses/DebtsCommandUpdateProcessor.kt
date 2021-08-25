@@ -94,8 +94,8 @@ class DebtsCommandUpdateProcessor(
 
                         I18N(groupConfig.language)[
                             "debts.response.owes",
-                            "[${from.displayName}](tg://user?id=${debt.from})",
-                            "[${to.displayName}](tg://user?id=${debt.to})",
+                            "[${from.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.from})",
+                            "[${to.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.to})",
                             amount,
                         ]
                     }

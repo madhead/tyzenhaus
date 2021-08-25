@@ -2,13 +2,16 @@ package me.madhead.tyzenhaus.core.telegram.updates.expenses
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
+import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
 import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
+import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
-import dev.inmo.tgbotapi.types.titleField
+import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
@@ -40,6 +43,7 @@ class DoneCallbackQueryUpdateProcessor(
         private val logger = LogManager.getLogger(DoneCallbackQueryUpdateProcessor::class.java)!!
     }
 
+    @Suppress("LongMethod")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? CallbackQueryUpdate ?: return null
@@ -79,9 +83,26 @@ class DoneCallbackQueryUpdateProcessor(
                     message = callbackQuery.message,
                     replyMarkup = null,
                 )
+
+
+                val members = (transaction.recipients + transaction.payer).toSet()
+                val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+                val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
+                    "(tg://user?id=${transaction.payer})"
+                val to = transaction.recipients.joinToString(", ") { recipient ->
+                    "[${chatMembers.first { it.user.id.chatId == recipient }.displayName.escapeMarkdownV2Common()}]" +
+                        "(tg://user?id=$recipient)"
+                }
+                val amount = "${transaction.amount} ${transaction.currency}".escapeMarkdownV2Common()
+
                 requestsExecutor.sendMessage(
                     chatId = callbackQuery.message.chat.id,
-                    text = I18N(groupConfig?.language)["expense.response.success"],
+                    text = I18N(groupConfig?.language)[
+                        "expense.response.success",
+                        from,
+                        to,
+                        amount,
+                    ],
                     parseMode = MarkdownV2,
                 )
             }
