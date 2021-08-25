@@ -4,18 +4,21 @@ import dev.inmo.tgbotapi.types.ChatId
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
-import me.madhead.tyzenhaus.core.telegram.updates.HelpCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.IDCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.ParticipateCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
-import me.madhead.tyzenhaus.core.telegram.updates.WelcomeMessageUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.AmountReplyUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.CurrencyReplyUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.DoneCallbackQueryUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.ExpenseCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.ParticipantCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.AmountReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.CurrencyReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.DebtsCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.DoneCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.ExpenseCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipantCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipateCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.help.HelpCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcessor
+import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
 import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
@@ -23,6 +26,9 @@ import org.koin.dsl.module
 
 @KtorExperimentalAPI
 val pipelineModule = module {
+    single {
+        DebtsCalculator()
+    }
     single {
         WelcomeMessageUpdateProcessor(
             id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
@@ -44,6 +50,13 @@ val pipelineModule = module {
         ExpenseCommandUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
+        )
+    }
+    single {
+        DebtsCommandUpdateProcessor(
+            requestsExecutor = get(),
+            balanceRepository = get<BalanceRepository>(),
+            debtsCalculator = get(),
         )
     }
     single {
@@ -70,6 +83,7 @@ val pipelineModule = module {
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
             transactionRepository = get<TransactionRepository>(),
+            balanceRepository = get<BalanceRepository>(),
         )
     }
     single {
@@ -98,6 +112,7 @@ val pipelineModule = module {
                 get<HelpCommandUpdateProcessor>(),
                 get<IDCommandUpdateProcessor>(),
                 get<ExpenseCommandUpdateProcessor>(),
+                get<DebtsCommandUpdateProcessor>(),
                 get<AmountReplyUpdateProcessor>(),
                 get<CurrencyReplyUpdateProcessor>(),
                 get<ParticipantCallbackQueryUpdateProcessor>(),

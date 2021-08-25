@@ -43,3 +43,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/transaction.deinit.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 5
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/balance.init.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/balance.deinit.sql
+            relativeToChangelogFile: true

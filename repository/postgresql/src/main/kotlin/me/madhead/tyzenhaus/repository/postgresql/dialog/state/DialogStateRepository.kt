@@ -53,7 +53,6 @@ class DialogStateRepository(dataSource: DataSource)
                         preparedStatement.executeUpdate()
                     }
             }
-
     }
 
     override fun delete(groupId: Long, userId: Long) {
