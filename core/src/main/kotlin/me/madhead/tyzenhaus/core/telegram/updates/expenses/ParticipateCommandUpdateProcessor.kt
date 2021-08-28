@@ -3,6 +3,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expenses
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.MessageEntity.textsources.BotCommandTextSource
+import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -44,7 +45,8 @@ class ParticipateCommandUpdateProcessor(
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig?.language)["participate.response.ok"],
-                    replyToMessageId = message.messageId
+                    replyToMessageId = message.messageId,
+                    parseMode = MarkdownV2,
                 )
             }
         } else null

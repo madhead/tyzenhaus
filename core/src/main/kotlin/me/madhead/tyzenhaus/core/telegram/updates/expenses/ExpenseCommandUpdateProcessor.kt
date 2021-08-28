@@ -38,13 +38,13 @@ class ExpenseCommandUpdateProcessor(
         val content = message.content as? TextContent ?: return null
 
         return if (content.textSources.any { "expense" == (it as? BotCommandTextSource)?.command }) {
-            if (groupConfig?.members?.isEmpty() == true) {
+            if (groupConfig?.members.isNullOrEmpty()) {
                 {
                     logger.warn("No members participating in group expenses in in {}", update.groupId)
 
                     requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,
-                        text = I18N(groupConfig.language)["expense.response.participants.empty"],
+                        text = I18N(groupConfig?.language)["expense.response.participants.empty"],
                         parseMode = MarkdownV2,
                         replyToMessageId = message.messageId,
                     )
