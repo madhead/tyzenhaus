@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '13'
-      - run: ./gradlew clean :runner:heroku:installDist
+      - run: ./gradlew clean :runner:heroku:installDist :runner:heroku:stats:installDist
       - uses: docker/login-action@v1
         with:
           registry: registry.heroku.com
