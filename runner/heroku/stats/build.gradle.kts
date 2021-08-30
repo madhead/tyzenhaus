@@ -4,6 +4,9 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.koin.core)
+    implementation(libs.postgresql)
+    implementation(libs.log4j.slf4j.impl)
 }
 
 application {
