@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates.expenses
+package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery

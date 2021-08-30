@@ -1,10 +1,9 @@
-package me.madhead.tyzenhaus.core.telegram.updates.expenses
+package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
-import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
-import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
@@ -17,7 +16,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
-import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
+import me.madhead.tyzenhaus.entity.dialog.state.WaitingForConfirmation
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.i18.I18N
@@ -26,21 +25,22 @@ import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.apache.logging.log4j.LogManager
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Instant
 
 /**
- * Check / uncheck a participant.
+ * Store the transaction.
  */
-class DoneCallbackQueryUpdateProcessor(
+class ConfirmationCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val dialogStateRepository: DialogStateRepository,
     private val transactionRepository: TransactionRepository,
     private val balanceRepository: BalanceRepository,
 ) : UpdateProcessor {
     companion object {
-        const val CALLBACK = "participants:done"
+        const val CALLBACK = "confirmation:ok"
 
-        private val logger = LogManager.getLogger(DoneCallbackQueryUpdateProcessor::class.java)!!
+        private val logger = LogManager.getLogger(ConfirmationCallbackQueryUpdateProcessor::class.java)!!
     }
 
     @Suppress("LongMethod")
@@ -49,7 +49,7 @@ class DoneCallbackQueryUpdateProcessor(
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
 
-        return if (callbackQuery.data.startsWith(CALLBACK) && (dialogState is WaitingForParticipants)) {
+        return if (callbackQuery.data.startsWith(CALLBACK) && (dialogState is WaitingForConfirmation)) {
             {
                 val transaction = Transaction(
                     id = null,
@@ -67,7 +67,8 @@ class DoneCallbackQueryUpdateProcessor(
                 val balance = balanceRepository.get(update.groupId) ?: Balance(update.groupId)
                 val groupBalance = balance.balance.toMutableMap()
                 val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
-                val share = transaction.amount / transaction.recipients.size.toBigDecimal()
+                val share = transaction.amount.setScale(@Suppress("MagicNumber") 6, RoundingMode.HALF_UP) /
+                    transaction.recipients.size.toBigDecimal()
 
                 currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
                 transaction.recipients.forEach { recipient ->
@@ -79,12 +80,6 @@ class DoneCallbackQueryUpdateProcessor(
                 transactionRepository.save(transaction)
                 dialogStateRepository.delete(update.groupId, dialogState.userId)
 
-                requestsExecutor.editMessageReplyMarkup(
-                    message = callbackQuery.message,
-                    replyMarkup = null,
-                )
-
-
                 val members = (transaction.recipients + transaction.payer).toSet()
                 val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
                 val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
@@ -93,10 +88,11 @@ class DoneCallbackQueryUpdateProcessor(
                     "[${chatMembers.first { it.user.id.chatId == recipient }.displayName.escapeMarkdownV2Common()}]" +
                         "(tg://user?id=$recipient)"
                 }
-                val amount = "${transaction.amount} ${transaction.currency}".escapeMarkdownV2Common()
+                val amount = "${transaction.amount.setScale(2, RoundingMode.HALF_UP)} ${transaction.currency}".escapeMarkdownV2Common()
 
-                requestsExecutor.sendMessage(
-                    chatId = callbackQuery.message.chat.id,
+                requestsExecutor.editMessageText(
+                    chat = callbackQuery.message.chat,
+                    messageId = callbackQuery.message.messageId,
                     text = I18N(groupConfig?.language)[
                         "expense.response.success",
                         from,
@@ -104,9 +100,10 @@ class DoneCallbackQueryUpdateProcessor(
                         amount,
                     ],
                     parseMode = MarkdownV2,
+                    replyMarkup = null,
                 )
             }
-        } else if (callbackQuery.data.startsWith(CALLBACK) && (dialogState !is WaitingForParticipants)) {
+        } else if (callbackQuery.data.startsWith(CALLBACK) && (dialogState !is WaitingForConfirmation)) {
             {
                 requestsExecutor.answerCallbackQuery(
                     callbackQuery = callbackQuery,

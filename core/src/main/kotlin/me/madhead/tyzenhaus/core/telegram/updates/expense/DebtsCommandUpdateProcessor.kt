@@ -1,4 +1,4 @@
-package me.madhead.tyzenhaus.core.telegram.updates.expenses
+package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
@@ -22,6 +22,7 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.BalanceRepository
 import org.apache.logging.log4j.LogManager
+import java.math.RoundingMode
 
 /**
  * /debts command handler.
@@ -90,7 +91,7 @@ class DebtsCommandUpdateProcessor(
                     ) { debt ->
                         val from = chatMembers.first { it.user.id.chatId == debt.from }
                         val to = chatMembers.first { it.user.id.chatId == debt.to }
-                        val amount = "${debt.amount} ${debt.currency}".escapeMarkdownV2Common()
+                        val amount = "${debt.amount.setScale(2, RoundingMode.HALF_UP)} ${debt.currency}".escapeMarkdownV2Common()
 
                         I18N(groupConfig.language)[
                             "debts.response.owes",
