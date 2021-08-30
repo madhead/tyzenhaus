@@ -1,19 +1,27 @@
 package me.madhead.tyzenhaus.runner.heroku.stats
 
+import com.influxdb.annotations.Column
+import com.influxdb.annotations.Measurement
+import com.influxdb.client.domain.WritePrecision
+import com.influxdb.client.kotlin.InfluxDBClientKotlin
+import com.influxdb.client.write.Point
 import me.madhead.tyzenhaus.runner.heroku.stats.koin.dbModule
+import me.madhead.tyzenhaus.runner.heroku.stats.koin.influxModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import java.sql.Connection
+import java.time.Instant
 import javax.sql.DataSource
 
 /**
  * Gathers some stats.
  */
-fun main() {
+suspend fun main() {
     startKoin {
         modules(
-            dbModule
+            dbModule,
+            influxModule,
         )
     }
 
@@ -22,8 +30,9 @@ fun main() {
 
 internal class TyzenhausStats : KoinComponent {
     private val dataSource by inject<DataSource>()
+    private val influx by inject<InfluxDBClientKotlin>()
 
-    fun run() {
+    suspend fun run() {
         val stats = Stats()
 
         dataSource.connection?.use { connection ->
@@ -34,15 +43,23 @@ internal class TyzenhausStats : KoinComponent {
             averageGroupSize(connection, stats)
         }
 
+        influx.getWriteKotlinApi().writeMeasurement(
+            measurement = stats,
+            precision = WritePrecision.S,
+        )
+
         println(stats)
     }
 
+    @Suppress("DataClassShouldBeImmutable")
+    @Measurement(name = "KPI")
     data class Stats(
-        var totalNumberOfChats: Int = 0,
-        var numberOfGroups: Int = 0,
-        var numberOfGroupsWithTransactions: Int = 0,
-        var numberOfTransactions: Int = 0,
-        var averageGroupSize: Int = 0,
+        @Column var totalNumberOfChats: Int = 0,
+        @Column var numberOfGroups: Int = 0,
+        @Column var numberOfGroupsWithTransactions: Int = 0,
+        @Column var numberOfTransactions: Int = 0,
+        @Column var averageGroupSize: Int = 0,
+        @Column(timestamp = true) val time: Instant = Instant.now()
     )
 
     private fun totalNumberOfChats(connection: Connection, stats: Stats) {

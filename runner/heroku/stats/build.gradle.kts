@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation(libs.koin.core)
     implementation(libs.postgresql)
+    implementation(libs.influxdb.client.kotlin)
     implementation(libs.log4j.slf4j.impl)
 }
 
