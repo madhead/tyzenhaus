@@ -6,14 +6,15 @@ import io.ktor.util.KtorExperimentalAPI
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.AmountReplyUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.CurrencyReplyUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.DebtsCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.DoneCallbackQueryUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.ExpenseCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipantCallbackQueryUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.ParticipateCommandUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expenses.TitleReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.AmountReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ConfirmationCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.CurrencyReplyUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.DebtsCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.DoneCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ExpenseCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ParticipantCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ParticipateCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.TitleReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.HelpCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.StartCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
@@ -106,6 +107,14 @@ val pipelineModule = module {
         )
     }
     single {
+        ConfirmationCallbackQueryUpdateProcessor(
+            requestsExecutor = get(),
+            dialogStateRepository = get<DialogStateRepository>(),
+            transactionRepository = get<TransactionRepository>(),
+            balanceRepository = get<BalanceRepository>(),
+        )
+    }
+    single {
         LangCommandUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
@@ -138,6 +147,7 @@ val pipelineModule = module {
                 get<TitleReplyUpdateProcessor>(),
                 get<ParticipantCallbackQueryUpdateProcessor>(),
                 get<DoneCallbackQueryUpdateProcessor>(),
+                get<ConfirmationCallbackQueryUpdateProcessor>(),
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
