@@ -2,7 +2,6 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
-import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
 import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
@@ -72,7 +71,7 @@ class DoneCallbackQueryUpdateProcessor(
             timestamp = Instant.now(),
         )
         val members = (transaction.recipients + transaction.payer).toSet()
-        val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+        val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
         val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
             "(tg://user?id=${transaction.payer})"
         val to = transaction.recipients.joinToString(", ") { recipient ->

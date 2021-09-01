@@ -2,7 +2,6 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
-import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
 import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ChatId
@@ -56,7 +55,7 @@ class ParticipantCallbackQueryUpdateProcessor(
             val participant = rawParticipant.toLongOrNull()
 
             if (participant != null) {
-                val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+                val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
                 val state = dialogState.copy(
                     participants = if (dialogState.participants.contains(participant)) {
                         dialogState.participants - participant

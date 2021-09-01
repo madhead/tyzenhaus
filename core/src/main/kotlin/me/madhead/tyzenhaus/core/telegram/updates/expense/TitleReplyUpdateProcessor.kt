@@ -1,7 +1,6 @@
 package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
-import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
@@ -76,7 +75,7 @@ class TitleReplyUpdateProcessor(
         return {
             logger.debug("{} provided title in {}", update.userId, update.groupId)
 
-            val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+            val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
 
             logger.debug("Members of {}: {}", update.groupId, chatMembers)
 
