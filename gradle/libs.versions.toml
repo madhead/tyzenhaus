@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.5.0"
 ktor = "1.5.4"
-koin = "3.0.2"
+koin = "3.1.2"
 kotlinx-serialization = "1.2.1"
 tgbotapi = "0.34.1"
 postgresql = "42.2.20"
@@ -9,6 +9,8 @@ log4j = "2.14.1"
 
 junit = "5.7.2"
 mockk = "1.11.0"
+
+influxdb = "3.2.0"
 
 liquibase = "3.10.2"
 #liquibase = "4.3.5"
@@ -20,6 +22,7 @@ jacoco = "0.8.7"
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlin" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
@@ -36,6 +39,8 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
+influxdb-client-kotlin = { group = "com.influxdb", name = "influxdb-client-kotlin", version.ref = "influxdb" }
 
 liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
