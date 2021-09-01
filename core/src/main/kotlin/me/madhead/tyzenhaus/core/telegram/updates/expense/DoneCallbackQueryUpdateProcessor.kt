@@ -99,7 +99,11 @@ class DoneCallbackQueryUpdateProcessor(
                         listOf(
                             CallbackDataInlineKeyboardButton(
                                 I18N(groupConfig?.language)["expense.response.confirmation.ok"],
-                                ConfirmationCallbackQueryUpdateProcessor.CALLBACK
+                                ConfirmationOKCallbackQueryUpdateProcessor.CALLBACK_OK
+                            ),
+                            CallbackDataInlineKeyboardButton(
+                                I18N(groupConfig?.language)["expense.response.confirmation.cancel"],
+                                ConfirmationCancelCallbackQueryUpdateProcessor.CALLBACK_CANCEL
                             )
                         )
                     )

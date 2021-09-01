@@ -3,6 +3,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
+import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
@@ -16,6 +17,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
+import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForConfirmation
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.entity.transaction.Transaction
@@ -31,16 +33,16 @@ import java.time.Instant
 /**
  * Store the transaction.
  */
-class ConfirmationCallbackQueryUpdateProcessor(
+class ConfirmationOKCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val dialogStateRepository: DialogStateRepository,
     private val transactionRepository: TransactionRepository,
     private val balanceRepository: BalanceRepository,
 ) : UpdateProcessor {
     companion object {
-        const val CALLBACK = "confirmation:ok"
+        const val CALLBACK_OK = "confirmation:ok"
 
-        private val logger = LogManager.getLogger(ConfirmationCallbackQueryUpdateProcessor::class.java)!!
+        private val logger = LogManager.getLogger(ConfirmationOKCallbackQueryUpdateProcessor::class.java)!!
     }
 
     @Suppress("LongMethod")
@@ -48,10 +50,12 @@ class ConfirmationCallbackQueryUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
+        @Suppress("NAME_SHADOWING")
+        val dialogState = dialogState as? WaitingForConfirmation ?: return null
 
-        if (callbackQuery.data != CALLBACK) return null
+        if (callbackQuery.data != CALLBACK_OK) return null
 
-        if ((dialogState !is WaitingForConfirmation) || (dialogState.userId != update.userId)) return {
+        if (dialogState.userId != update.userId) return {
             requestsExecutor.answerCallbackQuery(
                 callbackQuery = callbackQuery,
                 text = I18N(groupConfig?.language)["expense.response.confirmation.wrongUser"],

@@ -3,6 +3,7 @@ package me.madhead.tyzenhaus.core.telegram.updates
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageCallbackQuery
 import dev.inmo.tgbotapi.types.message.abstracts.FromUserMessage
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
+import dev.inmo.tgbotapi.types.update.MyChatMemberUpdatedUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.BaseMessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 
@@ -15,6 +16,7 @@ val Update.groupId: Long
                 else -> throw IllegalArgumentException("Unknown update type")
             }
         }
+        is MyChatMemberUpdatedUpdate -> this.data.chat.id.chatId
         else -> throw IllegalArgumentException("Unknown update type")
     }
 
