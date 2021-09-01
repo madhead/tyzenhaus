@@ -38,9 +38,12 @@ class ParticipantCallbackQueryUpdateProcessor(
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
         val members = groupConfig?.members ?: return null
 
+        @Suppress("NAME_SHADOWING")
+        val dialogState = dialogState as? WaitingForParticipants ?: return null
+
         if (!callbackQuery.data.startsWith(CALLBACK_PREFIX)) return null
 
-        if ((dialogState !is WaitingForParticipants) || (dialogState.userId != update.userId)) return {
+        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId)) return {
             requestsExecutor.answerCallbackQuery(
                 callbackQuery = callbackQuery,
                 text = I18N(groupConfig.language)["expense.response.participants.wrongUser"],
