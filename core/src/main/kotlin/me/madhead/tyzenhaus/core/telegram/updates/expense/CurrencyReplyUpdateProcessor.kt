@@ -31,10 +31,12 @@ class CurrencyReplyUpdateProcessor(
         private val logger = LogManager.getLogger(CurrencyReplyUpdateProcessor::class.java)!!
     }
 
+    @Suppress("LongMethod", "ReturnCount")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
+
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
 
@@ -68,6 +70,22 @@ class CurrencyReplyUpdateProcessor(
         }
 
         val currency = content.text
+
+        if (currency.length > @Suppress("MagicNumber") 120) return {
+            val currencyRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.currency.tooLong"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(
+                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, dialogState.amount)
+            )
+        }
 
         return {
             logger.debug("{} provided expense currency ({}) in {}", update.userId, currency, update.groupId)
