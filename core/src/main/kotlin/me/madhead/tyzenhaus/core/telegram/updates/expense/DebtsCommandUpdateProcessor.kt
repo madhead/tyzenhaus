@@ -68,7 +68,7 @@ class DebtsCommandUpdateProcessor(
             }
         }
 
-        val members = groupConfig?.members
+        val members = groupConfig?.members?.plus(debts.flatMap { listOf(it.from, it.to) })
 
         if (members.isNullOrEmpty()) {
             return {
