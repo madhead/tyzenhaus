@@ -117,13 +117,11 @@ val pipelineModule = module {
     single {
         LangCommandUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
         )
     }
     single {
         LangCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
             groupConfigRepository = get<GroupConfigRepository>(),
         )
     }

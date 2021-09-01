@@ -7,7 +7,7 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import java.util.Locale
 
-internal fun replyMarkup(chatMembers: List<ChatMember>, participants: Set<Long>, groupConfig: GroupConfig) =
+internal fun replyMarkup(chatMembers: List<ChatMember>, participants: Set<Long>, groupConfig: GroupConfig, withDone: Boolean = true) =
     InlineKeyboardMarkup(
         chatMembers
             .map {
@@ -19,14 +19,18 @@ internal fun replyMarkup(chatMembers: List<ChatMember>, participants: Set<Long>,
                 )
             }
             +
-            listOf(
+            if (withDone) {
                 listOf(
-                    CallbackDataInlineKeyboardButton(
-                        I18N(groupConfig.language)["expense.response.participants.done"],
-                        DoneCallbackQueryUpdateProcessor.CALLBACK,
+                    listOf(
+                        CallbackDataInlineKeyboardButton(
+                            I18N(groupConfig.language)["expense.response.participants.done"],
+                            DoneCallbackQueryUpdateProcessor.CALLBACK,
+                        )
                     )
                 )
-            )
+            } else {
+                emptyList()
+            }
     )
 
 private fun ChatMember.callbackText(participants: Set<Long>, language: Locale?): String =

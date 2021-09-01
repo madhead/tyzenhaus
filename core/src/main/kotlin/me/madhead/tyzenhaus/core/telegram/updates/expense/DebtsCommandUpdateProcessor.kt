@@ -43,70 +43,67 @@ class DebtsCommandUpdateProcessor(
         val message = update.data as? CommonMessage<*> ?: return null
         val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
-        return if (content.textSources.any { "debts" == (it as? BotCommandTextSource)?.command }) {
-            reaction@{
-                logger.debug("{} asked for debts in {}", update.userId, update.groupId)
+        if (content.textSources.none { "debts" == (it as? BotCommandTextSource)?.command }) return null
 
-                val balance = balanceRepository.get(update.groupId)
+        logger.debug("{} asked for debts in {}", update.userId, update.groupId)
 
-                if (balance == null) {
-                    requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["debts.response.emptyBalance"],
-                        parseMode = MarkdownV2,
-                    )
-
-                    return@reaction
-                }
-
-                val debts = debtsCalculator.calculate(balance)
-
-                if (debts.isEmpty()) {
-                    requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["debts.response.emptyBalance"],
-                        parseMode = MarkdownV2,
-                    )
-
-                    return@reaction
-                }
-
-                val members = groupConfig?.members
-
-                if (members.isNullOrEmpty()) {
-                    requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["debts.response.noMembers"],
-                        parseMode = MarkdownV2,
-                    )
-
-                    return@reaction
-                }
-
-                val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
-                val debtsMessage = debts
-                    .joinToString(
-                        prefix = I18N(groupConfig.language)["debts.response.title"],
-                        separator = "\n"
-                    ) { debt ->
-                        val from = chatMembers.first { it.user.id.chatId == debt.from }
-                        val to = chatMembers.first { it.user.id.chatId == debt.to }
-                        val amount = "${debt.amount.setScale(2, RoundingMode.HALF_UP)} ${debt.currency}".escapeMarkdownV2Common()
-
-                        I18N(groupConfig.language)[
-                            "debts.response.owes",
-                            "[${from.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.from})",
-                            "[${to.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.to})",
-                            amount,
-                        ]
-                    }
-
+        val balance = balanceRepository.get(update.groupId)
+            ?: return {
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = debtsMessage,
+                    text = I18N(groupConfig?.language)["debts.response.emptyBalance"],
                     parseMode = MarkdownV2,
                 )
             }
-        } else null
+
+        val debts = debtsCalculator.calculate(balance)
+
+        if (debts.isEmpty()) {
+            return {
+                requestsExecutor.sendMessage(
+                    chatId = update.data.chat.id,
+                    text = I18N(groupConfig?.language)["debts.response.emptyBalance"],
+                    parseMode = MarkdownV2,
+                )
+            }
+        }
+
+        val members = groupConfig?.members
+
+        if (members.isNullOrEmpty()) {
+            return {
+                requestsExecutor.sendMessage(
+                    chatId = update.data.chat.id,
+                    text = I18N(groupConfig?.language)["debts.response.noMembers"],
+                    parseMode = MarkdownV2,
+                )
+            }
+        }
+
+        val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+        val debtsMessage = debts
+            .joinToString(
+                prefix = I18N(groupConfig.language)["debts.response.title"],
+                separator = "\n"
+            ) { debt ->
+                val from = chatMembers.first { it.user.id.chatId == debt.from }
+                val to = chatMembers.first { it.user.id.chatId == debt.to }
+                val amount = "${debt.amount.setScale(2, RoundingMode.HALF_UP)} ${debt.currency}".escapeMarkdownV2Common()
+
+                I18N(groupConfig.language)[
+                    "debts.response.owes",
+                    "[${from.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.from})",
+                    "[${to.displayName.escapeMarkdownV2Common()}](tg://user?id=${debt.to})",
+                    amount,
+                ]
+            }
+
+        return {
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = debtsMessage,
+                parseMode = MarkdownV2,
+            )
+        }
     }
 }

@@ -9,7 +9,8 @@ INSERT INTO "dialog_state" ("group_id", "user_id", "state")
 VALUES (1, 1, '{
   "groupId": 1,
   "userId": 1,
-  "type": "ChangingLanguage"
+  "messageId": 42,
+  "type": "WaitingForAmount"
 }'::JSONB);
 
 INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")

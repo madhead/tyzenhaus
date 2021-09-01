@@ -15,11 +15,9 @@ import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor.Companion.CALLBACK_PREFIX
 import me.madhead.tyzenhaus.core.telegram.updates.userId
-import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
-import me.madhead.tyzenhaus.repository.DialogStateRepository
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -27,7 +25,6 @@ import org.apache.logging.log4j.LogManager
  */
 class LangCommandUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
-    private val dialogStateRepository: DialogStateRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(LangCommandUpdateProcessor::class.java)!!
@@ -39,25 +36,24 @@ class LangCommandUpdateProcessor(
         val message = update.data as? CommonMessage<*> ?: return null
         val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
 
-        return if (content.textSources.any { "lang" == (it as? BotCommandTextSource)?.command }) {
-            {
-                logger.debug("{} initiated a language change in {}", update.userId, update.groupId)
+        if (content.textSources.none { "lang" == (it as? BotCommandTextSource)?.command }) return null
 
-                dialogStateRepository.save(ChangingLanguage(update.groupId, update.userId))
-                requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["language.action.choose"],
-                    parseMode = MarkdownV2,
-                    replyMarkup = InlineKeyboardMarkup(
+        return {
+            logger.debug("{} initiated a language change in {}", update.userId, update.groupId)
+
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["language.action.choose"],
+                parseMode = MarkdownV2,
+                replyMarkup = InlineKeyboardMarkup(
+                    listOf(
                         listOf(
-                            listOf(
-                                CallbackDataInlineKeyboardButton("EN", "${CALLBACK_PREFIX}en"),
-                                CallbackDataInlineKeyboardButton("RU", "${CALLBACK_PREFIX}ru"),
-                            )
+                            CallbackDataInlineKeyboardButton("EN", "${CALLBACK_PREFIX}en"),
+                            CallbackDataInlineKeyboardButton("RU", "${CALLBACK_PREFIX}ru"),
                         )
                     )
                 )
-            }
-        } else null
+            )
+        }
     }
 }

@@ -17,6 +17,7 @@ import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
+import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForConfirmation
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
@@ -51,72 +52,71 @@ class DoneCallbackQueryUpdateProcessor(
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
 
-        return if (callbackQuery.data.startsWith(CALLBACK) && (dialogState is WaitingForParticipants)) {
-            {
-                val transaction = Transaction(
-                    id = null,
-                    groupId = dialogState.groupId,
-                    payer = dialogState.userId,
-                    recipients = dialogState.participants,
-                    amount = dialogState.amount,
-                    currency = dialogState.currency,
-                    title = dialogState.title,
-                    timestamp = Instant.now(),
-                )
+        if (callbackQuery.data != CALLBACK) return null
 
-                val members = (transaction.recipients + transaction.payer).toSet()
-                val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
-                val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
-                    "(tg://user?id=${transaction.payer})"
-                val to = transaction.recipients.joinToString(", ") { recipient ->
-                    "[${chatMembers.first { it.user.id.chatId == recipient }.displayName.escapeMarkdownV2Common()}]" +
-                        "(tg://user?id=$recipient)"
-                }
-                val amount = "${transaction.amount.setScale(2, RoundingMode.HALF_UP)} ${transaction.currency}".escapeMarkdownV2Common()
+        if ((dialogState !is WaitingForParticipants) || (dialogState.userId != update.userId)) return {
+            requestsExecutor.answerCallbackQuery(
+                callbackQuery = callbackQuery,
+                text = I18N(groupConfig?.language)["expense.response.participants.wrongUser"],
+            )
+        }
 
-                requestsExecutor.editMessageReplyMarkup(
-                    message = callbackQuery.message,
-                    replyMarkup = null,
-                )
-                requestsExecutor.sendMessage(
-                    chatId = callbackQuery.message.chat.id,
-                    text = I18N(groupConfig?.language)[
-                        "expense.action.confirmation",
-                        from,
-                        to,
-                        amount,
-                    ],
-                    parseMode = MarkdownV2,
-                    replyMarkup = InlineKeyboardMarkup(
+        val transaction = Transaction(
+            id = null,
+            groupId = dialogState.groupId,
+            payer = dialogState.userId,
+            recipients = dialogState.participants,
+            amount = dialogState.amount,
+            currency = dialogState.currency,
+            title = dialogState.title,
+            timestamp = Instant.now(),
+        )
+        val members = (transaction.recipients + transaction.payer).toSet()
+        val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
+        val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
+            "(tg://user?id=${transaction.payer})"
+        val to = transaction.recipients.joinToString(", ") { recipient ->
+            "[${chatMembers.first { it.user.id.chatId == recipient }.displayName.escapeMarkdownV2Common()}]" +
+                "(tg://user?id=$recipient)"
+        }
+        val amount = "${transaction.amount.setScale(2, RoundingMode.HALF_UP)} ${transaction.currency}".escapeMarkdownV2Common()
+
+        return {
+            requestsExecutor.editMessageReplyMarkup(
+                message = callbackQuery.message,
+                replyMarkup = null,
+            )
+            requestsExecutor.sendMessage(
+                chatId = callbackQuery.message.chat.id,
+                text = I18N(groupConfig?.language)[
+                    "expense.action.confirmation",
+                    from,
+                    to,
+                    amount,
+                ],
+                parseMode = MarkdownV2,
+                replyMarkup = InlineKeyboardMarkup(
+                    listOf(
                         listOf(
-                            listOf(
-                                CallbackDataInlineKeyboardButton(
-                                    I18N(groupConfig?.language)["expense.response.confirmation.ok"],
-                                    ConfirmationCallbackQueryUpdateProcessor.CALLBACK
-                                )
+                            CallbackDataInlineKeyboardButton(
+                                I18N(groupConfig?.language)["expense.response.confirmation.ok"],
+                                ConfirmationCallbackQueryUpdateProcessor.CALLBACK
                             )
                         )
                     )
                 )
+            )
 
-                dialogStateRepository.save(
-                    WaitingForConfirmation(
-                        groupId = dialogState.groupId,
-                        userId = dialogState.userId,
-                        amount = dialogState.amount,
-                        currency = dialogState.currency,
-                        title = dialogState.title,
-                        participants = dialogState.participants,
-                    )
+            dialogStateRepository.save(
+                WaitingForConfirmation(
+                    groupId = dialogState.groupId,
+                    userId = dialogState.userId,
+                    amount = dialogState.amount,
+                    currency = dialogState.currency,
+                    title = dialogState.title,
+                    participants = dialogState.participants,
                 )
-            }
-        } else if (callbackQuery.data.startsWith(CALLBACK) && (dialogState !is WaitingForParticipants)) {
-            {
-                requestsExecutor.answerCallbackQuery(
-                    callbackQuery = callbackQuery,
-                    text = I18N(groupConfig?.language)["expense.response.participants.done.wrongState"],
-                )
-            }
-        } else null
+            )
+        }
     }
 }

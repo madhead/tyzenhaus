@@ -21,6 +21,7 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import org.apache.logging.log4j.LogManager
+import java.math.BigDecimal
 
 /**
  * New expense flow: amount entered.
@@ -34,66 +35,88 @@ class AmountReplyUpdateProcessor(
         private val logger = LogManager.getLogger(AmountReplyUpdateProcessor::class.java)!!
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "LongMethod")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
-
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForAmount ?: return null
 
-        return if ((dialogState.messageId == message.replyTo?.messageId) && (dialogState.userId == update.userId)) {
-            logger.debug("Processing amount reply from {} in {}", update.userId, update.groupId)
+        if (dialogState.messageId != message.replyTo?.messageId) return null
 
-            val content = message.content as? TextContent ?: return {
-                val amountRequestMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
+        if (dialogState.userId != update.userId) return {
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.amount.wrongUser"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+            )
+        }
+
+        logger.debug("Processing amount reply from {} in {}", update.userId, update.groupId)
+
+        val content = message.content as? TextContent ?: return {
+            val amountRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+        }
+
+        val amount = content.text.toBigDecimalOrNull() ?: return {
+            val amountRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
+            val amountRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+        }
+
+        return {
+            logger.debug("{} provided expense amount ({}) in {}", update.userId, amount, update.groupId)
+
+            val currencyRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.action.currency"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
+                    keyboard = chatCurrenciesService
+                        .groupCurrencies(update.groupId)
+                        .map { listOf(SimpleKeyboardButton(it)) },
+                    resizeKeyboard = true,
+                    oneTimeKeyboard = true,
+                    selective = true,
                 )
+            )
 
-                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
-            }
-
-            val amount = content.text.toBigDecimalOrNull() ?: return {
-                val amountRequestMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
-                )
-
-                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
-            }
-
-            {
-                logger.debug("{} provided expense amount ({}) in {}", update.userId, amount, update.groupId)
-
-                val currencyRequestMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.action.currency"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
-                        keyboard = chatCurrenciesService
-                            .groupCurrencies(update.groupId)
-                            .map { listOf(SimpleKeyboardButton(it)) },
-                        resizeKeyboard = true,
-                        oneTimeKeyboard = true,
-                        selective = true,
-                    )
-                )
-
-                dialogStateRepository.save(WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, amount))
-            }
-        } else null
+            dialogStateRepository.save(WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, amount))
+        }
     }
 }

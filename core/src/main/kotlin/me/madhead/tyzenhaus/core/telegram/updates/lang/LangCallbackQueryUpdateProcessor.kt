@@ -2,31 +2,31 @@ package me.madhead.tyzenhaus.core.telegram.updates.lang
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
-import dev.inmo.tgbotapi.extensions.api.deleteMessage
-import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.core.telegram.updates.userId
-import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
-import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import org.apache.logging.log4j.LogManager
 import java.util.Locale
+import kotlin.coroutines.coroutineContext
 
 /**
  * Language change callback handler.
  */
 class LangCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
-    private val dialogStateRepository: DialogStateRepository,
     private val groupConfigRepository: GroupConfigRepository,
 ) : UpdateProcessor {
     companion object {
@@ -40,32 +40,27 @@ class LangCallbackQueryUpdateProcessor(
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
 
-        return if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState is ChangingLanguage)) {
-            {
-                val (_, language) = callbackQuery.data.split(":")
+        if (!callbackQuery.data.startsWith(CALLBACK_PREFIX)) return null
 
-                logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
+        return {
+            val (_, language) = callbackQuery.data.split(":")
 
-                val newGroupConfig = (groupConfig
-                    ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
+            logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
 
+            val newGroupConfig = (groupConfig ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
+
+            CoroutineScope(coroutineContext + Dispatchers.IO).launch {
                 groupConfigRepository.save(newGroupConfig)
-                requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
-                requestsExecutor.deleteMessage(callbackQuery.message)
-                requestsExecutor.sendMessage(
-                    chatId = callbackQuery.message.chat.id,
-                    text = I18N(newGroupConfig.language)["language.response.ok"],
-                    parseMode = MarkdownV2,
-                )
-                dialogStateRepository.delete(callbackQuery.message.chat.id.chatId, callbackQuery.user.id.chatId)
             }
-        } else if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState !is ChangingLanguage)) {
-            {
-                requestsExecutor.answerCallbackQuery(
-                    callbackQuery = callbackQuery,
-                    text = I18N(groupConfig?.language)["language.response.wrongUser"],
-                )
-            }
-        } else null
+
+            requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
+            requestsExecutor.editMessageText(
+                chat = callbackQuery.message.chat,
+                messageId = callbackQuery.message.messageId,
+                text = I18N(newGroupConfig.language)["language.response.ok"],
+                parseMode = MarkdownV2,
+                replyMarkup = null,
+            )
+        }
     }
 }
