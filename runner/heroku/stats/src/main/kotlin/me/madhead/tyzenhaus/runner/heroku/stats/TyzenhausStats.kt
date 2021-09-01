@@ -4,7 +4,6 @@ import com.influxdb.annotations.Column
 import com.influxdb.annotations.Measurement
 import com.influxdb.client.domain.WritePrecision
 import com.influxdb.client.kotlin.InfluxDBClientKotlin
-import com.influxdb.client.write.Point
 import me.madhead.tyzenhaus.runner.heroku.stats.koin.dbModule
 import me.madhead.tyzenhaus.runner.heroku.stats.koin.influxModule
 import org.koin.core.component.KoinComponent
@@ -58,7 +57,7 @@ internal class TyzenhausStats : KoinComponent {
         @Column var numberOfGroups: Int = 0,
         @Column var numberOfGroupsWithTransactions: Int = 0,
         @Column var numberOfTransactions: Int = 0,
-        @Column var averageGroupSize: Int = 0,
+        @Column var averageGroupSize: Double = 0.0,
         @Column(timestamp = true) val time: Instant = Instant.now()
     )
 
@@ -150,9 +149,9 @@ internal class TyzenhausStats : KoinComponent {
                     .executeQuery()
                     ?.use { resultSet ->
                         stats.averageGroupSize = if (resultSet.next()) {
-                            resultSet.getInt(1)
+                            resultSet.getDouble(1)
                         } else {
-                            0
+                            0.0
                         }
                     }
             }
