@@ -50,6 +50,15 @@ class ExpenseCommandUpdateProcessor(
             )
         }
 
+        if (groupConfig?.members?.contains(update.userId) == false) return {
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig.language)["expense.response.participants.unknown"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+            )
+        }
+
         return {
             logger.debug("{} initiated an expense in {}", update.userId, update.groupId)
 
