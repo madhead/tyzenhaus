@@ -37,35 +37,42 @@ class ExpenseCommandUpdateProcessor(
         val message = update.data as? CommonMessage<*> ?: return null
         val content = message.content as? TextContent ?: return null
 
-        return if (content.textSources.any { "expense" == (it as? BotCommandTextSource)?.command }) {
-            if (groupConfig?.members.isNullOrEmpty()) {
-                {
-                    logger.warn("No members participating in group expenses in in {}", update.groupId)
+        if (content.textSources.none { "expense" == (it as? BotCommandTextSource)?.command }) return null
 
-                    requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["expense.response.participants.empty"],
-                        parseMode = MarkdownV2,
-                        replyToMessageId = message.messageId,
-                    )
-                }
-            } else {
-                {
-                    logger.debug("{} initiated an expense in {}", update.userId, update.groupId)
+        if (groupConfig?.members.isNullOrEmpty()) return {
+            logger.warn("No members participating in group expenses in in {}", update.groupId)
 
-                    val amountRequestMessage = requestsExecutor.sendMessage(
-                        chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language)["expense.action.amount"],
-                        parseMode = MarkdownV2,
-                        replyToMessageId = message.messageId,
-                        replyMarkup = ForceReply(
-                            selective = true,
-                        ),
-                    )
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.participants.empty"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+            )
+        }
 
-                    dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
-                }
-            }
-        } else null
+        if (groupConfig?.members?.contains(update.userId) == false) return {
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig.language)["expense.response.participants.unknown"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+            )
+        }
+
+        return {
+            logger.debug("{} initiated an expense in {}", update.userId, update.groupId)
+
+            val amountRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.action.amount"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+        }
     }
 }

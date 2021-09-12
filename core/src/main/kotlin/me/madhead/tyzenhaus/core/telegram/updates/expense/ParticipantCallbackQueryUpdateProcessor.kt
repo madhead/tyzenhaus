@@ -2,7 +2,6 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
-import dev.inmo.tgbotapi.extensions.api.chat.members.getChatMember
 import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ChatId
@@ -12,6 +11,7 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
+import me.madhead.tyzenhaus.core.telegram.updates.userId
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
@@ -38,41 +38,44 @@ class ParticipantCallbackQueryUpdateProcessor(
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
         val members = groupConfig?.members ?: return null
 
-        return if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState is WaitingForParticipants)) {
-            {
-                val (_, rawParticipant) = callbackQuery.data.split(":")
+        @Suppress("NAME_SHADOWING")
+        val dialogState = dialogState as? WaitingForParticipants ?: return null
 
-                logger.debug("Toggling participation status for {}", rawParticipant)
+        if (!callbackQuery.data.startsWith(CALLBACK_PREFIX)) return null
 
-                val participant = rawParticipant.toLongOrNull()
+        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId)) return {
+            requestsExecutor.answerCallbackQuery(
+                callbackQuery = callbackQuery,
+                text = I18N(groupConfig.language)["expense.response.participants.wrongUser"],
+            )
+        }
 
-                if (participant != null) {
-                    val chatMembers = members.map { requestsExecutor.getChatMember(ChatId(update.groupId), UserId(it)) }
-                    val state = dialogState.copy(
-                        participants = if (dialogState.participants.contains(participant)) {
-                            dialogState.participants - participant
-                        } else {
-                            dialogState.participants + participant
-                        }
-                    )
+        return {
+            val (_, rawParticipant) = callbackQuery.data.split(":")
 
-                    dialogStateRepository.save(state)
-                    requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
-                    requestsExecutor.editMessageReplyMarkup(
-                        message = callbackQuery.message,
-                        replyMarkup = replyMarkup(chatMembers, state.participants, groupConfig)
-                    )
-                } else {
-                    logger.warn("Invalid participant: {}", rawParticipant)
-                }
-            }
-        } else if (callbackQuery.data.startsWith(CALLBACK_PREFIX) && (dialogState !is WaitingForParticipants)) {
-            {
-                requestsExecutor.answerCallbackQuery(
-                    callbackQuery = callbackQuery,
-                    text = I18N(groupConfig.language)["expense.response.participants.wrongState"],
+            logger.debug("Toggling participation status for {}", rawParticipant)
+
+            val participant = rawParticipant.toLongOrNull()
+
+            if (participant != null) {
+                val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
+                val state = dialogState.copy(
+                    participants = if (dialogState.participants.contains(participant)) {
+                        dialogState.participants - participant
+                    } else {
+                        dialogState.participants + participant
+                    }
                 )
+
+                dialogStateRepository.save(state)
+                requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
+                requestsExecutor.editMessageReplyMarkup(
+                    message = callbackQuery.message,
+                    replyMarkup = replyMarkup(chatMembers, state.participants, groupConfig, state.participants.isNotEmpty())
+                )
+            } else {
+                logger.warn("Invalid participant: {}", rawParticipant)
             }
-        } else null
+        }
     }
 }

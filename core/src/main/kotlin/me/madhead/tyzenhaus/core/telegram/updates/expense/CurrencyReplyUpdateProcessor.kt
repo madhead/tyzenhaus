@@ -31,6 +31,7 @@ class CurrencyReplyUpdateProcessor(
         private val logger = LogManager.getLogger(CurrencyReplyUpdateProcessor::class.java)!!
     }
 
+    @Suppress("LongMethod", "ReturnCount")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
@@ -39,55 +40,69 @@ class CurrencyReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
 
-        return if ((dialogState.messageId == message.replyTo?.messageId) && (dialogState.userId == update.userId)) {
-            logger.debug("Processing currency reply from {} in {}", update.userId, update.groupId)
+        if (dialogState.messageId != message.replyTo?.messageId) return null
 
-            val content = message.content as? TextContent ?: return {
-                val currencyRequestMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.response.currency.textPlease"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
-                )
+        if (dialogState.userId != update.userId) return {
+            requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.currency.wrongUser"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+            )
+        }
 
-                dialogStateRepository.save(
-                    WaitingForCurrency(update.groupId,
-                        update.userId,
-                        currencyRequestMessage.messageId,
-                        dialogState.amount
-                    )
-                )
-            }
+        logger.debug("Processing currency reply from {} in {}", update.userId, update.groupId)
 
-            val currency = content.text
+        val content = message.content as? TextContent ?: return {
+            val currencyRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.currency.textPlease"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
 
-            {
-                logger.debug("{} provided expense currency ({}) in {}", update.userId, currency, update.groupId)
+            dialogStateRepository.save(
+                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, dialogState.amount)
+            )
+        }
 
-                val titleMessage = requestsExecutor.sendMessage(
-                    chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["expense.action.title"],
-                    parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
-                )
+        val currency = content.text
 
-                dialogStateRepository.save(
-                    WaitingForTitle(
-                        update.groupId,
-                        update.userId,
-                        titleMessage.messageId,
-                        dialogState.amount,
-                        currency,
-                    )
-                )
-            }
-        } else null
+        if (currency.length > @Suppress("MagicNumber") 120) return {
+            val currencyRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.response.currency.tooLong"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(
+                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, dialogState.amount)
+            )
+        }
+
+        return {
+            logger.debug("{} provided expense currency ({}) in {}", update.userId, currency, update.groupId)
+
+            val titleRequestMessage = requestsExecutor.sendMessage(
+                chatId = update.data.chat.id,
+                text = I18N(groupConfig?.language)["expense.action.title"],
+                parseMode = MarkdownV2,
+                replyToMessageId = message.messageId,
+                replyMarkup = ForceReply(
+                    selective = true,
+                ),
+            )
+
+            dialogStateRepository.save(
+                WaitingForTitle(update.groupId, update.userId, titleRequestMessage.messageId, dialogState.amount, currency)
+            )
+        }
     }
 }
-

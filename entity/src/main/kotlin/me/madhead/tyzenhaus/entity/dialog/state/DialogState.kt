@@ -11,7 +11,6 @@ interface DialogState {
     companion object {
         val serializers = SerializersModule {
             polymorphic(DialogState::class) {
-                subclass(ChangingLanguage::class)
                 subclass(WaitingForAmount::class)
                 subclass(WaitingForCurrency::class)
                 subclass(WaitingForTitle::class)

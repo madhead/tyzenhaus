@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.dialog.state
 
-import me.madhead.tyzenhaus.entity.dialog.state.ChangingLanguage
+import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
@@ -29,7 +29,7 @@ class DialogStateRepositoryTest {
 
     @Test
     fun get() {
-        Assertions.assertEquals(ChangingLanguage(1, 1), dialogStateRepository.get(1, 1))
+        Assertions.assertEquals(WaitingForAmount(1, 1, 42), dialogStateRepository.get(1, 1))
     }
 
     @Test
@@ -39,23 +39,27 @@ class DialogStateRepositoryTest {
 
     @Test
     fun saveChangingLanguage() {
-        dialogStateRepository.save(ChangingLanguage(-1, -1))
+        dialogStateRepository.save(WaitingForAmount(-1, -1, 42))
 
-        Assertions.assertEquals(ChangingLanguage(-1, -1), dialogStateRepository.get(-1, -1))
+        Assertions.assertEquals(WaitingForAmount(-1, -1, 42), dialogStateRepository.get(-1, -1))
     }
 
     @Test
     fun update() {
-        dialogStateRepository.save(ChangingLanguage(-2, -2))
+        dialogStateRepository.save(WaitingForAmount(-2, -2, 42))
 
-        Assertions.assertEquals(ChangingLanguage(-2, -2), dialogStateRepository.get(-2, -2))
+        Assertions.assertEquals(WaitingForAmount(-2, -2, 42), dialogStateRepository.get(-2, -2))
+
+        dialogStateRepository.save(WaitingForAmount(-2, -2, 43))
+
+        Assertions.assertEquals(WaitingForAmount(-2, -2, 43), dialogStateRepository.get(-2, -2))
     }
 
     @Test
     fun delete() {
-        dialogStateRepository.save(ChangingLanguage(-3, -3))
+        dialogStateRepository.save(WaitingForAmount(-3, -3, 33))
 
-        Assertions.assertEquals(ChangingLanguage(-3, -3), dialogStateRepository.get(-3, -3))
+        Assertions.assertEquals(WaitingForAmount(-3, -3, 33), dialogStateRepository.get(-3, -3))
 
         dialogStateRepository.delete(-3, -3)
 

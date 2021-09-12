@@ -7,7 +7,8 @@ import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.expense.AmountReplyUpdateProcessor
-import me.madhead.tyzenhaus.core.telegram.updates.expense.ConfirmationCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ConfirmationCancelCallbackQueryUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.expense.ConfirmationOKCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expense.CurrencyReplyUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expense.DebtsCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.expense.DoneCallbackQueryUpdateProcessor
@@ -107,7 +108,7 @@ val pipelineModule = module {
         )
     }
     single {
-        ConfirmationCallbackQueryUpdateProcessor(
+        ConfirmationOKCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
             transactionRepository = get<TransactionRepository>(),
@@ -115,15 +116,19 @@ val pipelineModule = module {
         )
     }
     single {
-        LangCommandUpdateProcessor(
+        ConfirmationCancelCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
         )
     }
     single {
+        LangCommandUpdateProcessor(
+            requestsExecutor = get(),
+        )
+    }
+    single {
         LangCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
             groupConfigRepository = get<GroupConfigRepository>(),
         )
     }
@@ -147,7 +152,8 @@ val pipelineModule = module {
                 get<TitleReplyUpdateProcessor>(),
                 get<ParticipantCallbackQueryUpdateProcessor>(),
                 get<DoneCallbackQueryUpdateProcessor>(),
-                get<ConfirmationCallbackQueryUpdateProcessor>(),
+                get<ConfirmationOKCallbackQueryUpdateProcessor>(),
+                get<ConfirmationCancelCallbackQueryUpdateProcessor>(),
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
