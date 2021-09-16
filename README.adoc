@@ -4,6 +4,9 @@ ifdef::env-github[]
   <img src="./assets/logo.svg">
 </p>
 <p align="center">
+  <a href="https://producthunt.com/posts/tyzenhaus">
+    <img src="./assets/ph.png">
+  </a>
   <a href="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot">
     <img src="./assets/reddit.png">
   </a>
@@ -18,6 +21,7 @@ ifndef::env-github[]
 image::./assets/logo.svg[align="center"]
 
 [.text-center]
+image:./assets/ph.png[link="https://producthunt.com/posts/tyzenhaus"]
 image:./assets/reddit.png[link="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot"]
 image:./assets/vc.png[link="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah"]
 endif::[]
