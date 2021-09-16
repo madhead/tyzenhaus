@@ -3,9 +3,29 @@ ifdef::env-github[]
 <p align="center">
   <img src="./assets/logo.svg">
 </p>
+<p align="center">
+  <a href="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot">
+    <img src="./assets/reddit.png">
+  </a>
+  <a href="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah">
+    <img src="./assets/vc.png">
+  </a>
+</p>
 ++++
 endif::[]
 
 ifndef::env-github[]
 image::./assets/logo.svg[align="center"]
+
+[.text-center]
+image:./assets/reddit.png[link="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot"]
+image:./assets/vc.png[link="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah"]
 endif::[]
+
+https://t.me/TyzenhausBot[Tyzenhaus] is a shared expenses tracking bot.
+
+Whether you are a group of travelers ✈️, roommates 🏠, or just friends 👫, Tyzenhaus will help you settle up your debts in three simple steps:
+
+. Invite Tyzenhaus into your chat
+. Track shared expenses with Tyzenhaus
+. Tyzenhaus will simplify the debts
