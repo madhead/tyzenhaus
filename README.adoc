@@ -7,7 +7,7 @@ ifdef::env-github[]
   <a href="https://producthunt.com/posts/tyzenhaus">
     <img src="./assets/ph.png">
   </a>
-  <a href="https://news.ycombinator.com/item?id=12821984">
+  <a href="https://news.ycombinator.com/item?id=28556366">
     <img src="./assets/hackernews.png">
   </a>
   <a href="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot">
@@ -25,7 +25,7 @@ image::./assets/logo.svg[align="center"]
 
 [.text-center]
 image:./assets/ph.png[link="https://producthunt.com/posts/tyzenhaus"]
-image:./assets/hackernews.png[link="https://news.ycombinator.com/item?id=12821984"]
+image:./assets/hackernews.png[link="https://news.ycombinator.com/item?id=28556366"]
 image:./assets/reddit.png[link="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot"]
 image:./assets/vc.png[link="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah"]
 endif::[]
