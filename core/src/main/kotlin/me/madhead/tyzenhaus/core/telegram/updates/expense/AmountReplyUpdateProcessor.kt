@@ -85,17 +85,19 @@ class AmountReplyUpdateProcessor(
         }
 
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
-            val amountRequestMessage = requestsExecutor.sendMessage(
-                chatId = update.data.chat.id,
-                text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
-                parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
-            )
+            return {
+                val amountRequestMessage = requestsExecutor.sendMessage(
+                    chatId = update.data.chat.id,
+                    text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
+                    parseMode = MarkdownV2,
+                    replyToMessageId = message.messageId,
+                    replyMarkup = ForceReply(
+                        selective = true,
+                    ),
+                )
 
-            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+            }
         }
 
         return {
