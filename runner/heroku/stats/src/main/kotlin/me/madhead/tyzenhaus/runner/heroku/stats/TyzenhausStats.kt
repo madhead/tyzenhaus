@@ -36,7 +36,6 @@ internal class TyzenhausStats : KoinComponent {
 
         dataSource.connection?.use { connection ->
             totalNumberOfChats(connection, stats)
-            numberOfGroups(connection, stats)
             numberOfGroupsWithTransactions(connection, stats)
             numberOfTransactions(connection, stats)
             averageGroupSize(connection, stats)
@@ -54,7 +53,6 @@ internal class TyzenhausStats : KoinComponent {
     @Measurement(name = "KPI")
     data class Stats(
         @Column var totalNumberOfChats: Int = 0,
-        @Column var numberOfGroups: Int = 0,
         @Column var numberOfGroupsWithTransactions: Int = 0,
         @Column var numberOfTransactions: Int = 0,
         @Column var averageGroupSize: Double = 0.0,
@@ -72,26 +70,6 @@ internal class TyzenhausStats : KoinComponent {
                     .executeQuery()
                     ?.use { resultSet ->
                         stats.totalNumberOfChats = if (resultSet.next()) {
-                            resultSet.getInt(1)
-                        } else {
-                            0
-                        }
-                    }
-            }
-    }
-
-    private fun numberOfGroups(connection: Connection, stats: Stats) {
-        connection
-            .prepareStatement("""
-                SELECT COUNT(*)
-                FROM group_config
-                WHERE invited_at IS NOT NULL;
-            """.trimIndent())
-            ?.use { statement ->
-                statement
-                    .executeQuery()
-                    ?.use { resultSet ->
-                        stats.numberOfGroups = if (resultSet.next()) {
                             resultSet.getInt(1)
                         } else {
                             0
