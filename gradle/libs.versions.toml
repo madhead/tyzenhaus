@@ -5,7 +5,7 @@ koin = "3.1.2"
 kotlinx-serialization = "1.2.1"
 tgbotapi = "0.34.1"
 postgresql = "42.2.20"
-log4j = "2.14.1"
+log4j = "2.16.0"
 
 junit = "5.7.2"
 mockk = "1.11.0"
