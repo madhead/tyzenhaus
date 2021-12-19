@@ -37,7 +37,6 @@ class ParticipantCallbackQueryUpdateProcessor(
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
         val members = groupConfig?.members ?: return null
-
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForParticipants ?: return null
 

@@ -3,7 +3,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
-import dev.inmo.tgbotapi.types.buttons.ForceReply
+import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.buttons.SimpleKeyboardButton
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
@@ -62,9 +62,7 @@ class AmountReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
@@ -76,9 +74,7 @@ class AmountReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
@@ -91,9 +87,7 @@ class AmountReplyUpdateProcessor(
                     text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
-                        selective = true,
-                    ),
+                    replyMarkup = ReplyForce.ReplyForceSelective,
                 )
 
                 dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))

@@ -5,7 +5,7 @@ import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.UserId
-import dev.inmo.tgbotapi.types.buttons.ForceReply
+import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -60,9 +60,7 @@ class TitleReplyUpdateProcessor(
                 text = I18N(groupConfig.language)["expense.response.title.textPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(

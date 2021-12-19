@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '13'
+          java-version: '17'
       - run: ./gradlew check jacocoTestReport
       - uses: actions/upload-artifact@v2
         if: always()
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '13'
+          java-version: '17'
       - run: ./gradlew :repository:postgresql:liquibaseUpdate
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
