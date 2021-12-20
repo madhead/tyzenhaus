@@ -50,7 +50,6 @@ class DoneCallbackQueryUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? CallbackQueryUpdate ?: return null
         val callbackQuery = update.data as? MessageDataCallbackQuery ?: return null
-
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForParticipants ?: return null
 

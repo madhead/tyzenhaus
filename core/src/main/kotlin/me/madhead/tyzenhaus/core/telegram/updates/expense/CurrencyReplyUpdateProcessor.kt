@@ -3,7 +3,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
-import dev.inmo.tgbotapi.types.buttons.ForceReply
+import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -36,7 +36,6 @@ class CurrencyReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
-
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
 
@@ -59,9 +58,7 @@ class CurrencyReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.currency.textPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(
@@ -77,9 +74,7 @@ class CurrencyReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.currency.tooLong"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(
@@ -95,9 +90,7 @@ class CurrencyReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.action.title"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
-                    selective = true,
-                ),
+                replyMarkup = ReplyForce.ReplyForceSelective,
             )
 
             dialogStateRepository.save(

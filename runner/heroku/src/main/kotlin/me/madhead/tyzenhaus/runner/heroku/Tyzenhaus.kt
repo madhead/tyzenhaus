@@ -10,7 +10,6 @@ import io.ktor.features.CallLogging
 import io.ktor.features.Compression
 import io.ktor.features.DefaultHeaders
 import io.ktor.routing.routing
-import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import me.madhead.tyzenhaus.runner.heroku.koin.configModule
 import me.madhead.tyzenhaus.runner.heroku.koin.dbModule
@@ -24,7 +23,6 @@ import org.koin.ktor.ext.inject
 /**
  * [Ktor-based](https://ktor.io) Tyzenhaus runner.
  */
-@KtorExperimentalAPI
 fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
