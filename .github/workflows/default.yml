@@ -23,7 +23,11 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '13'
-      - run: ./gradlew check jacocoTestReport
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check jacocoTestReport
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -59,11 +63,18 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '13'
-      - run: ./gradlew :repository:postgresql:liquibaseUpdate
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :repository:postgresql:liquibaseUpdate
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       - run: psql -h ${{env.POSTGRES_HOST}} -U ${{env.POSTGRES_USER}} -d ${{env.POSTGRES_DB}} <repository/postgresql/src/test/sql/seed.sql
-      - run: ./gradlew dbTest jacocoDbTestReport
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: dbTest jacocoDbTestReport
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       - uses: actions/upload-artifact@v2
