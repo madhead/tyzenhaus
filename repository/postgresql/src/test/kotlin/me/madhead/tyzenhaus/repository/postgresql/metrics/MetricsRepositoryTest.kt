@@ -1,7 +1,7 @@
 package me.madhead.tyzenhaus.repository.postgresql.metrics
 
 import java.net.URI
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Tag
@@ -30,21 +30,21 @@ class MetricsRepositoryTest {
 
     @Test
     fun totalNumberOfChats() {
-        Assertions.assertEquals(1, metricsRepository.totalNumberOfChats())
+        assertEquals(1, metricsRepository.totalNumberOfChats())
     }
 
     @Test
     fun numberOfGroupsWithTransactions() {
-        Assertions.assertEquals(1, metricsRepository.numberOfGroupsWithTransactions())
+        assertEquals(1, metricsRepository.numberOfGroupsWithTransactions())
     }
 
     @Test
     fun numberOfTransactions() {
-        Assertions.assertEquals(1, metricsRepository.numberOfTransactions())
+        assertEquals(1, metricsRepository.numberOfTransactions())
     }
 
     @Test
     fun averageGroupSize() {
-        Assertions.assertEquals(1.0, metricsRepository.averageGroupSize())
+        assertEquals(1.0, metricsRepository.averageGroupSize())
     }
 }

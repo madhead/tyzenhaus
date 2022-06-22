@@ -44,7 +44,7 @@ class BalanceRepository(dataSource: DataSource)
                                 INSERT INTO balance ("group_id", "version", "balance")
                                 VALUES (?, ?, ?::jsonb)
                                 ON CONFLICT ("group_id", "version")
-                                    DO UPDATE SET "version" = EXCLUDED.version + 1,
+                                    DO UPDATE SET "version" = EXCLUDED."version" + 1,
                                                   "balance" = EXCLUDED."balance";
                             """.trimIndent())
                     .use { preparedStatement ->

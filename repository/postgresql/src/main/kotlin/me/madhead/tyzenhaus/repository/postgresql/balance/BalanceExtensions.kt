@@ -7,7 +7,10 @@ import me.madhead.tyzenhaus.entity.balance.Balance
 
 internal fun ResultSet.toBalance(json: Json): Balance? {
     return if (this.next()) {
-        json.decodeFromString<Balance>(this.getString("balance")).copy(version = this.getLong("version"))
+        json.decodeFromString<Balance>(this.getString("balance")).copy(
+            groupId = this.getLong("group_id"),
+            version = this.getLong("version")
+        )
     } else {
         null
     }

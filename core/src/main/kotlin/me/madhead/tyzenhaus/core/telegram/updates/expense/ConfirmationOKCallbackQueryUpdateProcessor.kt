@@ -64,7 +64,7 @@ class ConfirmationOKCallbackQueryUpdateProcessor(
         return {
             val transaction = Transaction(
                 id = null,
-                groupId = dialogState.groupId,
+                groupId = update.groupId,
                 payer = dialogState.userId,
                 recipients = dialogState.participants,
                 amount = dialogState.amount,

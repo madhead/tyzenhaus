@@ -58,7 +58,7 @@ class DoneCallbackQueryUpdateProcessor(
 
         val transaction = Transaction(
             id = null,
-            groupId = dialogState.groupId,
+            groupId = update.groupId,
             payer = dialogState.userId,
             recipients = dialogState.participants,
             amount = dialogState.amount,
@@ -108,7 +108,7 @@ class DoneCallbackQueryUpdateProcessor(
 
             dialogStateRepository.save(
                 WaitingForConfirmation(
-                    groupId = dialogState.groupId,
+                    groupId = update.groupId,
                     userId = dialogState.userId,
                     amount = dialogState.amount,
                     currency = dialogState.currency,

@@ -20,6 +20,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.help.StartCommandUpdateProcess
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.supergroup.SupergroupChatCreatedUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcessor
 import org.koin.dsl.module
 
@@ -131,6 +132,12 @@ val pipelineModule = module {
         )
     }
     single {
+        SupergroupChatCreatedUpdateProcessor(
+            supergroupRepository = get(),
+            meterRegistry = get(),
+        )
+    }
+    single {
         UpdateProcessingPipeline(
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
@@ -149,6 +156,7 @@ val pipelineModule = module {
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
+                get<SupergroupChatCreatedUpdateProcessor>(),
             ),
             get(),
             get(),
