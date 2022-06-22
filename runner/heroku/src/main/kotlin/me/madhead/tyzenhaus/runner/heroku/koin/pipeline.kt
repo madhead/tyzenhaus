@@ -20,6 +20,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.help.StartCommandUpdateProcess
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.supergroup.SupergroupChatCreatedUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcessor
 import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
@@ -137,6 +138,11 @@ val pipelineModule = module {
         )
     }
     single {
+        SupergroupChatCreatedUpdateProcessor(
+            requestsExecutor = get(),
+        )
+    }
+    single {
         UpdateProcessingPipeline(
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
@@ -155,6 +161,7 @@ val pipelineModule = module {
                 get<LangCommandUpdateProcessor>(),
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
+                get<SupergroupChatCreatedUpdateProcessor>(),
             ),
             get<GroupConfigRepository>(),
             get<DialogStateRepository>(),
