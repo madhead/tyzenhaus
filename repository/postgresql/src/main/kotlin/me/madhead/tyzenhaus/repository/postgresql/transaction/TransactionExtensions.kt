@@ -1,8 +1,7 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
-import me.madhead.tyzenhaus.entity.transaction.Transaction
 import java.sql.ResultSet
-import java.util.Locale
+import me.madhead.tyzenhaus.entity.transaction.Transaction
 
 internal fun ResultSet.toTransaction(): Transaction? {
     return if (this.next()) {

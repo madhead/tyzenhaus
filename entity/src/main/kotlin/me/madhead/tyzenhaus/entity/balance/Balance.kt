@@ -1,9 +1,9 @@
 package me.madhead.tyzenhaus.entity.balance
 
+import java.math.BigDecimal
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import me.madhead.tyzenhaus.entity.serializers.BigDecimalSerializer
-import java.math.BigDecimal
 
 private typealias Currency = String
 private typealias User = Long

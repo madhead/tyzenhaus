@@ -31,7 +31,7 @@ else
     -e POSTGRES_PASSWORD=tyzenhaus \
     -p 5432:5432 \
     -d \
-    postgres:12
+    postgres:14
 
   if [ $seed = true ] || [ $seedUnit = true ]; then
     until docker exec tyzenhaus-postgres psql -U tyzenhaus -d tyzenhaus -c "select 1" >/dev/null 2>&1; do

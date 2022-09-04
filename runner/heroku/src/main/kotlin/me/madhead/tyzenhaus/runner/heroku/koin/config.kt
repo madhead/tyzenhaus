@@ -1,10 +1,8 @@
 package me.madhead.tyzenhaus.runner.heroku.koin
 
-import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.server.config.ApplicationConfig
 import org.koin.dsl.module
 
-@KtorExperimentalAPI
 @Suppress("UndocumentedPublicFunction")
 fun configModule(config: ApplicationConfig) = module {
     single {

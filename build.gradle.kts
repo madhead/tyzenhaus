@@ -17,7 +17,7 @@ allprojects {
         parallel = true
         config = files("$rootDir/detekt.yml")
         buildUponDefaultConfig = false
-        input = files(projectDir)
+        source = files(projectDir)
     }
 
     configure<JacocoPluginExtension> {
@@ -40,8 +40,8 @@ allprojects {
         }
         withType<JacocoReport> {
             reports {
-                xml.isEnabled = true
-                html.isEnabled = true
+                xml.required.set(true)
+                html.required.set(true)
             }
         }
     }

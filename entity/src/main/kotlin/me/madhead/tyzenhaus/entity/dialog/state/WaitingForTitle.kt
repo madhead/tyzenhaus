@@ -1,9 +1,9 @@
 package me.madhead.tyzenhaus.entity.dialog.state
 
+import java.math.BigDecimal
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import me.madhead.tyzenhaus.entity.serializers.BigDecimalSerializer
-import java.math.BigDecimal
 
 /**
  * Expense flow: waiting for title input.

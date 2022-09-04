@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.i18
 
+import java.util.Locale
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.Locale
 
 @TestInstance(Lifecycle.PER_CLASS)
 class I18NTest {
@@ -43,7 +43,6 @@ class I18NTest {
         Locale.setDefault(defaultLocale)
     }
 
-    @Suppress("unused")
     private fun params() = listOf(
         Arguments.of("message", Locale("ru"), emptyArray<Any?>(), "Сообщение"),
         Arguments.of("message", Locale("ru"), arrayOf(42), "Сообщение"),

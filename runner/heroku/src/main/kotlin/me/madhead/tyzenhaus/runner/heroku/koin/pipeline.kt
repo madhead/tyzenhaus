@@ -1,8 +1,7 @@
 package me.madhead.tyzenhaus.runner.heroku.koin
 
 import dev.inmo.tgbotapi.types.ChatId
-import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.server.config.ApplicationConfig
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
@@ -28,7 +27,6 @@ import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigReposi
 import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
 import org.koin.dsl.module
 
-@KtorExperimentalAPI
 val pipelineModule = module {
     single {
         ChatCurrenciesService(
@@ -103,8 +101,6 @@ val pipelineModule = module {
         DoneCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get<DialogStateRepository>(),
-            transactionRepository = get<TransactionRepository>(),
-            balanceRepository = get<BalanceRepository>(),
         )
     }
     single {

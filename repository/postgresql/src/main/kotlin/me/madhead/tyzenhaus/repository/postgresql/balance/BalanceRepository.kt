@@ -1,11 +1,11 @@
 package me.madhead.tyzenhaus.repository.postgresql.balance
 
+import javax.sql.DataSource
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
 import org.apache.logging.log4j.LogManager
-import javax.sql.DataSource
 
 /**
  * PostgreSQL repository for [balances][Balance].
@@ -32,6 +32,7 @@ class BalanceRepository(dataSource: DataSource)
         }
     }
 
+    @Suppress("DuplicatedCode")
     override fun save(entity: Balance) {
         logger.debug("save {}", entity)
 

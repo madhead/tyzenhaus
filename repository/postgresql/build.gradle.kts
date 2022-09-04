@@ -24,7 +24,7 @@ dependencies {
     testRuntimeOnly(libs.log4j.core)
 
     liquibaseRuntime(libs.liquibase.core)
-    liquibaseRuntime(libs.snakeyaml)
+    liquibaseRuntime(libs.picocli)
     liquibaseRuntime(libs.postgresql)
 }
 
@@ -34,11 +34,12 @@ liquibase {
             val databaseUri = URI(System.getenv("DATABASE_URL")!!)
 
             this.arguments = mapOf(
-                    "url" to "jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}",
-                    "username" to databaseUri.userInfo.split(":")[0],
-                    "password" to databaseUri.userInfo.split(":")[1],
-                    "driver" to "org.postgresql.Driver",
-                    "changeLogFile" to file("src/main/liquibase/changelog.yml")
+                "url" to "jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}",
+                "username" to databaseUri.userInfo.split(":")[0],
+                "password" to databaseUri.userInfo.split(":")[1],
+                "driver" to "org.postgresql.Driver",
+                "searchPath" to project.projectDir,
+                "changelogFile" to "src/main/liquibase/changelog.yml"
             )
         }
     }
@@ -67,13 +68,17 @@ tasks {
         executionData(dbTest.get())
         sourceSets(sourceSets.main.orNull)
 
-        val reportsDir = project.extensions.getByType<JacocoPluginExtension>().reportsDir
+        val reportsDirectory = project.extensions.getByType<JacocoPluginExtension>().reportsDirectory.get().asFile
 
         reports.all {
-            if (this.outputType == Report.OutputType.DIRECTORY) {
-                this.destination = File(reportsDir, "dbTest" + "/" + this.name)
-            } else {
-                this.destination = File(reportsDir, "dbTest" + "/" + this@registering.name + "." + this.name)
+            when (val outputLocation = this.outputLocation) {
+                is DirectoryProperty -> {
+                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this.name))
+                }
+
+                is RegularFileProperty -> {
+                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this@registering.name + "." + this.name))
+                }
             }
         }
     }

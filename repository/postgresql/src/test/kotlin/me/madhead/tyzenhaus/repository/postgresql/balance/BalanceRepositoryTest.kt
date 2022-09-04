@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.balance
 
+import java.net.URI
 import me.madhead.tyzenhaus.entity.balance.Balance
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -7,12 +8,11 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
-import java.net.URI
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("db")
 class BalanceRepositoryTest {
-    lateinit var balanceRepository: BalanceRepository
+    private lateinit var balanceRepository: BalanceRepository
 
     @BeforeAll
     fun setUp() {
@@ -80,7 +80,7 @@ class BalanceRepositoryTest {
         )
     }
 
-    val balance = Balance(
+    private val balance = Balance(
         1,
         2,
         mapOf(

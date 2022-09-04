@@ -4,14 +4,14 @@ import com.influxdb.annotations.Column
 import com.influxdb.annotations.Measurement
 import com.influxdb.client.domain.WritePrecision
 import com.influxdb.client.kotlin.InfluxDBClientKotlin
+import java.sql.Connection
+import java.time.Instant
+import javax.sql.DataSource
 import me.madhead.tyzenhaus.runner.heroku.stats.koin.dbModule
 import me.madhead.tyzenhaus.runner.heroku.stats.koin.influxModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
-import java.sql.Connection
-import java.time.Instant
-import javax.sql.DataSource
 
 /**
  * Gathers some stats.
@@ -97,7 +97,7 @@ internal class TyzenhausStats : KoinComponent {
             }
     }
 
-    private fun numberOfTransactions(connection: Connection, stats: TyzenhausStats.Stats) {
+    private fun numberOfTransactions(connection: Connection, stats: Stats) {
         connection
             .prepareStatement("""
                 SELECT COUNT(*)
@@ -116,7 +116,7 @@ internal class TyzenhausStats : KoinComponent {
             }
     }
 
-    private fun averageGroupSize(connection: Connection, stats: TyzenhausStats.Stats) {
+    private fun averageGroupSize(connection: Connection, stats: Stats) {
         connection
             .prepareStatement("""
                 SELECT AVG(ARRAY_LENGTH(members, 1))

@@ -3,10 +3,12 @@ package me.madhead.tyzenhaus.core.telegram.updates.lang
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
-import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
-import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
+import dev.inmo.tgbotapi.types.message.MarkdownV2
+import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import java.util.Locale
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,8 +21,6 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import org.apache.logging.log4j.LogManager
-import java.util.Locale
-import kotlin.coroutines.coroutineContext
 
 /**
  * Language change callback handler.

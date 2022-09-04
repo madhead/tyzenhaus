@@ -1,7 +1,7 @@
 package me.madhead.tyzenhaus.core.debts
 
-import me.madhead.tyzenhaus.entity.balance.Balance
 import java.math.BigDecimal
+import me.madhead.tyzenhaus.entity.balance.Balance
 
 /**
  * Calculates debts given group's balance.

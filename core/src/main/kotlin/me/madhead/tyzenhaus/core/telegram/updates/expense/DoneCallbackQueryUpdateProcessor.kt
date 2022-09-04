@@ -2,17 +2,19 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
-import dev.inmo.tgbotapi.extensions.api.edit.ReplyMarkup.editMessageReplyMarkup
+import dev.inmo.tgbotapi.extensions.api.edit.reply_markup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
-import dev.inmo.tgbotapi.types.CallbackQuery.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.ChatId
-import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
+import dev.inmo.tgbotapi.types.message.MarkdownV2
+import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
+import java.math.RoundingMode
+import java.time.Instant
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
@@ -23,12 +25,7 @@ import me.madhead.tyzenhaus.entity.dialog.state.WaitingForParticipants
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.i18.I18N
-import me.madhead.tyzenhaus.repository.BalanceRepository
 import me.madhead.tyzenhaus.repository.DialogStateRepository
-import me.madhead.tyzenhaus.repository.TransactionRepository
-import org.apache.logging.log4j.LogManager
-import java.math.RoundingMode
-import java.time.Instant
 
 /**
  * Finalize the transaction.
@@ -36,16 +33,12 @@ import java.time.Instant
 class DoneCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val dialogStateRepository: DialogStateRepository,
-    private val transactionRepository: TransactionRepository,
-    private val balanceRepository: BalanceRepository,
 ) : UpdateProcessor {
     companion object {
         const val CALLBACK = "participants:done"
-
-        private val logger = LogManager.getLogger(DoneCallbackQueryUpdateProcessor::class.java)!!
     }
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "DuplicatedCode")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? CallbackQueryUpdate ?: return null

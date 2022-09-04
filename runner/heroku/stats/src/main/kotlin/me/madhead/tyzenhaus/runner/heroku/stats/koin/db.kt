@@ -1,9 +1,9 @@
 package me.madhead.tyzenhaus.runner.heroku.stats.koin
 
-import org.koin.dsl.module
-import org.postgresql.ds.PGSimpleDataSource
 import java.net.URI
 import javax.sql.DataSource
+import org.koin.dsl.module
+import org.postgresql.ds.PGSimpleDataSource
 
 val dbModule = module {
     single<DataSource> {

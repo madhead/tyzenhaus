@@ -3,14 +3,13 @@ package me.madhead.tyzenhaus.runner.heroku
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
 import dev.inmo.tgbotapi.types.BotCommand
-import io.ktor.application.Application
-import io.ktor.application.ApplicationStarted
-import io.ktor.application.install
-import io.ktor.features.CallLogging
-import io.ktor.features.Compression
-import io.ktor.features.DefaultHeaders
-import io.ktor.routing.routing
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationStarted
+import io.ktor.server.application.install
+import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.compression.Compression
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.routing.routing
 import kotlinx.coroutines.runBlocking
 import me.madhead.tyzenhaus.runner.heroku.koin.configModule
 import me.madhead.tyzenhaus.runner.heroku.koin.dbModule
@@ -18,13 +17,13 @@ import me.madhead.tyzenhaus.runner.heroku.koin.jsonModule
 import me.madhead.tyzenhaus.runner.heroku.koin.pipelineModule
 import me.madhead.tyzenhaus.runner.heroku.koin.telegramModule
 import me.madhead.tyzenhaus.runner.heroku.routes.webhook
-import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.Koin
 
 /**
  * [Ktor-based](https://ktor.io) Tyzenhaus runner.
  */
-@KtorExperimentalAPI
+@Suppress("unused")
 fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)

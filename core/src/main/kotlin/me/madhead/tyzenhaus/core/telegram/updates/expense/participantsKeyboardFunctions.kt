@@ -1,11 +1,11 @@
 package me.madhead.tyzenhaus.core.telegram.updates.expense
 
-import dev.inmo.tgbotapi.types.ChatMember.abstracts.ChatMember
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
+import dev.inmo.tgbotapi.types.chat.member.ChatMember
+import java.util.Locale
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
-import java.util.Locale
 
 internal fun replyMarkup(chatMembers: List<ChatMember>, participants: Set<Long>, groupConfig: GroupConfig, withDone: Boolean = true) =
     InlineKeyboardMarkup(

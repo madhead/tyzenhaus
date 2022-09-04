@@ -5,7 +5,7 @@ package me.madhead.tyzenhaus.repository
  */
 interface Repository<ID, T> {
     /**
-     * Get the entity bu its identifier.
+     * Get the entity by its identifier.
      */
     fun get(id: ID): T?
 

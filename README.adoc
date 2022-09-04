@@ -1,20 +1,21 @@
 ifdef::env-github[]
 ++++
+<!--suppress HtmlDeprecatedAttribute -->
 <p align="center">
-  <img src="./assets/logo.svg">
+  <img src="./assets/logo.svg" alt="Tyzenhaus logo">
 </p>
 <p align="center">
   <a href="https://producthunt.com/posts/tyzenhaus">
-    <img src="./assets/ph.png">
+    <img src="./assets/ph.png" alt="Product Hunt link">
   </a>
   <a href="https://news.ycombinator.com/item?id=28556366">
-    <img src="./assets/hackernews.png">
+    <img src="./assets/hackernews.png" alt="Hacker News link">
   </a>
   <a href="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot">
-    <img src="./assets/reddit.png">
+    <img src="./assets/reddit.png" alt="Reddit link">
   </a>
   <a href="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah">
-    <img src="./assets/vc.png">
+    <img src="./assets/vc.png" alt="vc.ru link">
   </a>
 </p>
 ++++

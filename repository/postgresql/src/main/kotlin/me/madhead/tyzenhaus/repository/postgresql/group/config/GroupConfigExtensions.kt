@@ -1,8 +1,8 @@
 package me.madhead.tyzenhaus.repository.postgresql.group.config
 
-import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import java.sql.ResultSet
 import java.util.Locale
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 
 internal fun ResultSet.toGroupConfig(): GroupConfig? {
     return if (this.next()) {

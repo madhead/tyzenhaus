@@ -1,4 +1,4 @@
-FROM openjdk:13-alpine
+FROM openjdk:17-alpine
 
 RUN addgroup -S tyzenhaus && \
     adduser -S -G tyzenhaus tyzenhaus

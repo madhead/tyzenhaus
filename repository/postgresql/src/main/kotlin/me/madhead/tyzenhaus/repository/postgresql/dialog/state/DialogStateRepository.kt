@@ -1,11 +1,11 @@
 package me.madhead.tyzenhaus.repository.postgresql.dialog.state
 
+import javax.sql.DataSource
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
 import org.apache.logging.log4j.LogManager
-import javax.sql.DataSource
 
 /**
  * PostgreSQL repository for [dialog states][DialogState].
@@ -33,6 +33,7 @@ class DialogStateRepository(dataSource: DataSource)
         }
     }
 
+    @Suppress("DuplicatedCode")
     override fun save(entity: DialogState) {
         logger.debug("save {}", entity)
 

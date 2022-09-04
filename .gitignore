@@ -1,7 +1,10 @@
 .gradle
 build
 
-.idea
+.idea/*
+!.idea/codeStyles
+!.idea/inspectionProfiles
+!.idea/scopes
 out
 
 .env
