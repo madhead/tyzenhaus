@@ -8,17 +8,17 @@ dependencies {
         api(platform(it))
     }
 
-    implementation(libs.ktor.server.netty)
-    implementation(libs.koin.ktor)
+    implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.tgbotapi)
     implementation(libs.postgresql)
     implementation(libs.log4j.slf4j.impl)
+    implementation(libs.micrometer.registry.prometheus)
     implementation(projects.repository.postgresql)
     implementation(projects.core)
 }
 
 application {
     applicationName = "tyzenhaus"
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("me.madhead.tyzenhaus.launcher.fly.TyzenhausKt")
 }

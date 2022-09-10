@@ -3,12 +3,18 @@ package me.madhead.tyzenhaus.launcher.fly.koin
 import io.ktor.server.config.ApplicationConfig
 import java.net.URI
 import javax.sql.DataSource
-import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
-import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
-import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
-import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
+import me.madhead.tyzenhaus.repository.BalanceRepository
+import me.madhead.tyzenhaus.repository.DialogStateRepository
+import me.madhead.tyzenhaus.repository.GroupConfigRepository
+import me.madhead.tyzenhaus.repository.MetricsRepository
+import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.koin.dsl.module
 import org.postgresql.ds.PGSimpleDataSource
+import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository as PostgreSQLBalanceRepository
+import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository as PostgreSQLDialogStateRepository
+import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository as PostgreSQLGroupConfigRepository
+import me.madhead.tyzenhaus.repository.postgresql.metrics.MetricsRepository as PostgreSQLMetricsRepository
+import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository as PostgreSQLTransactionRepository
 
 val dbModule = module {
     single<DataSource> {
@@ -21,19 +27,23 @@ val dbModule = module {
         }
     }
 
-    single {
-        GroupConfigRepository(get())
+    single<GroupConfigRepository> {
+        PostgreSQLGroupConfigRepository(get())
     }
 
-    single {
-        DialogStateRepository(get())
+    single<DialogStateRepository> {
+        PostgreSQLDialogStateRepository(get())
     }
 
-    single {
-        TransactionRepository(get())
+    single<TransactionRepository> {
+        PostgreSQLTransactionRepository(get())
     }
 
-    single {
-        BalanceRepository(get())
+    single<BalanceRepository> {
+        PostgreSQLBalanceRepository(get())
+    }
+
+    single<MetricsRepository> {
+        PostgreSQLMetricsRepository(get())
     }
 }

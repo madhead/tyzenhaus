@@ -7,11 +7,10 @@ kotlinx-serialization = "1.4.0"
 tgbotapi = "3.2.0"
 postgresql = "42.5.0"
 log4j = "2.18.0"
+micrometer = "1.9.3"
 
 junit = "5.9.0"
 mockk = "1.12.7"
-
-influxdb = "6.5.0"
 
 liquibase = "4.15.0"
 picocli = "4.6.3"
@@ -22,7 +21,7 @@ jacoco = "0.8.8"
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
@@ -33,6 +32,7 @@ log4j-bom = { module = "org.apache.logging.log4j:log4j-bom", version.ref = "log4
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
@@ -40,10 +40,9 @@ junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", vers
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
-influxdb-client-kotlin = { group = "com.influxdb", name = "influxdb-client-kotlin", version.ref = "influxdb" }
-
 liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 
 [bundles]
 boms = ["kotlin-bom", "kotlinx-serialization-bom", "kotlinx-coroutines-bom", "log4j-bom", "junit-bom"]
+ktor = ["ktor-server-netty", "ktor-server-metrics-micrometer", "koin-ktor"]

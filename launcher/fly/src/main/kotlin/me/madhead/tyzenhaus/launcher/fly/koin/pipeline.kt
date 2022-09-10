@@ -21,16 +21,12 @@ import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProce
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcessor
-import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
-import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
-import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
-import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository
 import org.koin.dsl.module
 
 val pipelineModule = module {
     single {
         ChatCurrenciesService(
-            balanceRepository = get<BalanceRepository>(),
+            balanceRepository = get(),
         )
     }
     single {
@@ -41,7 +37,7 @@ val pipelineModule = module {
         WelcomeMessageUpdateProcessor(
             id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
             requestsExecutor = get(),
-            groupConfigRepository = get<GroupConfigRepository>(),
+            groupConfigRepository = get(),
         )
     }
     single {
@@ -62,59 +58,59 @@ val pipelineModule = module {
     single {
         ExpenseCommandUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
         DebtsCommandUpdateProcessor(
             requestsExecutor = get(),
-            balanceRepository = get<BalanceRepository>(),
+            balanceRepository = get(),
             debtsCalculator = get(),
         )
     }
     single {
         AmountReplyUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
             chatCurrenciesService = get(),
         )
     }
     single {
         CurrencyReplyUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
         TitleReplyUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
         ParticipantCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
         DoneCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
         ConfirmationOKCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
-            transactionRepository = get<TransactionRepository>(),
-            balanceRepository = get<BalanceRepository>(),
+            dialogStateRepository = get(),
+            transactionRepository = get(),
+            balanceRepository = get(),
         )
     }
     single {
         ConfirmationCancelCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            dialogStateRepository = get<DialogStateRepository>(),
+            dialogStateRepository = get(),
         )
     }
     single {
@@ -125,13 +121,13 @@ val pipelineModule = module {
     single {
         LangCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
-            groupConfigRepository = get<GroupConfigRepository>(),
+            groupConfigRepository = get(),
         )
     }
     single {
         ParticipateCommandUpdateProcessor(
             requestsExecutor = get(),
-            groupConfigRepository = get<GroupConfigRepository>(),
+            groupConfigRepository = get(),
         )
     }
     single {
@@ -154,8 +150,8 @@ val pipelineModule = module {
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
             ),
-            get<GroupConfigRepository>(),
-            get<DialogStateRepository>(),
+            get(),
+            get(),
         )
     }
 }
