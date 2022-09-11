@@ -1,0 +1,33 @@
+name: DB backup
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    name: DB backup
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt install wireguard-tools openresolv
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: printf "${{ secrets.FLY_WG_CONF }}" | sudo tee /etc/wireguard/fly.conf
+      - run: wg-quick up fly
+      - run: >-
+          pg_dump
+          --dbname=${{ secrets.DATABASE_URL }}
+          --schema=public
+          --table=public.balance
+          --table=public.dialog_state
+          --table=public.group_config
+          --table=public.transaction
+          --file=tyzenhaus.dump
+          --format=c
+          --data-only
+      - run: >-
+          curl
+          -X POST
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+          --form 'chat_id="${{ secrets.TELEGRAM_BACKUP_CHAT }}"'
+          --form 'document=@"tyzenhaus.dump"'
