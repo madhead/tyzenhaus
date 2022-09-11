@@ -2,13 +2,14 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
-import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
-import dev.inmo.tgbotapi.types.buttons.ForceReply
+import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.buttons.SimpleKeyboardButton
+import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import java.math.BigDecimal
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
@@ -21,7 +22,6 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import org.apache.logging.log4j.LogManager
-import java.math.BigDecimal
 
 /**
  * New expense flow: amount entered.
@@ -40,6 +40,7 @@ class AmountReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
+
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForAmount ?: return null
 
@@ -62,7 +63,7 @@ class AmountReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
+                replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
@@ -76,7 +77,7 @@ class AmountReplyUpdateProcessor(
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
+                replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
@@ -91,7 +92,7 @@ class AmountReplyUpdateProcessor(
                     text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
                     parseMode = MarkdownV2,
                     replyToMessageId = message.messageId,
-                    replyMarkup = ForceReply(
+                    replyMarkup = ReplyForce(
                         selective = true,
                     ),
                 )

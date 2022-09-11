@@ -1,6 +1,7 @@
 package me.madhead.tyzenhaus.core.telegram.updates
 
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository

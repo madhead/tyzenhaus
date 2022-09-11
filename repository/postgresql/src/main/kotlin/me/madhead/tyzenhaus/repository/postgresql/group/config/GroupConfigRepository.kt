@@ -1,11 +1,11 @@
 package me.madhead.tyzenhaus.repository.postgresql.group.config
 
-import me.madhead.tyzenhaus.entity.group.config.GroupConfig
-import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
-import org.apache.logging.log4j.LogManager
 import java.sql.Timestamp
 import java.sql.Types
 import javax.sql.DataSource
+import me.madhead.tyzenhaus.entity.group.config.GroupConfig
+import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
+import org.apache.logging.log4j.LogManager
 
 /**
  * PostgreSQL repository for [group configs][GroupConfig].

@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.dialog.state
 
+import java.net.URI
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -7,12 +8,11 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
-import java.net.URI
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("db")
 class DialogStateRepositoryTest {
-    lateinit var dialogStateRepository: DialogStateRepository
+    private lateinit var dialogStateRepository: DialogStateRepository
 
     @BeforeAll
     fun setUp() {

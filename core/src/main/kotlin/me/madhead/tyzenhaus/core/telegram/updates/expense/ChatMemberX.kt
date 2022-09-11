@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.core.telegram.updates.expense
 
-import dev.inmo.tgbotapi.types.ChatMember.abstracts.ChatMember
+import dev.inmo.tgbotapi.types.chat.member.ChatMember
 
 internal val ChatMember.displayName: String
     get() {

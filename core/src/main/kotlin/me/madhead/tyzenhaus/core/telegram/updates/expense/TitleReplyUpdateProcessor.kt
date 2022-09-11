@@ -3,9 +3,9 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
-import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.UserId
-import dev.inmo.tgbotapi.types.buttons.ForceReply
+import dev.inmo.tgbotapi.types.buttons.ReplyForce
+import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -38,6 +38,7 @@ class TitleReplyUpdateProcessor(
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? CommonMessage<*> ?: return null
         val members = groupConfig?.members ?: return null
+
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForTitle ?: return null
 
@@ -60,7 +61,7 @@ class TitleReplyUpdateProcessor(
                 text = I18N(groupConfig.language)["expense.response.title.textPlease"],
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
-                replyMarkup = ForceReply(
+                replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )

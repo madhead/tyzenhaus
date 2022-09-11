@@ -1,5 +1,8 @@
 package me.madhead.tyzenhaus.repository.postgresql.group.config
 
+import java.net.URI
+import java.time.Instant
+import java.util.Locale
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -7,14 +10,11 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
-import java.net.URI
-import java.time.Instant
-import java.util.Locale
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("db")
 class GroupConfigRepositoryTest {
-    lateinit var groupConfigRepository: GroupConfigRepository
+    private lateinit var groupConfigRepository: GroupConfigRepository
 
     @BeforeAll
     fun setUp() {

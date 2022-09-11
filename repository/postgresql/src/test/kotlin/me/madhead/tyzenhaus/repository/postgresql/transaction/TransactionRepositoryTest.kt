@@ -1,5 +1,7 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
+import java.net.URI
+import java.time.Instant
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -7,13 +9,11 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
-import java.net.URI
-import java.time.Instant
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("db")
 class TransactionRepositoryTest {
-    lateinit var transactionRepository: TransactionRepository
+    private lateinit var transactionRepository: TransactionRepository
 
     @BeforeAll
     fun setUp() {

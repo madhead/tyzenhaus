@@ -1,6 +1,6 @@
-enableFeaturePreview(org.gradle.api.internal.FeaturePreviews.Feature.VERSION_CATALOGS.name)
 enableFeaturePreview(org.gradle.api.internal.FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS.name)
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -15,5 +15,4 @@ include(":entity")
 include(":repository")
 include(":repository:postgresql")
 include(":core")
-include(":runner:heroku:stats")
-include(":runner:heroku")
+include(":launcher:fly")

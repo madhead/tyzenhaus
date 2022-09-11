@@ -11,7 +11,7 @@ class ChatCurrenciesService(
     /**
      * Lists currencies used in transactions of the [group].
      */
-    suspend fun groupCurrencies(group: Long): List<String> {
+    fun groupCurrencies(group: Long): List<String> {
         return balanceRepository
             .get(group)
             ?.balance

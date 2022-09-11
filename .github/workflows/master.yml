@@ -7,52 +7,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-heroku:
-    name: Heroku deployment
+  deploy-flyio:
+    name: Fly.io deployment
     runs-on: ubuntu-latest
     environment:
-      name: heroku
-      url: https://tyzenhaus.herokuapp.com
+      name: fly.io
+      url: https://tyzenhaus.fly.dev
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
       - uses: madhead/read-java-properties@latest
-        id: version
+        id: project-version
         with:
           file: gradle.properties
           property: version
-      - uses: actions/setup-java@v2
+      - uses: madhead/semver-utils@latest
+        id: version
         with:
-          distribution: 'adopt'
-          java-version: '13'
+          version: ${{ steps.project-version.outputs.value }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - uses: gradle/wrapper-validation-action@v1
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean :runner:heroku:installDist :runner:heroku:stats:installDist
+          arguments: clean :launcher:fly:installDist
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v2
         with:
-          registry: registry.heroku.com
-          username: _
-          password: ${{ secrets.HEROKU_API_KEY }}
-      - uses: docker/build-push-action@v2
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v3
         with:
-          context: runner/heroku
+          context: launcher/fly
           push: true
           tags: >
-            registry.heroku.com/tyzenhaus/web
-      - run: docker push registry.heroku.com/tyzenhaus/web
-      - run: docker inspect registry.heroku.com/tyzenhaus/web --format={{.Id}} > imageid
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }},
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }},
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }},
+            ghcr.io/${{ github.repository }}:latest
+      - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: >-
-          curl
-          -X PATCH
-          https://api.heroku.com/apps/tyzenhaus/formation
-          --header "Content-Type: application/json"
-          --header "Accept: application/vnd.heroku+json; version=3.docker-releases"
-          --header "Authorization: Bearer ${{ secrets.HEROKU_API_KEY }}"
-          --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid)'" } ] }'
+          flyctl deploy
+          --app tyzenhaus
+          --config launcher/fly/fly.toml
+          --image ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - run: >-
           curl
           -X POST
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/setWebhook
           --header "Content-Type: application/json"
-          --data '{ "url": "https://tyzenhaus.herokuapp.com/${{ secrets.TELEGRAM_BOT_TOKEN }}" }'
+          --data '{ "url": "https://tyzenhaus.fly.dev/${{ secrets.TELEGRAM_BOT_TOKEN }}" }'

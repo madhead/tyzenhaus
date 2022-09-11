@@ -3,14 +3,15 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
-import dev.inmo.tgbotapi.types.MessageEntity.textsources.BotCommandTextSource
-import dev.inmo.tgbotapi.types.ParseMode.MarkdownV2
 import dev.inmo.tgbotapi.types.UserId
+import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
+import java.math.RoundingMode
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
@@ -21,7 +22,6 @@ import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.BalanceRepository
 import org.apache.logging.log4j.LogManager
-import java.math.RoundingMode
 
 /**
  * /debts command handler.
@@ -35,7 +35,7 @@ class DebtsCommandUpdateProcessor(
         private val logger = LogManager.getLogger(DebtsCommandUpdateProcessor::class.java)!!
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "DuplicatedCode")
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
