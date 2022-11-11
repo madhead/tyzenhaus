@@ -1,4 +1,5 @@
 ifdef::env-github[]
+
 ++++
 <!--suppress HtmlDeprecatedAttribute -->
 <p align="center">
@@ -19,9 +20,10 @@ ifdef::env-github[]
   </a>
 </p>
 ++++
-endif::[]
 
+endif::[]
 ifndef::env-github[]
+
 image::./assets/logo.svg[align="center"]
 
 [.text-center]
@@ -29,6 +31,7 @@ image:./assets/ph.png[link="https://producthunt.com/posts/tyzenhaus"]
 image:./assets/hackernews.png[link="https://news.ycombinator.com/item?id=28556366"]
 image:./assets/reddit.png[link="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot"]
 image:./assets/vc.png[link="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah"]
+
 endif::[]
 
 https://t.me/TyzenhausBot[Tyzenhaus] is a shared expenses tracking bot.
@@ -38,5 +41,27 @@ Whether you are a group of travelers ✈️, roommates 🏠, or just friends �
 . Invite Tyzenhaus into your chat
 . Track shared expenses with Tyzenhaus
 . Tyzenhaus will simplify the debts
+
+'''
+
+ifdef::env-github[]
+
+++++
+<!--suppress HtmlDeprecatedAttribute -->
+<p align="center">
+  <a href="https://crowdin.com/project/tyzenhaus">
+    <img src="https://badges.crowdin.net/tyzenhaus/localized.svg" alt="Crowdin">
+  </a>
+</p>
+++++
+
+endif::[]
+
+ifndef::env-github[]
+
+[.text-center]
+image:https://badges.crowdin.net/tyzenhaus/localized.svg[link="https://crowdin.com/project/tyzenhaus"]
+
+endif::[]
 
 Tyzenhaus is translated into 🇮🇹 Italian by https://t.me/SebaDev[@SebaDev]!
