@@ -45,6 +45,21 @@ class MetricsRepository(dataSource: DataSource)
             }
         }
 
+    override fun languages(): Map<String, Int> =
+        execute("""
+            SELECT COALESCE(language, 'en'), COUNT(1)
+            FROM group_config
+            GROUP BY 1;
+        """.trimIndent()) {
+            val result = mutableMapOf<String, Int>()
+
+            while (it.next()) {
+                result[it.getString(1)] = it.getInt(2)
+            }
+
+            result
+        }
+
     private fun <T> execute(sql: String, action: (ResultSet) -> T): T {
         return dataSource.connection.use { connection ->
             connection

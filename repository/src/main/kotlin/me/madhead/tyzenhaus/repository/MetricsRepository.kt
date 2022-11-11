@@ -23,4 +23,9 @@ interface MetricsRepository {
      * Get average group size.
      */
     fun averageGroupSize(): Double
+
+    /**
+     * Get languages statistics.
+     */
+    fun languages(): Map<String, Int>
 }
