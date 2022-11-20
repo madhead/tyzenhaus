@@ -42,6 +42,11 @@ Whether you are a group of travelers ✈️, roommates 🏠, or just friends �
 . Track shared expenses with Tyzenhaus
 . Tyzenhaus will simplify the debts
 
+== Acknowledgements
+
+* https://t.me/SebaDev[@SebaDev] for 🇮🇹 Italian translations
+* https://github.com/NicolasGirondi[Nicolas Girondi] for 🇮🇹 Italian translations
+
 '''
 
 ifdef::env-github[]
@@ -63,5 +68,3 @@ ifndef::env-github[]
 image:https://badges.crowdin.net/tyzenhaus/localized.svg[link="https://crowdin.com/project/tyzenhaus"]
 
 endif::[]
-
-Tyzenhaus is translated into 🇮🇹 Italian by https://t.me/SebaDev[@SebaDev]!
