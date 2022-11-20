@@ -1,3 +1,7 @@
 files:
   - source: /i18n/src/main/resources/i18n.properties
     translation: /i18n/src/main/resources/i18n_%two_letters_code%.properties
+  - source: /creatives/src/text/creative/captions_en.properties
+    translation: /creatives/src/text/creative/captions_%two_letters_code%.properties
+  - source: /creatives/src/text/youtube/en.txt
+    translation: /creatives/src/text/youtube/%two_letters_code%.txt
