@@ -15,9 +15,9 @@ allprojects {
 
     configure<DetektExtension> {
         parallel = true
-        config = files("$rootDir/detekt.yml")
+        config.from(files("$rootDir/detekt.yml"))
         buildUponDefaultConfig = false
-        source = files(projectDir)
+        source.from(files(projectDir))
     }
 
     configure<JacocoPluginExtension> {
