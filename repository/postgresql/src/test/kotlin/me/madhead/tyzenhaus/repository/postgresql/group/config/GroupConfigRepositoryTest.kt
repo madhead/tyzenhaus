@@ -4,7 +4,8 @@ import java.net.URI
 import java.time.Instant
 import java.util.Locale
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -31,11 +32,11 @@ class GroupConfigRepositoryTest {
 
     @Test
     fun get() {
-        Assertions.assertEquals(GroupConfig(1, 1, Instant.ofEpochMilli(808174800000), Locale("en")), groupConfigRepository.get(1))
-        Assertions.assertEquals(GroupConfig(2, 2, Instant.ofEpochMilli(808174800000), null), groupConfigRepository.get(2))
-        Assertions.assertEquals(GroupConfig(3, 3, null, null), groupConfigRepository.get(3))
-        Assertions.assertEquals(GroupConfig(4, null, null, null), groupConfigRepository.get(4))
-        Assertions.assertEquals(
+        assertEquals(GroupConfig(1, 1, Instant.ofEpochMilli(808174800000), Locale("en")), groupConfigRepository.get(1))
+        assertEquals(GroupConfig(2, 2, Instant.ofEpochMilli(808174800000), null), groupConfigRepository.get(2))
+        assertEquals(GroupConfig(3, 3, null, null), groupConfigRepository.get(3))
+        assertEquals(GroupConfig(4, null, null, null), groupConfigRepository.get(4))
+        assertEquals(
             GroupConfig(5, 1, Instant.ofEpochMilli(808174800000), Locale("en"), setOf(1, 2, 3)),
             groupConfigRepository.get(5)
         )
@@ -43,14 +44,14 @@ class GroupConfigRepositoryTest {
 
     @Test
     fun getNonExisting() {
-        Assertions.assertNull(groupConfigRepository.get(0))
+        assertNull(groupConfigRepository.get(0))
     }
 
     @Test
     fun save() {
         groupConfigRepository.save(GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)))
 
-        Assertions.assertEquals(
+        assertEquals(
             GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)),
             groupConfigRepository.get(-1)
         )
@@ -60,23 +61,23 @@ class GroupConfigRepositoryTest {
     fun update() {
         groupConfigRepository.save(GroupConfig(-2))
 
-        Assertions.assertEquals(GroupConfig(-2), groupConfigRepository.get(-2))
+        assertEquals(GroupConfig(-2), groupConfigRepository.get(-2))
 
         groupConfigRepository.save(GroupConfig(-2, -2))
 
-        Assertions.assertEquals(GroupConfig(-2, -2), groupConfigRepository.get(-2))
+        assertEquals(GroupConfig(-2, -2), groupConfigRepository.get(-2))
 
         groupConfigRepository.save(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000)))
 
-        Assertions.assertEquals(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000)), groupConfigRepository.get(-2))
+        assertEquals(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000)), groupConfigRepository.get(-2))
 
         groupConfigRepository.save(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by")))
 
-        Assertions.assertEquals(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by")), groupConfigRepository.get(-2))
+        assertEquals(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by")), groupConfigRepository.get(-2))
 
         groupConfigRepository.save(GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)))
 
-        Assertions.assertEquals(
+        assertEquals(
             GroupConfig(-2, -2, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)),
             groupConfigRepository.get(-2)
         )

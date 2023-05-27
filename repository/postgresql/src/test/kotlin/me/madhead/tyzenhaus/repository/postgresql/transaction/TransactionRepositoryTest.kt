@@ -3,7 +3,8 @@ package me.madhead.tyzenhaus.repository.postgresql.transaction
 import java.net.URI
 import java.time.Instant
 import me.madhead.tyzenhaus.entity.transaction.Transaction
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -30,7 +31,7 @@ class TransactionRepositoryTest {
 
     @Test
     fun get() {
-        Assertions.assertEquals(
+        assertEquals(
             Transaction(1, 1, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", "Lunch", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(1)
         )
@@ -38,7 +39,7 @@ class TransactionRepositoryTest {
 
     @Test
     fun getNonExisting() {
-        Assertions.assertNull(transactionRepository.get(0))
+        assertNull(transactionRepository.get(0))
     }
 
     @Test
@@ -47,7 +48,7 @@ class TransactionRepositoryTest {
             Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
-        Assertions.assertEquals(
+        assertEquals(
             Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-1)
         )
@@ -59,7 +60,7 @@ class TransactionRepositoryTest {
             Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
-        Assertions.assertEquals(
+        assertEquals(
             Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-2)
         )
@@ -68,7 +69,7 @@ class TransactionRepositoryTest {
             Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
 
-        Assertions.assertEquals(
+        assertEquals(
             Transaction(-2, 2, 3, setOf(3, 2, 1), "20000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(-2)
         )

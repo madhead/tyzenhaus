@@ -12,4 +12,5 @@ dependencies {
     api(projects.repository)
     implementation(projects.i18n)
     implementation(libs.log4j.api)
+    implementation(libs.micrometer.registry.prometheus)
 }

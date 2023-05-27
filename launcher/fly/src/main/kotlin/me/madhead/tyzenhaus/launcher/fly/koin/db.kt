@@ -7,6 +7,7 @@ import me.madhead.tyzenhaus.repository.BalanceRepository
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import me.madhead.tyzenhaus.repository.MetricsRepository
+import me.madhead.tyzenhaus.repository.SupergroupRepository
 import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.koin.dsl.module
 import org.postgresql.ds.PGSimpleDataSource
@@ -14,6 +15,7 @@ import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository as P
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository as PostgreSQLDialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository as PostgreSQLGroupConfigRepository
 import me.madhead.tyzenhaus.repository.postgresql.metrics.MetricsRepository as PostgreSQLMetricsRepository
+import me.madhead.tyzenhaus.repository.postgresql.supergroup.SupergroupRepository as PostgreSQLSupegroupRepository
 import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionRepository as PostgreSQLTransactionRepository
 
 val dbModule = module {
@@ -45,5 +47,9 @@ val dbModule = module {
 
     single<MetricsRepository> {
         PostgreSQLMetricsRepository(get())
+    }
+
+    single<SupergroupRepository> {
+        PostgreSQLSupegroupRepository(get())
     }
 }

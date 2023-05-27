@@ -2,7 +2,8 @@ package me.madhead.tyzenhaus.repository.postgresql.balance
 
 import java.net.URI
 import me.madhead.tyzenhaus.entity.balance.Balance
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -29,7 +30,7 @@ class BalanceRepositoryTest {
 
     @Test
     fun get() {
-        Assertions.assertEquals(
+        assertEquals(
             balance,
             balanceRepository.get(1)
         )
@@ -37,7 +38,7 @@ class BalanceRepositoryTest {
 
     @Test
     fun getNonExisting() {
-        Assertions.assertNull(balanceRepository.get(0))
+        assertNull(balanceRepository.get(0))
     }
 
     @Test
@@ -46,7 +47,7 @@ class BalanceRepositoryTest {
             balance.copy(groupId = -1, version = 1)
         )
 
-        Assertions.assertEquals(
+        assertEquals(
             balance.copy(groupId = -1, version = 1),
             balanceRepository.get(-1)
         )
@@ -74,7 +75,7 @@ class BalanceRepositoryTest {
             updated
         )
 
-        Assertions.assertEquals(
+        assertEquals(
             updated.copy(version = 2),
             balanceRepository.get(-1)
         )

@@ -2,5 +2,5 @@ POST https://api.telegram.org/bot{{telegram_token}}/setWebhook HTTP/1.1
 Content-Type: application/json
 
 {
-  "url": "https://{{ngrok}}.ngrok.io/{{telegram_token}}"
+  "url": "https://{{ngrok}}/{{telegram_token}}"
 }

@@ -11,9 +11,9 @@ object Versions {
      * Gradle plugins versions.
      */
     object Plugins {
-        const val KOTLIN = "1.7.10"
-        const val LIQUIBASE = "2.1.1"
-        const val DETEKT = "1.21.0"
-        const val JACOCO = "0.8.8"
+        const val KOTLIN = "1.8.21"
+        const val LIQUIBASE = "2.2.0"
+        const val DETEKT = "1.23.0"
+        const val JACOCO = "0.8.10"
     }
 }
