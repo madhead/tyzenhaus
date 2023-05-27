@@ -2,9 +2,11 @@ package me.madhead.tyzenhaus.launcher.fly.koin
 
 import io.micrometer.core.instrument.FunctionCounter
 import io.micrometer.core.instrument.Gauge
+import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import me.madhead.tyzenhaus.repository.MetricsRepository
+import org.koin.dsl.binds
 import org.koin.dsl.module
 
 val metricsModule = module {
@@ -30,5 +32,5 @@ val metricsModule = module {
             .register(registry)
 
         registry
-    }
+    }.binds(arrayOf(MeterRegistry::class, PrometheusMeterRegistry::class))
 }

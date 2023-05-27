@@ -1,6 +1,6 @@
 package me.madhead.tyzenhaus.core.telegram.updates.supergroup
 
-import dev.inmo.tgbotapi.types.message.ChatEvents.SupergroupChatCreated
+import dev.inmo.tgbotapi.types.message.ChatEvents.MigratedToSupergroup
 import dev.inmo.tgbotapi.types.message.abstracts.ChatEventMessage
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
@@ -29,7 +29,7 @@ class SupergroupChatCreatedUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
         val message = update.data as? ChatEventMessage<*> ?: return null
-        val event = message.chatEvent as? SupergroupChatCreated ?: return null
+        val event = message.chatEvent as? MigratedToSupergroup ?: return null
         val migratedFrom = event.migratedFrom ?: return null
 
         return {
