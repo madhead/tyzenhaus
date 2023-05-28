@@ -51,6 +51,7 @@ class LangCommandUpdateProcessor(
                         listOf(
                             CallbackDataInlineKeyboardButton("English", "${CALLBACK_PREFIX}en"),
                             CallbackDataInlineKeyboardButton("Italiano", "${CALLBACK_PREFIX}it"),
+                            CallbackDataInlineKeyboardButton("Português", "${CALLBACK_PREFIX}pt"),
                             CallbackDataInlineKeyboardButton("Русский", "${CALLBACK_PREFIX}ru"),
                         )
                     )
