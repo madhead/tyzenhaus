@@ -1,0 +1,23 @@
+### getMyDescription
+GET https://api.telegram.org/bot{{telegram_token}}/getMyDescription
+
+### setMyDescription
+POST https://api.telegram.org/bot{{telegram_token}}/setMyDescription
+Content-Type: application/json
+
+{
+    "description": "",
+    "language_code": ""
+}
+
+### getMyShortDescription
+GET https://api.telegram.org/bot{{telegram_token}}/getMyShortDescription
+
+### setMyShortDescription
+POST https://api.telegram.org/bot{{telegram_token}}/setMyShortDescription
+Content-Type: application/json
+
+{
+    "short_description": "",
+    "language_code": ""
+}
