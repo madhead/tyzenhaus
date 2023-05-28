@@ -5,3 +5,7 @@ files:
     translation: /creatives/src/text/creative/captions_%two_letters_code%.properties
   - source: /creatives/src/text/youtube/en.txt
     translation: /creatives/src/text/youtube/%two_letters_code%.txt
+  - source: /creatives/src/text/telegram/description/en.txt
+    translation: /creatives/src/text/telegram/description/%two_letters_code%.txt
+  - source: /creatives/src/text/telegram/short_description/en.txt
+    translation: /creatives/src/text/telegram/short_description/%two_letters_code%.txt
