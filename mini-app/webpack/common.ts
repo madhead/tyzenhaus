@@ -12,6 +12,7 @@ const configuration: webpack.Configuration = {
     },
     output: {
         path: path.resolve(root, "build"),
+        publicPath: "/app"
     },
     optimization: {
         splitChunks: {
