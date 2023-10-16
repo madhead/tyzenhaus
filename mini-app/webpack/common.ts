@@ -12,11 +12,18 @@ const configuration: webpack.Configuration = {
     },
     output: {
         path: path.resolve(root, "build"),
-        publicPath: "/app"
+        publicPath: "/app",
     },
     optimization: {
         splitChunks: {
-            chunks: "all",
+            cacheGroups: {
+                default: false,
+                vendor: {
+                    test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                    name: "react",
+                    chunks: "all",
+                },
+            },
         },
         realContentHash: true,
     },
