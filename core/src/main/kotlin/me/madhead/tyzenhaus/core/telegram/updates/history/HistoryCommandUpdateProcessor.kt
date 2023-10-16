@@ -40,9 +40,6 @@ class HistoryCommandUpdateProcessor(
             {
                 logger.debug("{} asked for history in {}", update.userId, update.groupId)
 
-                println(me)
-                println(me.username)
-
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig?.language)["history.response", me.username.usernameWithoutAt, "TOKEN"],

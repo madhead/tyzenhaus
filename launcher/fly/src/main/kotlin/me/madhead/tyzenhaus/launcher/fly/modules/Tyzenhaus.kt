@@ -16,6 +16,7 @@ import me.madhead.tyzenhaus.launcher.fly.koin.pipelineModule
 import me.madhead.tyzenhaus.launcher.fly.koin.telegramModule
 import me.madhead.tyzenhaus.launcher.fly.routes.metrics
 import me.madhead.tyzenhaus.launcher.fly.routes.miniApp
+import me.madhead.tyzenhaus.launcher.fly.routes.miniAppAPI
 import me.madhead.tyzenhaus.launcher.fly.routes.webhook
 import org.koin.ktor.ext.get
 import org.koin.ktor.plugin.Koin
@@ -44,5 +45,6 @@ fun Application.tyzenhaus() {
         webhook()
         metrics()
         miniApp()
+        miniAppAPI()
     }
 }
