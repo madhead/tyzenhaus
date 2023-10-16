@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.less";
-import MiniApp from "./MiniApp";
+import "./history.less";
+import HistoryApp from "./HistoryApp";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -9,6 +9,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <MiniApp />
+    <HistoryApp />
   </React.StrictMode>
 );
