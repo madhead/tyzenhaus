@@ -1,6 +1,7 @@
 package me.madhead.tyzenhaus.launcher.fly.koin
 
 import dev.inmo.tgbotapi.types.ChatId
+import dev.inmo.tgbotapi.types.chat.ExtendedBot
 import io.ktor.server.config.ApplicationConfig
 import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
@@ -18,6 +19,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.expense.TitleReplyUpdateProces
 import me.madhead.tyzenhaus.core.telegram.updates.help.HelpCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.StartCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.history.HistoryCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.supergroup.SupergroupChatCreatedUpdateProcessor
@@ -36,7 +38,7 @@ val pipelineModule = module {
 
     single {
         WelcomeMessageUpdateProcessor(
-            id = ChatId(get<ApplicationConfig>().property("telegram.token").getString().substringBefore(":").toLong()),
+            id = get<ExtendedBot>().id,
             requestsExecutor = get(),
             groupConfigRepository = get(),
         )
@@ -138,6 +140,12 @@ val pipelineModule = module {
         )
     }
     single {
+        HistoryCommandUpdateProcessor(
+            requestsExecutor = get(),
+            me = get(),
+        )
+    }
+    single {
         UpdateProcessingPipeline(
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
@@ -157,6 +165,7 @@ val pipelineModule = module {
                 get<LangCallbackQueryUpdateProcessor>(),
                 get<ParticipateCommandUpdateProcessor>(),
                 get<SupergroupChatCreatedUpdateProcessor>(),
+                get<HistoryCommandUpdateProcessor>(),
             ),
             get(),
             get(),
