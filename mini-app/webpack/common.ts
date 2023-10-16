@@ -8,7 +8,8 @@ const src = path.resolve(root, "src");
 
 const configuration: webpack.Configuration = {
     entry: {
-        app: [path.resolve(src, "index.tsx")],
+        history: [path.resolve(src, "history/history.tsx")],
+        expense: [path.resolve(src, "expense/expense.tsx")],
     },
     output: {
         path: path.resolve(root, "build"),
@@ -32,6 +33,12 @@ const configuration: webpack.Configuration = {
     },
     module: {
         rules: [
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
             {
                 test: /\.tsx?$/,
                 use: [
@@ -60,6 +67,14 @@ const configuration: webpack.Configuration = {
         new HtmlWebpackPlugin({
             template: path.resolve(src, "index.html"),
             hash: true,
+            filename: "history.html",
+            chunks: ["history"],
+        }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(src, "index.html"),
+            hash: true,
+            filename: "expense.html",
+            chunks: ["expense"],
         }),
     ],
 };
