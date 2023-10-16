@@ -30,6 +30,7 @@
         "clean": "rm -rf build",
         "build": "webpack --config webpack/production.ts",
         "build:dev": "webpack --config webpack/development.ts",
+        "build:watch": "webpack --watch --config webpack/development.ts",
         "dev": "webpack serve --config webpack/development.ts"
     }
 }
