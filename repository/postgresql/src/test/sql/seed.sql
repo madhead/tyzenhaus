@@ -56,3 +56,6 @@ VALUES (6, 1, '{
     "groupId": 6,
     "balance": {}
 }'::JSONB);
+
+INSERT INTO "api_token" ("token", "group_id", "scope", "valid_until")
+VALUES ('00000000-0000-0000-0000-000000000000', 1, 'HISTORY', '9999-12-12 00:00:00');
