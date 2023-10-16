@@ -1,3 +1,7 @@
+### Get me
+GET https://api.telegram.org/bot{{telegram_token}}/getMe HTTP/1.1
+
+### Set webhook
 POST https://api.telegram.org/bot{{telegram_token}}/setWebhook HTTP/1.1
 Content-Type: application/json
 
