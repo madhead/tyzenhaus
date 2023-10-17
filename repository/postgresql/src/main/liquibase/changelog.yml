@@ -65,3 +65,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/transaction-remove-title-column.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 7
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/api-token.init.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/api-token.deinit.sql
+            relativeToChangelogFile: true
