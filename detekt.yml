@@ -40,7 +40,7 @@ comments:
     matchDeclarationsOrder: true
     allowParamOnConstructorProperties: false
   UndocumentedPublicClass:
-    active: false
+    active: true
     excludes:
       - '**/test/**'
     searchInNestedClass: true
@@ -48,7 +48,7 @@ comments:
     searchInInnerObject: true
     searchInInnerInterface: true
   UndocumentedPublicFunction:
-    active: false
+    active: true
     excludes:
       - '**/test/**'
   UndocumentedPublicProperty:

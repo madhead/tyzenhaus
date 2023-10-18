@@ -10,7 +10,7 @@ import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import java.math.BigDecimal
-import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
+import me.madhead.tyzenhaus.core.service.GroupCurrenciesService
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
@@ -29,7 +29,7 @@ import org.apache.logging.log4j.LogManager
 class AmountReplyUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val dialogStateRepository: DialogStateRepository,
-    private val chatCurrenciesService: ChatCurrenciesService,
+    private val groupCurrenciesService: GroupCurrenciesService,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(AmountReplyUpdateProcessor::class.java)!!
@@ -110,7 +110,7 @@ class AmountReplyUpdateProcessor(
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
                 replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
-                    keyboard = chatCurrenciesService
+                    keyboard = groupCurrenciesService
                         .groupCurrencies(update.groupId)
                         .map { listOf(SimpleKeyboardButton(it)) },
                     resizeKeyboard = true,

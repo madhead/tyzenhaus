@@ -21,6 +21,9 @@ import me.madhead.tyzenhaus.launcher.fly.routes.webhook
 import org.koin.ktor.ext.get
 import org.koin.ktor.plugin.Koin
 
+/**
+ * Initializes and configures the application.
+ */
 fun Application.tyzenhaus() {
     install(DefaultHeaders)
     install(CallLogging)
