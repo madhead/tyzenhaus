@@ -8,9 +8,11 @@ import java.util.UUID
  *
  * Available scopes:
  * - HISTORY: Allows to read group's transaction history.
+ * - EXPENSE: Allows to create new transactions.
  */
 enum class Scope {
     HISTORY,
+    EXPENSE,
 }
 
 /**
