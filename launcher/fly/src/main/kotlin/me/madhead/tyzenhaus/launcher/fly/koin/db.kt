@@ -3,6 +3,7 @@ package me.madhead.tyzenhaus.launcher.fly.koin
 import io.ktor.server.config.ApplicationConfig
 import java.net.URI
 import javax.sql.DataSource
+import me.madhead.tyzenhaus.repository.APITokenRepository
 import me.madhead.tyzenhaus.repository.BalanceRepository
 import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
@@ -11,6 +12,7 @@ import me.madhead.tyzenhaus.repository.SupergroupRepository
 import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.koin.dsl.module
 import org.postgresql.ds.PGSimpleDataSource
+import me.madhead.tyzenhaus.repository.postgresql.api.token.APITokenRepository as PostgreSQLAPITokenRepository
 import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository as PostgreSQLBalanceRepository
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository as PostgreSQLDialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository as PostgreSQLGroupConfigRepository
@@ -51,5 +53,9 @@ val dbModule = module {
 
     single<SupergroupRepository> {
         PostgreSQLSupegroupRepository(get())
+    }
+
+    single<APITokenRepository> {
+        PostgreSQLAPITokenRepository(get())
     }
 }

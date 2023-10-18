@@ -135,6 +135,7 @@ val pipelineModule = module {
         HistoryCommandUpdateProcessor(
             requestsExecutor = get(),
             me = get(),
+            apiTokenRepository = get(),
         )
     }
     single {

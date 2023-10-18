@@ -8,3 +8,7 @@ Content-Type: application/json
 {
   "url": "https://{{ngrok}}/{{telegram_token}}"
 }
+
+### Get group members
+GET http://{{local}}/app/api/group/members
+Authorization: Bearer {{api_token}}

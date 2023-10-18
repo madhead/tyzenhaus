@@ -5,6 +5,7 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import io.ktor.server.routing.localPort
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.koin.ktor.ext.inject
 
@@ -14,10 +15,9 @@ import org.koin.ktor.ext.inject
 fun Route.metrics() {
     val registry by inject<PrometheusMeterRegistry>()
     val config by inject<ApplicationConfig>()
-    val managementPort = config.property("deployment.managementPort").getString().toInt()
 
-    get("metrics") {
-        if (call.request.local.port == managementPort) {
+    localPort(config.property("deployment.managementPort").getString().toInt()) {
+        get("metrics") {
             this.call.respond(registry.scrape())
         }
     }
