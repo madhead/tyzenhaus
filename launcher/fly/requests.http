@@ -9,6 +9,15 @@ Content-Type: application/json
   "url": "https://{{ngrok}}/{{telegram_token}}"
 }
 
+### Validate initData
+POST https://{{ngrok}}/app/api/auth/validation
+Authorization: Bearer {{api_token}}
+
+
 ### Get group members
-GET http://{{local}}/app/api/group/members
+GET https://{{ngrok}}/app/api/group/members
+Authorization: Bearer {{api_token}}
+
+### Get group currencies
+GET https://{{ngrok}}/app/api/group/currencies
 Authorization: Bearer {{api_token}}
