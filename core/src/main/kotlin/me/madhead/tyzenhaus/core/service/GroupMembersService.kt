@@ -29,6 +29,7 @@ class GroupMembersService(
                     id = it.user.id.chatId,
                     firstName = it.user.firstName,
                     lastName = it.user.lastName,
+                    username = it.user.username?.usernameWithoutAt,
                 )
             }
         )
