@@ -10,6 +10,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.localPort
 import io.ktor.server.routing.route
+import me.madhead.tyzenhaus.core.service.GroupCurrenciesService
 import me.madhead.tyzenhaus.core.service.GroupMembersService
 import me.madhead.tyzenhaus.launcher.fly.security.APITokenPrincipal
 import org.koin.ktor.ext.inject
@@ -20,18 +21,28 @@ import org.koin.ktor.ext.inject
 fun Route.miniAppAPI() {
     val config by inject<ApplicationConfig>()
     val groupMembersService by inject<GroupMembersService>()
+    val groupCurrenciesService by inject<GroupCurrenciesService>()
 
     localPort(config.property("deployment.port").getString().toInt()) {
-        route("/app/api") {
-            authenticate("api") {
-                get("/group/members") {
-                    val principal = call.principal<APITokenPrincipal>()!!
-                    val members = groupMembersService.groupMembers(principal.groupId)
+        authenticate("api") {
+            route("/app/api") {
+                route("group") {
+                    get("members") {
+                        val principal = call.principal<APITokenPrincipal>()!!
+                        val members = groupMembersService.groupMembers(principal.groupId)
 
-                    if (members != null) {
-                        call.respond(members)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
+                        if (members != null) {
+                            call.respond(members)
+                        } else {
+                            call.respond(HttpStatusCode.NotFound)
+                        }
+                    }
+
+                    get("currencies") {
+                        val principal = call.principal<APITokenPrincipal>()!!
+                        val currencies = groupCurrenciesService.groupCurrencies(principal.groupId) ?: emptyList()
+
+                        call.respond(currencies)
                     }
                 }
             }

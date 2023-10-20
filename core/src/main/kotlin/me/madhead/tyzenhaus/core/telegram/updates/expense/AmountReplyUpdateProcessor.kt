@@ -110,8 +110,7 @@ class AmountReplyUpdateProcessor(
                 parseMode = MarkdownV2,
                 replyToMessageId = message.messageId,
                 replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
-                    keyboard = groupCurrenciesService
-                        .groupCurrencies(update.groupId)
+                    keyboard = (groupCurrenciesService.groupCurrencies(update.groupId) ?: listOf("USD", "EUR", "RUB"))
                         .map { listOf(SimpleKeyboardButton(it)) },
                     resizeKeyboard = true,
                     oneTimeKeyboard = true,
