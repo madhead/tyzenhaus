@@ -35,3 +35,13 @@ internal fun ResultSet.toTransaction(): Transaction? {
         null
     }
 }
+
+internal fun ResultSet.toCurrencies(): List<String> {
+    val result = mutableListOf<String>()
+
+    while (this.next()) {
+        result.add(this.getString("currency"))
+    }
+
+    return result
+}

@@ -86,4 +86,19 @@ class TransactionRepository(dataSource: DataSource)
             }
         }
     }
+
+    override fun groupCurrencies(groupId: Long): List<String> {
+        logger.debug("groupCurrencies {}", groupId)
+
+        dataSource.connection.use { connection ->
+            connection
+                .prepareStatement("""SELECT DISTINCT("currency") FROM "transaction" WHERE "group_id" = ?;""")
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                    preparedStatement.executeQuery().use { resultSet ->
+                        return@groupCurrencies resultSet.toCurrencies()
+                    }
+                }
+        }
+    }
 }

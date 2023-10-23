@@ -7,7 +7,7 @@ import org.koin.dsl.module
 val serviceModule = module {
     single {
         GroupCurrenciesService(
-            balanceRepository = get(),
+            transactionRepository = get(),
         )
     }
 
