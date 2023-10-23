@@ -22,6 +22,8 @@ kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
@@ -45,4 +47,4 @@ picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 
 [bundles]
 boms = ["kotlin-bom", "kotlinx-serialization-bom", "kotlinx-coroutines-bom", "log4j-bom", "junit-bom"]
-ktor = ["ktor-server-netty", "ktor-server-metrics-micrometer", "koin-ktor"]
+ktor = ["ktor-server-netty", "ktor-server-metrics-micrometer", "ktor-server-auth", "koin-ktor", "ktor-serialization-kotlinx-json"]

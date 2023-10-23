@@ -1,9 +1,6 @@
 package me.madhead.tyzenhaus.launcher.fly.koin
 
-import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.chat.ExtendedBot
-import io.ktor.server.config.ApplicationConfig
-import me.madhead.tyzenhaus.core.currencies.ChatCurrenciesService
 import me.madhead.tyzenhaus.core.debts.DebtsCalculator
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessingPipeline
 import me.madhead.tyzenhaus.core.telegram.updates.expense.AmountReplyUpdateProcessor
@@ -27,11 +24,6 @@ import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcess
 import org.koin.dsl.module
 
 val pipelineModule = module {
-    single {
-        ChatCurrenciesService(
-            balanceRepository = get(),
-        )
-    }
     single {
         DebtsCalculator()
     }
@@ -75,7 +67,7 @@ val pipelineModule = module {
         AmountReplyUpdateProcessor(
             requestsExecutor = get(),
             dialogStateRepository = get(),
-            chatCurrenciesService = get(),
+            groupCurrenciesService = get(),
         )
     }
     single {
@@ -143,6 +135,7 @@ val pipelineModule = module {
         HistoryCommandUpdateProcessor(
             requestsExecutor = get(),
             me = get(),
+            apiTokenRepository = get(),
         )
     }
     single {

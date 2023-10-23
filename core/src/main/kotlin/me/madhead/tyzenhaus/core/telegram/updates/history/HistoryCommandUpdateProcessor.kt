@@ -9,13 +9,19 @@ import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import java.time.Duration
+import java.time.Instant
+import java.util.UUID
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
 import me.madhead.tyzenhaus.core.telegram.updates.userId
+import me.madhead.tyzenhaus.entity.api.token.APIToken
+import me.madhead.tyzenhaus.entity.api.token.Scope
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.i18.I18N
+import me.madhead.tyzenhaus.repository.APITokenRepository
 import org.apache.logging.log4j.LogManager
 
 /**
@@ -24,6 +30,7 @@ import org.apache.logging.log4j.LogManager
 class HistoryCommandUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
     private val me: ExtendedBot,
+    private val apiTokenRepository: APITokenRepository,
 ) : UpdateProcessor {
     companion object {
         private val logger = LogManager.getLogger(HistoryCommandUpdateProcessor::class.java)!!
@@ -40,9 +47,18 @@ class HistoryCommandUpdateProcessor(
             {
                 logger.debug("{} asked for history in {}", update.userId, update.groupId)
 
+                val token = APIToken(
+                    token = UUID.randomUUID(),
+                    groupId = update.groupId,
+                    scope = Scope.HISTORY,
+                    validUntil = Instant.now() + @Suppress("MagicNumber") Duration.ofMinutes(30)
+                )
+
+                apiTokenRepository.save(token)
+
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["history.response", me.username.usernameWithoutAt, "TOKEN"],
+                    text = I18N(groupConfig?.language)["history.response", me.username.usernameWithoutAt, token.token.toString()],
                     parseMode = MarkdownV2,
                 )
             }

@@ -21,7 +21,7 @@ function HistoryApp() {
   return (
     <div>
       <h1>History</h1>
-      Data: {JSON.stringify(data)}
+      Init Data: {WebApp.initData}
     </div>
   );
 }
