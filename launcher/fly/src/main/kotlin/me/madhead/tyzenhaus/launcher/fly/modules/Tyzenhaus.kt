@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.launcher.fly.modules
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -10,6 +11,8 @@ import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.compression.Compression
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.response.header
+import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import java.time.Instant
@@ -68,8 +71,19 @@ fun Application.tyzenhaus() {
                     return@authenticate null
                 }
                 val tokenRepository by inject<APITokenRepository>()
+                val apiToken = tokenRepository.get(token)
 
-                tokenRepository.get(token)?.takeIf { it.validUntil > Instant.now() }?.let { APITokenPrincipal(it.groupId, it.scope) }
+                return@authenticate when {
+                    apiToken == null -> null
+
+                    apiToken.validUntil < Instant.now() -> {
+                        this.response.header("X-Token-Expired", apiToken.validUntil)
+                        this.respond(HttpStatusCode.Forbidden)
+                        null
+                    }
+
+                    else -> APITokenPrincipal(apiToken.groupId, apiToken.scope)
+                }
             }
         }
     }
