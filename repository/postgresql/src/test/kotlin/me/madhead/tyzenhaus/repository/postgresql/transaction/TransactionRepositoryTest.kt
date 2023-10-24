@@ -74,4 +74,12 @@ class TransactionRepositoryTest {
             transactionRepository.get(-2)
         )
     }
+
+    @Test
+    fun groupCurrencies() {
+        assertEquals(
+            listOf("USD"),
+            transactionRepository.groupCurrencies(1)
+        )
+    }
 }

@@ -76,3 +76,14 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/api-token.deinit.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 8
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/transaction-add-group-id-index.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: ../sql/transaction-remove-group-id-index.sql
+            relativeToChangelogFile: true
