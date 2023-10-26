@@ -17,6 +17,8 @@ import io.ktor.server.routing.route
 import io.ktor.utils.io.core.toByteArray
 import me.madhead.tyzenhaus.core.service.GroupCurrenciesService
 import me.madhead.tyzenhaus.core.service.GroupMembersService
+import me.madhead.tyzenhaus.core.service.TransactionsSearchParams
+import me.madhead.tyzenhaus.core.service.TransactionsSearchService
 import me.madhead.tyzenhaus.launcher.fly.security.APITokenPrincipal
 import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
@@ -28,6 +30,7 @@ fun Route.miniAppAPI() {
     val config by inject<ApplicationConfig>()
     val groupMembersService by inject<GroupMembersService>()
     val groupCurrenciesService by inject<GroupCurrenciesService>()
+    val transactionsSearchService by inject<TransactionsSearchService>()
     val webAppDataSecretKeyHash by lazy {
         HMAC.hmacSHA256(
             "WebAppData".toByteArray(),
@@ -76,6 +79,12 @@ fun Route.miniAppAPI() {
                         val currencies = groupCurrenciesService.groupCurrencies(principal.groupId) ?: emptyList()
 
                         call.respond(currencies)
+                    }
+
+                    get("transactions") {
+                        val principal = call.principal<APITokenPrincipal>()!!
+
+                        call.respond(transactionsSearchService.search(principal.groupId, TransactionsSearchParams()))
                     }
                 }
             }

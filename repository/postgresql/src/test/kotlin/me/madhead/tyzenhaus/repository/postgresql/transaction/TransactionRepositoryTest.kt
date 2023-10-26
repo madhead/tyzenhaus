@@ -5,6 +5,7 @@ import java.time.Instant
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -80,6 +81,16 @@ class TransactionRepositoryTest {
         assertEquals(
             listOf("USD"),
             transactionRepository.groupCurrencies(1)
+        )
+    }
+
+    @Test
+    fun search() {
+        assertTrue(
+            transactionRepository.search(1).isNotEmpty()
+        )
+        assertTrue(
+            transactionRepository.search(8).size == 3
         )
     }
 }

@@ -29,13 +29,13 @@ VALUES (6, 2, '{
 }'::JSONB);
 
 INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
-VALUES (1, 1, 1, '{1,2,3}', 42.99, 'USD', 'Lunch', '1995-08-12 00:00:00 +03:00');
-INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
-VALUES (2, 6, 1, '{1,2,3}', 42.99, 'USD', 'Breakfast', '1995-08-12 00:00:00 +03:00');
-INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
-VALUES (3, 6, 2, '{1,2,3}', 42.99, 'USD', 'Lunch', '1995-08-12 00:00:00 +03:00');
-INSERT INTO "transaction" ("id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp")
-VALUES (4, 6, 3, '{1,2,3}', 42.99, 'USD', 'Dinner', '1995-08-12 00:00:00 +03:00');
+VALUES (1, 1, 1, '{1,2,3}', 42.99, 'USD', 'Lunch', '1995-08-12 00:00:00 +03:00'),
+       (2, 6, 1, '{1,2,3}', 42.99, 'USD', 'Breakfast', '1995-08-12 00:00:00 +03:00'),
+       (3, 6, 2, '{1,2,3}', 42.99, 'USD', 'Lunch', '1995-08-12 00:00:00 +03:00'),
+       (4, 6, 3, '{1,2,3}', 42.99, 'USD', 'Dinner', '1995-08-12 00:00:00 +03:00'),
+       (5, 8, 1, '{1,2,3}', 42.99, 'USD', 'Breakfast', '1995-08-12 00:00:00 +03:00'),
+       (6, 8, 2, '{1,2,3}', 42.99, 'USD', 'Lunch', '1995-08-12 00:00:00 +03:00'),
+       (7, 8, 3, '{1,2,3}', 42.99, 'USD', 'Dinner', '1995-08-12 00:00:00 +03:00');
 
 INSERT INTO balance ("group_id", "version", "balance")
 VALUES (1, 2, '{
