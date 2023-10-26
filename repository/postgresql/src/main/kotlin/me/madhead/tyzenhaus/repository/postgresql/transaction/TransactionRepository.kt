@@ -15,6 +15,7 @@ class TransactionRepository(dataSource: DataSource)
         private val logger = LogManager.getLogger(TransactionRepository::class.java)!!
     }
 
+    @Suppress("NestedBlockDepth")
     override fun get(id: Long): Transaction? {
         logger.debug("get {}", id)
 
@@ -24,7 +25,11 @@ class TransactionRepository(dataSource: DataSource)
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@get resultSet.toTransaction()
+                        if (resultSet.next()) {
+                            return@get resultSet.toTransaction()
+                        } else {
+                            return@get null
+                        }
                     }
                 }
         }
@@ -97,6 +102,21 @@ class TransactionRepository(dataSource: DataSource)
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.executeQuery().use { resultSet ->
                         return@groupCurrencies resultSet.toCurrencies()
+                    }
+                }
+        }
+    }
+
+    override fun search(groupId: Long): List<Transaction> {
+        logger.debug("search {}", groupId)
+
+        dataSource.connection.use { connection ->
+            connection
+                .prepareStatement("""SELECT * FROM "transaction" WHERE "group_id" = ? ORDER BY "timestamp" DESC;""")
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                    preparedStatement.executeQuery().use { resultSet ->
+                        return@search resultSet.toTransactions()
                     }
                 }
         }
