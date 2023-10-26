@@ -1,27 +1,37 @@
-import { useEffect, useState } from "react";
 import "./HistoryApp.less";
+
 import WebApp from "@twa-dev/sdk";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import TransactionCard, {
+  Transaction,
+} from "../common/transaction/Transaction";
 
 function HistoryApp() {
-  console.log(WebApp.initData);
-  console.log(WebApp.initDataUnsafe);
-
-  const [data, setData] = useState(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await fetch("/app/api/test");
-      const json = await data.json();
-      setData(json);
+    async function loadTransactions() {
+      let response = await fetch("/app/api/group/transactions", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${WebApp.initDataUnsafe.start_param}`,
+        },
+      });
+
+      setTransactions(await response.json());
     }
 
-    fetchData();
+    loadTransactions();
   }, []);
 
+  const { t } = useTranslation();
+
   return (
-    <div>
-      <h1>History</h1>
-      Init Data: {WebApp.initData}
+    <div className="history">
+      {transactions.map((transaction) => (
+        <TransactionCard key={transaction.id} {...transaction} />
+      ))}
     </div>
   );
 }
