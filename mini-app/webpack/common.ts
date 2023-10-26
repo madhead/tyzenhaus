@@ -2,6 +2,7 @@ import path from "path";
 import webpack from "webpack";
 import "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import CopyPlugin from "copy-webpack-plugin";
 
 const root = path.resolve(__dirname, "..");
 const src = path.resolve(root, "src");
@@ -87,6 +88,14 @@ const configuration: webpack.Configuration = {
             hash: true,
             filename: "expense.html",
             chunks: ["expense"],
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.join(src, "/i18n"),
+                    to: path.join(build, "/i18n"),
+                },
+            ],
         }),
     ],
 };

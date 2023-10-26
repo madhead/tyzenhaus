@@ -1,0 +1,7 @@
+{
+    "errors": {
+        "outsideOfTelegram": "This app must be executed inside a Telegram client",
+        "expired": "Authorisation token expired. Restart the app.",
+        "unauthorized": "You are not authorized to use this app"
+    }
+}
