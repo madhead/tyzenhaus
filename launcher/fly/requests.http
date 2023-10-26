@@ -21,3 +21,7 @@ Authorization: Bearer {{api_token}}
 ### Get group currencies
 GET https://{{ngrok}}/app/api/group/currencies
 Authorization: Bearer {{api_token}}
+
+### Search for transactions
+GET https://{{ngrok}}/app/api/group/transactions
+Authorization: Bearer {{api_token}}
