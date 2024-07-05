@@ -1,7 +1,8 @@
 import moment from "moment";
-import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
+import Marquee from "../marquee/Marquee";
+import { participantName, useParticipants } from "../parricipants/participants";
 import "./Transaction.less";
+import { useTranslation } from "react-i18next";
 
 export type Transaction = {
   id: number;
@@ -21,7 +22,9 @@ export default function TransactionCard(transaction: Transaction) {
         <Title title={transaction.title} />
         <Amount amount={transaction.amount} currency={transaction.currency} />
       </div>
-      <div className="participants"></div>
+      <div className="participants">
+        <Participants {...transaction} />
+      </div>
     </div>
   );
 }
@@ -38,33 +41,9 @@ function Timestamp({ timestamp }: { timestamp: number }) {
 }
 
 function Title({ title }: { title: string }) {
-  const titleContainerRef = useRef<HTMLDivElement>(null);
-  const [marquee, setMarquee] = useState(false);
-
-  useEffect(() => {
-    if (!titleContainerRef.current) {
-      return;
-    }
-
-    const element = titleContainerRef.current;
-
-    if (
-      element.offsetWidth < element.scrollWidth ||
-      element.offsetHeight < element.scrollHeight
-    ) {
-      setMarquee(true);
-    }
-  }, [titleContainerRef]);
-
   return (
-    <div className="title" ref={titleContainerRef}>
-      {marquee && (
-        <Marquee delay={3}>
-          {title}
-          <span className="spacer" />
-        </Marquee>
-      )}
-      {!marquee && <span>{title}</span>}
+    <div className="title">
+      <Marquee>{title}</Marquee>
     </div>
   );
 }
@@ -90,4 +69,37 @@ function Amount({ amount, currency }: { amount: string; currency: string }) {
       <div className="quantity">{formatAmount(amount)}</div>
     </div>
   );
+}
+
+function Participants({
+  payer,
+  recipients,
+}: {
+  payer: number;
+  recipients: Set<number>;
+}) {
+  let participants = useParticipants() || [];
+  const payerParticipant = participants?.find((p) => p.id === payer);
+  const recipientParticipants = Array.from(recipients).map((r: number) =>
+    participantName(r, participants)
+  );
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {t("history.paidFor", {
+        payer: `${participantName(payer, participants)}`,
+        recipients: oxford(recipientParticipants, t("history.and")),
+      })}
+    </>
+  );
+}
+
+function oxford(arr: any[], conjunction: string): string {
+  let l = arr.length;
+  if (l < 2) return arr[0];
+  if (l < 3) return arr.join(` ${conjunction} `);
+  arr = arr.slice();
+  arr[l - 1] = `${conjunction} ${arr[l - 1]}`;
+  return arr.join(", ");
 }

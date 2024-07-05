@@ -4,6 +4,8 @@ plugins {
 }
 
 dependencies {
+    implementation("commons-validator:commons-validator:1.8.0")
+
     libs.bundles.boms.orNull?.forEach {
         api(platform(it))
     }

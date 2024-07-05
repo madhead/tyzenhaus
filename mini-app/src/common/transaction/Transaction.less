@@ -14,7 +14,7 @@
       color: var(--tg-theme-hint-color);
       text-align: justify;
       text-justify: auto;
-      min-width: 40px;
+      width: 40px;
       margin-inline-end: 8px;
 
       @media (pointer: coarse), (hover: none) {
@@ -57,11 +57,6 @@
       margin-inline: 8px 8px;
       max-height: 36pt;
       overflow: hidden;
-
-      .spacer {
-        display: block;
-        width: 25vw;
-      }
     }
 
     & > .amount {
@@ -87,6 +82,41 @@
   }
 
   & > .participants {
-    display: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row-reverse;
+    padding-inline-start: 54px;
+    color: var(--tg-theme-hint-color);
+    font-size: 12pt;
+    line-height: 12pt;
+
+    & > .payers,
+    & > .recipients {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      & > .payer,
+      & > .recipient {
+        margin-bottom: 4px;
+
+        & > .arrow {
+          margin: 0 8px 0 0;
+        }
+      }
+
+      & > .payer {
+        text-align: end;
+        margin-inline-end: 8px;
+      }
+    }
+
+    & > .payers {
+      order: 2;
+    }
+
+    & > .recipients {
+      order: 1;
+    }
   }
 }

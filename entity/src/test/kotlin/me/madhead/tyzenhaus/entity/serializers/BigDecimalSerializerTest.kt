@@ -1,70 +1,40 @@
 package me.madhead.tyzenhaus.entity.serializers
 
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.junit5.MockKExtension
-import io.mockk.just
-import io.mockk.runs
-import io.mockk.verify
-import java.math.BigDecimal
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import org.apache.commons.validator.routines.InetAddressValidator
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
-@ExperimentalSerializationApi
-@ExtendWith(MockKExtension::class)
-internal class BigDecimalSerializerTest {
-    @MockK
-    private lateinit var encoder: Encoder
 
-    @MockK
-    private lateinit var decoder: Decoder
-
-    private lateinit var sut: BigDecimalSerializer
-
-    @BeforeEach
-    fun setUp() {
-        sut = BigDecimalSerializer()
+internal class IPAddressValidationTest {
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "1.2.3.4",
+        "01.102.103.104",
+        "2001:db8:3333:4444:5555:6666:7777:8888",
+        "2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF",
+        "::",
+        "2001:db8::",
+        "::1234:5678",
+        "2001:db8::1234:5678",
+        "2001:0db8:0001:0000:0000:0ab9:C0A8:0102",
+        "2001:db8:1::ab9:C0A8:102",
+        "2001:db8:3333:4444:5555:6666:1.2.3.4",
+        "::11.22.33.44",
+        "2001:db8::123.123.123.123",
+        "::1234:5678:91.123.4.56",
+        "::1234:5678:1.2.3.4",
+        "2001:db8::1234:5678:5.6.7.8",
+    ])
+    fun test(value: String) {
+        assertTrue(isValidIP(value))
     }
+}
 
-    @Test
-    fun getDescriptor() {
-        val expected = PrimitiveSerialDescriptor("BigDecimal", PrimitiveKind.STRING)
-        val actual = sut.descriptor
 
-        Assertions.assertEquals(expected.kind, actual.kind)
-        Assertions.assertEquals(expected.serialName, actual.serialName)
-    }
+val validator = InetAddressValidator.getInstance()
 
-    @Test
-    fun serialize() {
-        every { encoder.encodeString("10.00") } just runs
-
-        sut.serialize(encoder, BigDecimal("10.00"))
-
-        verify { encoder.encodeString("10.00") }
-
-        clearAllMocks()
-    }
-
-    @Test
-    fun deserialize() {
-        every { decoder.decodeString() } returns "10.00"
-
-        Assertions.assertEquals(
-            BigDecimal("10.00"),
-            sut.deserialize(decoder)
-        )
-
-        verify { decoder.decodeString() }
-
-        clearAllMocks()
-    }
+fun isValidIP(value: String): Boolean {
+    return validator.isValid(value)
 }

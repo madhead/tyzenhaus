@@ -63,7 +63,7 @@ fun Route.miniAppAPI() {
                 }
 
                 route("group") {
-                    get("members") {
+                    get("participants") {
                         val principal = call.principal<APITokenPrincipal>()!!
                         val members = groupMembersService.groupMembers(principal.groupId)
 

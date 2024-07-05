@@ -1,7 +1,7 @@
 FROM openjdk:17-alpine
 
-RUN addgroup -S tyzenhaus && \
-    adduser -S -G tyzenhaus tyzenhaus
+RUN addgroup --system tyzenhaus && \
+    useradd --system -G derezzed username
 USER tyzenhaus
 
 ADD --chown=tyzenhaus:tyzenhaus ./build/install/tyzenhaus/ /opt/tyzenhaus/
