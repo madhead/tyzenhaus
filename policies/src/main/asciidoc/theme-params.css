@@ -1,0 +1,21 @@
+/*This file is not actually used. It exists only to list all the available theme parameters*/
+/*(https://core.telegram.org/bots/webapps#themeparams) to make the IDE happy.*/
+:root {
+    --tg-color-scheme: 0;
+    --tg-theme-bg-color: 0;
+    --tg-theme-section-bg-color: 0;
+    --tg-theme-secondary-bg-color: 0;
+    --tg-theme-text-color: 0;
+    --tg-theme-hint-color: 0;
+    --tg-theme-link-color: 0;
+    --tg-theme-button-color: 0;
+    --tg-theme-button-text-color: 0;
+    --tg-theme-header-bg-color: 0;
+    --tg-theme-accent-text-color: 0;
+    --tg-theme-section-header-text-color: 0;
+    --tg-theme-subtitle-text-color: 0;
+    --tg-theme-destructive-text-color: 0;
+    --tg-theme-section-separator-color: 0;
+    --tg-viewport-height: 0;
+    --tg-viewport-stable-height: 0;
+}
