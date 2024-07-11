@@ -8,4 +8,7 @@ export default merge(common, {
         filename: "[name].js",
         chunkFilename: "[id].chunk.js",
     },
+    devServer: {
+        allowedHosts: "all",
+    },
 });
