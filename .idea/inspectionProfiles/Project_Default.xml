@@ -10,9 +10,22 @@
     <inspection_tool class="CheckXmlFileWithXercesValidator" enabled="true" level="ERROR" enabled_by_default="true">
       <scope name="Assets" level="INFORMATION" enabled="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     </inspection_tool>
+    <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myCustomPropertiesEnabled" value="true" />
+      <option name="myIgnoreVendorSpecificProperties" value="false" />
+      <option name="myCustomPropertiesList">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="flex-flow" />
+            <item index="1" class="java.lang.String" itemvalue="box-sizing" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
     <inspection_tool class="DeprecatedClassUsageInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Assets" level="INFORMATION" enabled="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="HttpUrlsUsage" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <scope name="Assets" level="INFORMATION" enabled="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     </inspection_tool>

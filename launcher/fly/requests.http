@@ -1,8 +1,48 @@
 ### Get me
-GET https://api.telegram.org/bot{{telegram_token}}/getMe HTTP/1.1
+GET https://api.telegram.org/bot{{telegram_token}}/getMe
+
+### Get my commands
+GET https://api.telegram.org/bot{{telegram_token}}/getMyCommands
+
+### Set my commands
+POST https://api.telegram.org/bot{{telegram_token}}/setMyCommands
+Content-Type: application/json
+
+{
+    "commands": [
+        {
+            "command": "help",
+            "description": "How to use the bot"
+        },
+        {
+            "command": "lang",
+            "description": "Change language"
+        },
+        {
+            "command": "participate",
+            "description": "Register yourself for expense tracking in this group"
+        },
+        {
+            "command": "expense",
+            "description": "Add a shared expense"
+        },
+        {
+            "command": "debts",
+            "description": "Show all the debts"
+        },
+        {
+            "command": "history",
+            "description": "Show transactions history"
+        },
+        {
+            "command": "privacy",
+            "description": "Show the Privacy Policy"
+        }
+    ]
+}
 
 ### Set webhook
-POST https://api.telegram.org/bot{{telegram_token}}/setWebhook HTTP/1.1
+POST https://api.telegram.org/bot{{telegram_token}}/setWebhook
 Content-Type: application/json
 
 {
@@ -12,7 +52,6 @@ Content-Type: application/json
 ### Validate initData
 POST https://{{ngrok}}/app/api/auth/validation
 Authorization: Bearer {{api_token}}
-
 
 ### Get group members
 GET https://{{ngrok}}/app/api/group/members

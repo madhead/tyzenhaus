@@ -17,6 +17,8 @@ picocli = "4.7.3"
 
 jacoco = "0.8.10"
 
+asciidoctor = "4.0.2"
+
 [libraries]
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
@@ -48,3 +50,6 @@ picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 [bundles]
 boms = ["kotlin-bom", "kotlinx-serialization-bom", "kotlinx-coroutines-bom", "log4j-bom", "junit-bom"]
 ktor = ["ktor-server-netty", "ktor-server-metrics-micrometer", "ktor-server-auth", "koin-ktor", "ktor-serialization-kotlinx-json"]
+
+[plugins]
+asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor" }

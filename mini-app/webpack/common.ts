@@ -95,6 +95,11 @@ const configuration: webpack.Configuration = {
                     from: path.join(src, "/i18n"),
                     to: path.join(build, "/i18n"),
                 },
+                {
+                    from: "*.{html,css}",
+                    to: build,
+                    context: path.resolve(root, "../policies/build"),
+                },
             ],
         }),
     ],

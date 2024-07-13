@@ -19,6 +19,7 @@ import me.madhead.tyzenhaus.core.telegram.updates.help.WelcomeMessageUpdateProce
 import me.madhead.tyzenhaus.core.telegram.updates.history.HistoryCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCallbackQueryUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.lang.LangCommandUpdateProcessor
+import me.madhead.tyzenhaus.core.telegram.updates.policy.PrivacyCommandUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.supergroup.SupergroupChatCreatedUpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.support.IDCommandUpdateProcessor
 import org.koin.dsl.module
@@ -139,6 +140,12 @@ val pipelineModule = module {
         )
     }
     single {
+        PrivacyCommandUpdateProcessor(
+            requestsExecutor = get(),
+            me = get(),
+        )
+    }
+    single {
         UpdateProcessingPipeline(
             listOf(
                 get<WelcomeMessageUpdateProcessor>(),
@@ -159,6 +166,7 @@ val pipelineModule = module {
                 get<ParticipateCommandUpdateProcessor>(),
                 get<SupergroupChatCreatedUpdateProcessor>(),
                 get<HistoryCommandUpdateProcessor>(),
+                get<PrivacyCommandUpdateProcessor>(),
             ),
             get(),
             get(),
