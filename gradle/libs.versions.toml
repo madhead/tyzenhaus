@@ -10,7 +10,7 @@ log4j = "2.20.0"
 micrometer = "1.11.0"
 
 junit = "5.10.3"
-mockk = "1.13.5"
+mockk = "1.13.12"
 
 liquibase = "4.22.0"
 picocli = "4.7.3"
