@@ -118,7 +118,7 @@ jobs:
           node-version-file: 'mini-app/.nvmrc'
       - run: yarn install
         working-directory: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: policies
       - run: |
@@ -135,7 +135,7 @@ jobs:
       - mini-app-test
     if: always()
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: test-results
       - uses: mikepenz/action-junit-report@v3
@@ -151,7 +151,7 @@ jobs:
       - mini-app-test
     if: always()
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: test-results
       - run: bash <(curl -s https://codecov.io/bash)

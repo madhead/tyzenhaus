@@ -40,7 +40,7 @@ jobs:
           node-version-file: 'mini-app/.nvmrc'
       - run: yarn install
         working-directory: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: policies
       - run: |
@@ -95,10 +95,10 @@ jobs:
         id: version
         with:
           version: ${{ steps.project-version.outputs.value }}
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: backend
       - run: |
