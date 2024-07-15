@@ -16,11 +16,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: :policies:privacy
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
       - uses: actions/upload-artifact@v3
         with:
@@ -63,11 +63,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: clean :launcher:fly:installDist
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew clean :launcher:fly:installDist
       - run: tar -cvf backend.tar launcher/fly/build
       - uses: actions/upload-artifact@v3
         with:
