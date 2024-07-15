@@ -24,11 +24,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: :policies:privacy
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
       - uses: actions/upload-artifact@v3
         with:
@@ -45,11 +45,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: check jacocoTestReport
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew check jacocoTestReport
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -85,18 +85,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/actions/wrapper-validation@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: :repository:postgresql:liquibaseUpdate
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew :repository:postgresql:liquibaseUpdate
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       - run: psql -h ${{env.POSTGRES_HOST}} -U ${{env.POSTGRES_USER}} -d ${{env.POSTGRES_DB}} <repository/postgresql/src/test/sql/seed.sql
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: dbTest jacocoDbTestReport
-          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - run: ./gradlew dbTest jacocoDbTestReport
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       - uses: actions/upload-artifact@v3
