@@ -30,7 +30,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: policies
           path: |
@@ -50,10 +50,10 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew check jacocoTestReport
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
+          name: unit-test-results
           retention-days: 1
           path: |
             **/build/reports
@@ -96,10 +96,10 @@ jobs:
       - run: ./gradlew dbTest jacocoDbTestReport
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
+          name: db-test-results
           retention-days: 1
           path: |
             **/build/reports
@@ -118,7 +118,7 @@ jobs:
           node-version-file: 'mini-app/.nvmrc'
       - run: yarn install
         working-directory: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: policies
       - run: |
@@ -135,9 +135,12 @@ jobs:
       - mini-app-test
     if: always()
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: test-results
+          name: unit-test-results
+      - uses: actions/download-artifact@v4
+        with:
+          name: db-test-results
       - uses: mikepenz/action-junit-report@v3
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
@@ -151,7 +154,10 @@ jobs:
       - mini-app-test
     if: always()
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: test-results
+          name: unit-test-results
+      - uses: actions/download-artifact@v4
+        with:
+          name: db-test-results
       - run: bash <(curl -s https://codecov.io/bash)
