@@ -9,7 +9,7 @@ postgresql = "42.7.3"
 log4j = "2.20.0"
 micrometer = "1.11.0"
 
-junit = "5.9.3"
+junit = "5.10.3"
 mockk = "1.13.5"
 
 liquibase = "4.22.0"
