@@ -16,7 +16,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/wrapper-validation-action@v3
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: :policies:privacy
@@ -63,7 +63,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/wrapper-validation-action@v3
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: clean :launcher:fly:installDist
