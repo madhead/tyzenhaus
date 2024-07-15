@@ -6,7 +6,7 @@ koin = "3.4.0"
 kotlinx-serialization = "1.5.1"
 tgbotapi = "7.1.3"
 postgresql = "42.7.3"
-log4j = "2.20.0"
+log4j = "2.23.1"
 micrometer = "1.11.0"
 
 junit = "5.10.3"
