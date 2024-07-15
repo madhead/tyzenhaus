@@ -22,7 +22,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: policies
           path: |
@@ -40,7 +40,7 @@ jobs:
           node-version-file: 'mini-app/.nvmrc'
       - run: yarn install
         working-directory: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: policies
       - run: |
@@ -48,7 +48,7 @@ jobs:
       - run: yarn run build
         working-directory: mini-app
       - run: tar -cvf mini-app.tar mini-app/build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: mini-app
           path: |
@@ -69,7 +69,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew clean :launcher:fly:installDist
       - run: tar -cvf backend.tar launcher/fly/build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: backend
           path: |
@@ -95,10 +95,10 @@ jobs:
         id: version
         with:
           version: ${{ steps.project-version.outputs.value }}
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: mini-app
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: backend
       - run: |
