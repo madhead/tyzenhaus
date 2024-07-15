@@ -13,7 +13,7 @@ junit = "5.10.3"
 mockk = "1.13.12"
 
 liquibase = "4.22.0"
-picocli = "4.7.3"
+picocli = "4.7.6"
 
 jacoco = "0.8.10"
 
