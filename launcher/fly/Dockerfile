@@ -1,4 +1,4 @@
-FROM openjdk:21-alpine
+FROM openjdk:21-slim-bookworm
 
 RUN addgroup -S tyzenhaus && \
     adduser -S -G tyzenhaus tyzenhaus
