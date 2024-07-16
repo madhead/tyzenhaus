@@ -35,7 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack", "npm:5.28.3"],\
             ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
             ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.8.1"],\
-            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.5.3"],\
+            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
             ["i18next", "npm:23.6.0"],\
             ["i18next-browser-languagedetector", "npm:7.1.0"],\
             ["i18next-http-backend", "npm:2.2.2"],\
@@ -2671,18 +2671,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["html-webpack-plugin", [\
-        ["npm:5.5.3", {\
-          "packageLocation": "./.yarn/cache/html-webpack-plugin-npm-5.5.3-b4f14786eb-ccf6851957.zip/node_modules/html-webpack-plugin/",\
+        ["npm:5.6.0", {\
+          "packageLocation": "./.yarn/cache/html-webpack-plugin-npm-5.6.0-4225ed9587-32a6e41da5.zip/node_modules/html-webpack-plugin/",\
           "packageDependencies": [\
-            ["html-webpack-plugin", "npm:5.5.3"]\
+            ["html-webpack-plugin", "npm:5.6.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.5.3", {\
-          "packageLocation": "./.yarn/__virtual__/html-webpack-plugin-virtual-50acb45184/0/cache/html-webpack-plugin-npm-5.5.3-b4f14786eb-ccf6851957.zip/node_modules/html-webpack-plugin/",\
+        ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0", {\
+          "packageLocation": "./.yarn/__virtual__/html-webpack-plugin-virtual-6eb791f0df/0/cache/html-webpack-plugin-npm-5.6.0-4225ed9587-32a6e41da5.zip/node_modules/html-webpack-plugin/",\
           "packageDependencies": [\
-            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.5.3"],\
+            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
+            ["@rspack/core", null],\
             ["@types/html-minifier-terser", "npm:6.1.0"],\
+            ["@types/rspack__core", null],\
             ["@types/webpack", "npm:5.28.3"],\
             ["html-minifier-terser", "npm:6.1.0"],\
             ["lodash", "npm:4.17.21"],\
@@ -2691,6 +2693,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.89.0"]\
           ],\
           "packagePeers": [\
+            "@rspack/core",\
+            "@types/rspack__core",\
             "@types/webpack",\
             "webpack"\
           ],\
@@ -3521,7 +3525,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack", "npm:5.28.3"],\
             ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
             ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.8.1"],\
-            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.5.3"],\
+            ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
             ["i18next", "npm:23.6.0"],\
             ["i18next-browser-languagedetector", "npm:7.1.0"],\
             ["i18next-http-backend", "npm:2.2.2"],\
