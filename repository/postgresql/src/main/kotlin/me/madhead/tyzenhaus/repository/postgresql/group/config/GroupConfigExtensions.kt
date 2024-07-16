@@ -32,7 +32,7 @@ internal fun ResultSet.toGroupConfig(): GroupConfig? {
                 if (this.wasNull()) {
                     null
                 } else {
-                    Locale(value)
+                    Locale.of(value)
                 }
             },
             members = run {

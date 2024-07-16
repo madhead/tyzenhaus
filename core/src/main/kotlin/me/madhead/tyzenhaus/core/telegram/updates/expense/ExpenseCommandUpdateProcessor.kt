@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
@@ -46,7 +47,7 @@ class ExpenseCommandUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.participants.empty"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
             )
         }
 
@@ -55,7 +56,7 @@ class ExpenseCommandUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig.language)["expense.response.participants.unknown"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
             )
         }
 
@@ -66,13 +67,13 @@ class ExpenseCommandUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.action.amount"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
-            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId.long))
         }
     }
 }

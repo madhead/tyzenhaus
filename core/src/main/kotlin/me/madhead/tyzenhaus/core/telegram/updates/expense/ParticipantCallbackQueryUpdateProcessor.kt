@@ -6,6 +6,7 @@ import dev.inmo.tgbotapi.extensions.api.edit.reply_markup.editMessageReplyMarkup
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
+import dev.inmo.tgbotapi.types.toChatId
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
@@ -43,7 +44,7 @@ class ParticipantCallbackQueryUpdateProcessor(
 
         if (!callbackQuery.data.startsWith(CALLBACK_PREFIX)) return null
 
-        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId)) return {
+        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId.long)) return {
             requestsExecutor.answerCallbackQuery(
                 callbackQuery = callbackQuery,
                 text = I18N(groupConfig.language)["expense.response.participants.wrongUser"],
@@ -58,7 +59,7 @@ class ParticipantCallbackQueryUpdateProcessor(
             val participant = rawParticipant.toLongOrNull()
 
             if (participant != null) {
-                val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
+                val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }
                 val state = dialogState.copy(
                     participants = if (dialogState.participants.contains(participant)) {
                         dialogState.participants - participant

@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.help
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.LinkPreviewOptions.Disabled
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
@@ -42,7 +43,7 @@ class HelpCommandUpdateProcessor(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig?.language)["help"],
                     parseMode = MarkdownV2,
-                    disableWebPagePreview = true,
+                    linkPreviewOptions = Disabled,
                 )
             }
         } else null

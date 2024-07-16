@@ -9,15 +9,15 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 
 val Update.groupId: Long
     get() = when (this) {
-        is BaseMessageUpdate -> this.data.chat.id.chatId
+        is BaseMessageUpdate -> this.data.chat.id.chatId.long
         is CallbackQueryUpdate -> {
             when (val callbackQuery = this.data) {
-                is MessageCallbackQuery -> callbackQuery.message.chat.id.chatId
+                is MessageCallbackQuery -> callbackQuery.message.chat.id.chatId.long
                 else -> throw IllegalArgumentException("Unknown update type")
             }
         }
 
-        is MyChatMemberUpdatedUpdate -> this.data.chat.id.chatId
+        is MyChatMemberUpdatedUpdate -> this.data.chat.id.chatId.long
         else -> throw IllegalArgumentException("Unknown update type")
     }
 
@@ -25,11 +25,11 @@ val Update.userId: Long
     get() = when (this) {
         is BaseMessageUpdate -> {
             when (val message = this.data) {
-                is FromUserMessage -> message.user.id.chatId
+                is FromUserMessage -> message.user.id.chatId.long
                 else -> throw IllegalArgumentException("Unknown update type")
             }
         }
 
-        is CallbackQueryUpdate -> this.data.user.id.chatId
+        is CallbackQueryUpdate -> this.data.user.id.chatId.long
         else -> throw IllegalArgumentException("Unknown update type")
     }

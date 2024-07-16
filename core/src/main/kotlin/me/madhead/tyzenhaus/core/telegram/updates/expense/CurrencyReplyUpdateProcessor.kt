@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
@@ -40,14 +41,14 @@ class CurrencyReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
 
-        if (dialogState.messageId != message.replyTo?.messageId) return null
+        if (dialogState.messageId != message.replyTo?.messageId?.long) return null
 
         if (dialogState.userId != update.userId) return {
             requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.currency.wrongUser"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
             )
         }
 
@@ -58,14 +59,14 @@ class CurrencyReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.currency.textPlease"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
             dialogStateRepository.save(
-                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, dialogState.amount)
+                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId.long, dialogState.amount)
             )
         }
 
@@ -76,14 +77,14 @@ class CurrencyReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.currency.tooLong"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
             dialogStateRepository.save(
-                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, dialogState.amount)
+                WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId.long, dialogState.amount)
             )
         }
 
@@ -94,14 +95,14 @@ class CurrencyReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.action.title"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
             dialogStateRepository.save(
-                WaitingForTitle(update.groupId, update.userId, titleRequestMessage.messageId, dialogState.amount, currency)
+                WaitingForTitle(update.groupId, update.userId, titleRequestMessage.messageId.long, dialogState.amount, currency)
             )
         }
     }

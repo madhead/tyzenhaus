@@ -8,6 +8,7 @@ import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
+import dev.inmo.tgbotapi.types.toChatId
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
@@ -79,14 +80,14 @@ class DebtsCommandUpdateProcessor(
             }
         }
 
-        val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
+        val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }
         val debtsMessage = debts
             .joinToString(
                 prefix = I18N(groupConfig.language)["debts.response.title"],
                 separator = "\n"
             ) { debt ->
-                val from = chatMembers.first { it.user.id.chatId == debt.from }
-                val to = chatMembers.first { it.user.id.chatId == debt.to }
+                val from = chatMembers.first { it.user.id.chatId.long == debt.from }
+                val to = chatMembers.first { it.user.id.chatId.long == debt.to }
                 val amount = "${debt.amount.setScale(2, RoundingMode.HALF_UP)} ${debt.currency}".escapeMarkdownV2Common()
 
                 I18N(groupConfig.language)[

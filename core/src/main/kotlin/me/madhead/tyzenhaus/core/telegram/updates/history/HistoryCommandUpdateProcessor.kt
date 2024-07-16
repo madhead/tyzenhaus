@@ -58,7 +58,7 @@ class HistoryCommandUpdateProcessor(
 
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["history.response", me.username.usernameWithoutAt, token.token.toString()],
+                    text = I18N(groupConfig?.language)["history.response", me.username!!.withoutAt, token.token.toString()],
                     parseMode = MarkdownV2,
                 )
             }

@@ -47,7 +47,7 @@ class PrivacyCommandUpdateProcessor(
 
                 requestsExecutor.sendMessage(
                     chatId = update.data.chat.id,
-                    text = I18N(groupConfig?.language)["privacy.response", me.username.usernameWithoutAt],
+                    text = I18N(groupConfig?.language)["privacy.response", me.username!!.withoutAt],
                     parseMode = MarkdownV2,
                 )
             }

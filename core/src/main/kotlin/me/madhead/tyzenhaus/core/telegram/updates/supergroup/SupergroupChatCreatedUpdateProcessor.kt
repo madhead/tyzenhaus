@@ -35,7 +35,7 @@ class SupergroupChatCreatedUpdateProcessor(
         return {
             logger.warn("Upgrading {} to a supergroup from {}", message.chat.id.chatId, migratedFrom.chatId)
 
-            supergroupRepository.update(migratedFrom.chatId, message.chat.id.chatId)
+            supergroupRepository.update(migratedFrom.chatId.long, message.chat.id.chatId.long)
             updates.increment()
         }
     }

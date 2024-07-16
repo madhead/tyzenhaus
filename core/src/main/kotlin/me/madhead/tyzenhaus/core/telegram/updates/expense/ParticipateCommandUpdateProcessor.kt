@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
@@ -45,7 +46,7 @@ class ParticipateCommandUpdateProcessor(
         return {
             logger.debug("{} joins in {}", update.userId, update.groupId)
 
-            val newGroupConfig = groupConfig ?: GroupConfig(update.data.chat.id.chatId)
+            val newGroupConfig = groupConfig ?: GroupConfig(update.data.chat.id.chatId.long)
 
             CoroutineScope(coroutineContext + Dispatchers.IO).launch {
                 groupConfigRepository.save(newGroupConfig.copy(members = newGroupConfig.members + update.userId))
@@ -54,7 +55,7 @@ class ParticipateCommandUpdateProcessor(
             requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["participate.response.ok"],
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 parseMode = MarkdownV2,
             )
         }

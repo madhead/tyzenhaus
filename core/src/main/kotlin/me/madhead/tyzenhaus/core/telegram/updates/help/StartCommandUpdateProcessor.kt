@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.help
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.LinkPreviewOptions.Disabled
 import dev.inmo.tgbotapi.types.chat.CommonUser
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
@@ -44,16 +45,16 @@ class StartCommandUpdateProcessor(
                 if (message is PrivateContentMessage<*>) {
                     requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,
-                        text = I18N(groupConfig?.language ?: (message.user as? CommonUser)?.languageCode?.let { Locale(it) })["start"],
+                        text = I18N(groupConfig?.language ?: (message.user as? CommonUser)?.languageCode?.let { Locale.of(it) })["start"],
                         parseMode = MarkdownV2,
-                        disableWebPagePreview = true,
+                        linkPreviewOptions = Disabled,
                     )
                 } else {
                     requestsExecutor.sendMessage(
                         chatId = update.data.chat.id,
                         text = I18N(groupConfig?.language)["help"],
                         parseMode = MarkdownV2,
-                        disableWebPagePreview = true,
+                        linkPreviewOptions = Disabled,
                     )
                 }
             }
