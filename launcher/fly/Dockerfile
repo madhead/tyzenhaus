@@ -1,7 +1,6 @@
 FROM openjdk:21-slim-bookworm
 
-RUN addgroup -S tyzenhaus && \
-    adduser -S -G tyzenhaus tyzenhaus
+RUN adduser --system --group tyzenhaus
 USER tyzenhaus
 
 ADD --chown=tyzenhaus:tyzenhaus ./build/install/tyzenhaus/ /opt/tyzenhaus/
