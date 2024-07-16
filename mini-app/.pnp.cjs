@@ -41,7 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["i18next-http-backend", "npm:2.2.2"],\
             ["less", "npm:4.2.0"],\
             ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.3"],\
-            ["moment", "npm:2.29.4"],\
+            ["moment", "npm:2.30.1"],\
             ["normalize.css", "npm:8.0.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.2.0"],\
@@ -3527,7 +3527,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["i18next-http-backend", "npm:2.2.2"],\
             ["less", "npm:4.2.0"],\
             ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.3"],\
-            ["moment", "npm:2.29.4"],\
+            ["moment", "npm:2.30.1"],\
             ["normalize.css", "npm:8.0.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.2.0"],\
@@ -3670,10 +3670,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["moment", [\
-        ["npm:2.29.4", {\
-          "packageLocation": "./.yarn/cache/moment-npm-2.29.4-902943305d-0ec3f9c2bc.zip/node_modules/moment/",\
+        ["npm:2.30.1", {\
+          "packageLocation": "./.yarn/cache/moment-npm-2.30.1-1c51a5c631-859236bab1.zip/node_modules/moment/",\
           "packageDependencies": [\
-            ["moment", "npm:2.29.4"]\
+            ["moment", "npm:2.30.1"]\
           ],\
           "linkType": "HARD"\
         }]\
