@@ -45,7 +45,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
           ["react-fast-marquee", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:1.6.5"],\
-          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:13.5.0"],\
+          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:14.1.3"],\
           ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4"],\
           ["ts-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:9.5.1"],\
           ["ts-node", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:10.9.2"],\
@@ -3487,7 +3487,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
           ["react-fast-marquee", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:1.6.5"],\
-          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:13.5.0"],\
+          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:14.1.3"],\
           ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4"],\
           ["ts-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:9.5.1"],\
           ["ts-node", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:10.9.2"],\
@@ -4400,17 +4400,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["react-i18next", [\
-      ["npm:13.5.0", {\
-        "packageLocation": "./.yarn/cache/react-i18next-npm-13.5.0-6d3c333859-903b486d11.zip/node_modules/react-i18next/",\
+      ["npm:14.1.3", {\
+        "packageLocation": "./.yarn/cache/react-i18next-npm-14.1.3-db0edc9df1-d0fa0f2717.zip/node_modules/react-i18next/",\
         "packageDependencies": [\
-          ["react-i18next", "npm:13.5.0"]\
+          ["react-i18next", "npm:14.1.3"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:13.5.0", {\
-        "packageLocation": "./.yarn/__virtual__/react-i18next-virtual-b7db5dd0dc/0/cache/react-i18next-npm-13.5.0-6d3c333859-903b486d11.zip/node_modules/react-i18next/",\
+      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:14.1.3", {\
+        "packageLocation": "./.yarn/__virtual__/react-i18next-virtual-83f9174145/0/cache/react-i18next-npm-14.1.3-db0edc9df1-d0fa0f2717.zip/node_modules/react-i18next/",\
         "packageDependencies": [\
-          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:13.5.0"],\
+          ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:14.1.3"],\
           ["@babel/runtime", "npm:7.24.8"],\
           ["@types/i18next", null],\
           ["@types/react", "npm:18.3.3"],\
