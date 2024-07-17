@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
+import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.buttons.SimpleKeyboardButton
 import dev.inmo.tgbotapi.types.message.MarkdownV2
@@ -44,14 +45,14 @@ class AmountReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForAmount ?: return null
 
-        if (dialogState.messageId != message.replyTo?.messageId) return null
+        if (dialogState.messageId != message.replyTo?.messageId?.long) return null
 
         if (dialogState.userId != update.userId) return {
             requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.amount.wrongUser"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
             )
         }
 
@@ -62,13 +63,13 @@ class AmountReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
-            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId.long))
         }
 
         val amount = content.text.toBigDecimalOrNull() ?: return {
@@ -76,13 +77,13 @@ class AmountReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.response.amount.numberPlease"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
-            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+            dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId.long))
         }
 
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
@@ -91,13 +92,13 @@ class AmountReplyUpdateProcessor(
                     chatId = update.data.chat.id,
                     text = I18N(groupConfig?.language)["expense.response.amount.nonZeroNumberPlease"],
                     parseMode = MarkdownV2,
-                    replyToMessageId = message.messageId,
+                    replyParameters = ReplyParameters(message),
                     replyMarkup = ReplyForce(
                         selective = true,
                     ),
                 )
 
-                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId))
+                dialogStateRepository.save(WaitingForAmount(update.groupId, update.userId, amountRequestMessage.messageId.long))
             }
         }
 
@@ -108,7 +109,7 @@ class AmountReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig?.language)["expense.action.currency"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = dev.inmo.tgbotapi.types.buttons.ReplyKeyboardMarkup(
                     keyboard = (groupCurrenciesService.groupCurrencies(update.groupId) ?: listOf("USD", "EUR", "RUB"))
                         .map { listOf(SimpleKeyboardButton(it)) },
@@ -118,7 +119,7 @@ class AmountReplyUpdateProcessor(
                 )
             )
 
-            dialogStateRepository.save(WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId, amount))
+            dialogStateRepository.save(WaitingForCurrency(update.groupId, update.userId, currencyRequestMessage.messageId.long, amount))
         }
     }
 }

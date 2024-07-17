@@ -10,6 +10,7 @@ import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineK
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
+import dev.inmo.tgbotapi.types.toChatId
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import dev.inmo.tgbotapi.utils.extensions.escapeMarkdownV2Common
@@ -49,7 +50,7 @@ class DoneCallbackQueryUpdateProcessor(
 
         if (callbackQuery.data != CALLBACK) return null
 
-        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId)) return {
+        if ((dialogState.userId != update.userId) || (dialogState.messageId != callbackQuery.message.messageId.long)) return {
             requestsExecutor.answerCallbackQuery(
                 callbackQuery = callbackQuery,
                 text = I18N(groupConfig?.language)["expense.response.participants.wrongUser"],
@@ -67,11 +68,11 @@ class DoneCallbackQueryUpdateProcessor(
             timestamp = Instant.now(),
         )
         val members = (transaction.recipients + transaction.payer).toSet()
-        val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
-        val from = "[${chatMembers.first { it.user.id.chatId == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
+        val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }
+        val from = "[${chatMembers.first { it.user.id.chatId.long == transaction.payer }.displayName.escapeMarkdownV2Common()}]" +
             "(tg://user?id=${transaction.payer})"
         val to = transaction.recipients.joinToString(", ") { recipient ->
-            "[${chatMembers.first { it.user.id.chatId == recipient }.displayName.escapeMarkdownV2Common()}]" +
+            "[${chatMembers.first { it.user.id.chatId.long == recipient }.displayName.escapeMarkdownV2Common()}]" +
                 "(tg://user?id=$recipient)"
         }
         val amount = "${transaction.amount.setScale(2, RoundingMode.HALF_UP)} ${transaction.currency}".escapeMarkdownV2Common()

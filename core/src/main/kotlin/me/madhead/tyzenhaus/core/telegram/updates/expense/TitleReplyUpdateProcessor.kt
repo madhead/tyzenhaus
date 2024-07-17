@@ -3,11 +3,13 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
+import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import dev.inmo.tgbotapi.types.toChatId
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
@@ -42,14 +44,14 @@ class TitleReplyUpdateProcessor(
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForTitle ?: return null
 
-        if (dialogState.messageId != message.replyTo?.messageId) return null
+        if (dialogState.messageId != message.replyTo?.messageId?.long) return null
 
         if (dialogState.userId != update.userId) return {
             requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig.language)["expense.response.title.wrongUser"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
             )
         }
 
@@ -60,14 +62,14 @@ class TitleReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig.language)["expense.response.title.textPlease"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = ReplyForce(
                     selective = true,
                 ),
             )
 
             dialogStateRepository.save(
-                WaitingForTitle(update.groupId, update.userId, titleRequestMessage.messageId, dialogState.amount, dialogState.currency)
+                WaitingForTitle(update.groupId, update.userId, titleRequestMessage.messageId.long, dialogState.amount, dialogState.currency)
             )
         }
 
@@ -76,7 +78,7 @@ class TitleReplyUpdateProcessor(
         return {
             logger.debug("{} provided title in {}", update.userId, update.groupId)
 
-            val chatMembers = members.map { requestsExecutor.getChatMemberSafe(ChatId(update.groupId), UserId(it)) }
+            val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }
 
             logger.debug("Members of {}: {}", update.groupId, chatMembers)
 
@@ -84,7 +86,7 @@ class TitleReplyUpdateProcessor(
                 chatId = update.data.chat.id,
                 text = I18N(groupConfig.language)["expense.action.participants"],
                 parseMode = MarkdownV2,
-                replyToMessageId = message.messageId,
+                replyParameters = ReplyParameters(message),
                 replyMarkup = replyMarkup(chatMembers, emptySet(), groupConfig, false)
             )
 
@@ -92,7 +94,7 @@ class TitleReplyUpdateProcessor(
                 WaitingForParticipants(
                     update.groupId,
                     update.userId,
-                    participantsMessage.messageId,
+                    participantsMessage.messageId.long,
                     dialogState.amount,
                     dialogState.currency,
                     title,

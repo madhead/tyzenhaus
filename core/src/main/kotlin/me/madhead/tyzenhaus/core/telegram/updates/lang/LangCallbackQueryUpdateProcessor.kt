@@ -47,7 +47,8 @@ class LangCallbackQueryUpdateProcessor(
 
             logger.debug("{} changed language in {} to {}", update.userId, update.groupId, language)
 
-            val newGroupConfig = (groupConfig ?: GroupConfig(callbackQuery.message.chat.id.chatId)).copy(language = Locale(language))
+            val newGroupConfig = (groupConfig
+                ?: GroupConfig(callbackQuery.message.chat.id.chatId.long)).copy(language = Locale.of(language))
 
             CoroutineScope(coroutineContext + Dispatchers.IO).launch {
                 groupConfigRepository.save(newGroupConfig)

@@ -34,7 +34,7 @@ internal fun replyMarkup(chatMembers: List<ChatMember>, participants: Set<Long>,
     )
 
 private fun ChatMember.callbackText(participants: Set<Long>, language: Locale?): String =
-    if (this.user.id.chatId in participants) {
+    if (this.user.id.chatId.long in participants) {
         I18N(language)["expense.response.participants.checked"]
     } else {
         I18N(language)["expense.response.participants.unchecked"]
