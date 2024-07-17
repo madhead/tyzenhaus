@@ -14,7 +14,7 @@ import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
-import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import java.time.Instant
 import java.util.UUID
 import me.madhead.tyzenhaus.launcher.fly.koin.configModule
