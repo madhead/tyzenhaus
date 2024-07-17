@@ -3,8 +3,8 @@ package me.madhead.tyzenhaus.launcher.fly.koin
 import io.micrometer.core.instrument.FunctionCounter
 import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.prometheus.PrometheusConfig
-import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.micrometer.prometheusmetrics.PrometheusConfig
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import me.madhead.tyzenhaus.repository.MetricsRepository
 import org.koin.dsl.binds
 import org.koin.dsl.module
