@@ -37,7 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.8.1"],\
             ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
             ["i18next", "npm:23.6.0"],\
-            ["i18next-browser-languagedetector", "npm:7.1.0"],\
+            ["i18next-browser-languagedetector", "npm:8.0.0"],\
             ["i18next-http-backend", "npm:2.2.2"],\
             ["less", "npm:4.2.0"],\
             ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.3"],\
@@ -64,6 +64,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.23.2-d013d6cf7e-6c4df4839e.zip/node_modules/@babel/runtime/",\
           "packageDependencies": [\
             ["@babel/runtime", "npm:7.23.2"],\
+            ["regenerator-runtime", "npm:0.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:7.24.8", {\
+          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.24.8-89166d937e-6b1e423058.zip/node_modules/@babel/runtime/",\
+          "packageDependencies": [\
+            ["@babel/runtime", "npm:7.24.8"],\
             ["regenerator-runtime", "npm:0.14.0"]\
           ],\
           "linkType": "HARD"\
@@ -2856,11 +2864,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["i18next-browser-languagedetector", [\
-        ["npm:7.1.0", {\
-          "packageLocation": "./.yarn/cache/i18next-browser-languagedetector-npm-7.1.0-1a79fe5d7c-36981b9a99.zip/node_modules/i18next-browser-languagedetector/",\
+        ["npm:8.0.0", {\
+          "packageLocation": "./.yarn/cache/i18next-browser-languagedetector-npm-8.0.0-fcff5207d7-44ae6b161f.zip/node_modules/i18next-browser-languagedetector/",\
           "packageDependencies": [\
-            ["i18next-browser-languagedetector", "npm:7.1.0"],\
-            ["@babel/runtime", "npm:7.23.2"]\
+            ["i18next-browser-languagedetector", "npm:8.0.0"],\
+            ["@babel/runtime", "npm:7.24.8"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3527,7 +3535,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.8.1"],\
             ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
             ["i18next", "npm:23.6.0"],\
-            ["i18next-browser-languagedetector", "npm:7.1.0"],\
+            ["i18next-browser-languagedetector", "npm:8.0.0"],\
             ["i18next-http-backend", "npm:2.2.2"],\
             ["less", "npm:4.2.0"],\
             ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.3"],\
