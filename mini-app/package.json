@@ -2,7 +2,7 @@
     "name": "mini-app",
     "version": "1.0.0",
     "private": true,
-    "packageManager": "yarn@3.6.4",
+    "packageManager": "yarn@4.3.1",
     "dependencies": {
         "@twa-dev/sdk": "^7.0.0",
         "i18next": "^23.6.0",
