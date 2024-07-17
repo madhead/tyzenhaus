@@ -53,7 +53,7 @@ const RAW_RUNTIME_STATE =
           ["webpack", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.93.0"],\
           ["webpack-cli", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.1.4"],\
           ["webpack-dev-server", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.0.4"],\
-          ["webpack-merge", "npm:5.10.0"]\
+          ["webpack-merge", "npm:6.0.1"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -3570,7 +3570,7 @@ const RAW_RUNTIME_STATE =
           ["webpack", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.93.0"],\
           ["webpack-cli", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.1.4"],\
           ["webpack-dev-server", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.0.4"],\
-          ["webpack-merge", "npm:5.10.0"]\
+          ["webpack-merge", "npm:6.0.1"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -5882,6 +5882,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/webpack-merge-npm-5.10.0-c2d9fd1f83-fa46ab200f.zip/node_modules/webpack-merge/",\
         "packageDependencies": [\
           ["webpack-merge", "npm:5.10.0"],\
+          ["clone-deep", "npm:4.0.1"],\
+          ["flat", "npm:5.0.2"],\
+          ["wildcard", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:6.0.1", {\
+        "packageLocation": "./.yarn/cache/webpack-merge-npm-6.0.1-7db02d1a02-39ab911c26.zip/node_modules/webpack-merge/",\
+        "packageDependencies": [\
+          ["webpack-merge", "npm:6.0.1"],\
           ["clone-deep", "npm:4.0.1"],\
           ["flat", "npm:5.0.2"],\
           ["wildcard", "npm:2.0.1"]\
