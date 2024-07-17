@@ -4,7 +4,7 @@
     "private": true,
     "packageManager": "yarn@3.6.4",
     "dependencies": {
-        "@twa-dev/sdk": "^6.9.0",
+        "@twa-dev/sdk": "^7.0.0",
         "i18next": "^23.6.0",
         "i18next-browser-languagedetector": "^8.0.0",
         "i18next-http-backend": "^2.2.2",

@@ -207,21 +207,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twa-dev/sdk@npm:^6.9.0":
-  version: 6.9.0
-  resolution: "@twa-dev/sdk@npm:6.9.0"
+"@twa-dev/sdk@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@twa-dev/sdk@npm:7.0.0"
   dependencies:
-    "@twa-dev/types": ^6.9.0
+    "@twa-dev/types": ^7.0.0
   peerDependencies:
     react: ">=16.0.0"
-  checksum: 2175a663b5ec8ae87d2d7bf123adc491b71129e5ec97d483ff99b16d22e4248af31aebbb0e3457b9e7e4b410c70ba266f26fa70afcebe99e46fe31ae0d4d5775
+  checksum: d7b855d5fde863a306b2d95f5421757e4c9f7df3aa8eeb9b59f90d53c2c8dbd635d955f20adbabc2a7cbec886fe44b9374486a96359e211ebb28cf3818995275
   languageName: node
   linkType: hard
 
-"@twa-dev/types@npm:^6.9.0":
-  version: 6.9.0
-  resolution: "@twa-dev/types@npm:6.9.0"
-  checksum: 8331cb905e4c59cd932f0515fa31a1465ed6b9c9e824163508eb544dbf07c7cbcd77f864c6d3bffbf602e4d6b2d2daee114b1275608df5c0536d8c47d30e32f8
+"@twa-dev/types@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@twa-dev/types@npm:7.0.0"
+  checksum: 3f3da1e22717322be2844fdc208eb8b061a16ef27b1eb4f8330f6fcb64228b34cd571b4a2f95254224a37dbde1c04b1e7ed92ce530456444c3f458386f412104
   languageName: node
   linkType: hard
 
@@ -2894,7 +2894,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mini-app@workspace:."
   dependencies:
-    "@twa-dev/sdk": ^6.9.0
+    "@twa-dev/sdk": ^7.0.0
     "@types/node": 18.18.2
     "@types/react": ^18.2.28
     "@types/react-dom": ^18.2.13

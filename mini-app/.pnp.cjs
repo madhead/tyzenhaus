@@ -28,7 +28,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.9.0"],\
+            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
             ["@types/node", "npm:18.18.2"],\
             ["@types/react", "npm:18.2.28"],\
             ["@types/react-dom", "npm:18.2.13"],\
@@ -304,18 +304,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@twa-dev/sdk", [\
-        ["npm:6.9.0", {\
-          "packageLocation": "./.yarn/cache/@twa-dev-sdk-npm-6.9.0-9fd37096cd-2175a663b5.zip/node_modules/@twa-dev/sdk/",\
+        ["npm:7.0.0", {\
+          "packageLocation": "./.yarn/cache/@twa-dev-sdk-npm-7.0.0-7ef4b6534a-d7b855d5fd.zip/node_modules/@twa-dev/sdk/",\
           "packageDependencies": [\
-            ["@twa-dev/sdk", "npm:6.9.0"]\
+            ["@twa-dev/sdk", "npm:7.0.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.9.0", {\
-          "packageLocation": "./.yarn/__virtual__/@twa-dev-sdk-virtual-d749ce6173/0/cache/@twa-dev-sdk-npm-6.9.0-9fd37096cd-2175a663b5.zip/node_modules/@twa-dev/sdk/",\
+        ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0", {\
+          "packageLocation": "./.yarn/__virtual__/@twa-dev-sdk-virtual-705a27e836/0/cache/@twa-dev-sdk-npm-7.0.0-7ef4b6534a-d7b855d5fd.zip/node_modules/@twa-dev/sdk/",\
           "packageDependencies": [\
-            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.9.0"],\
-            ["@twa-dev/types", "npm:6.9.0"],\
+            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
+            ["@twa-dev/types", "npm:7.0.0"],\
             ["@types/react", "npm:18.2.28"],\
             ["react", "npm:18.2.0"]\
           ],\
@@ -327,10 +327,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@twa-dev/types", [\
-        ["npm:6.9.0", {\
-          "packageLocation": "./.yarn/cache/@twa-dev-types-npm-6.9.0-c721fdd1d2-8331cb905e.zip/node_modules/@twa-dev/types/",\
+        ["npm:7.0.0", {\
+          "packageLocation": "./.yarn/cache/@twa-dev-types-npm-7.0.0-64a12e5c65-3f3da1e227.zip/node_modules/@twa-dev/types/",\
           "packageDependencies": [\
-            ["@twa-dev/types", "npm:6.9.0"]\
+            ["@twa-dev/types", "npm:7.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3526,7 +3526,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["mini-app", "workspace:."],\
-            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:6.9.0"],\
+            ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
             ["@types/node", "npm:18.18.2"],\
             ["@types/react", "npm:18.2.28"],\
             ["@types/react-dom", "npm:18.2.13"],\
