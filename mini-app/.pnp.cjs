@@ -39,7 +39,7 @@ const RAW_RUNTIME_STATE =
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
           ["i18next-http-backend", "npm:2.5.2"],\
           ["less", "npm:4.2.0"],\
-          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.4"],\
+          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0"],\
           ["moment", "npm:2.30.1"],\
           ["normalize.css", "npm:8.0.1"],\
           ["react", "npm:18.3.1"],\
@@ -3231,24 +3231,28 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["less-loader", [\
-      ["npm:11.1.4", {\
-        "packageLocation": "./.yarn/cache/less-loader-npm-11.1.4-71cfa16b9e-4d8764ac1c.zip/node_modules/less-loader/",\
+      ["npm:12.2.0", {\
+        "packageLocation": "./.yarn/cache/less-loader-npm-12.2.0-19b77fcf7d-b952705346.zip/node_modules/less-loader/",\
         "packageDependencies": [\
-          ["less-loader", "npm:11.1.4"]\
+          ["less-loader", "npm:12.2.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.4", {\
-        "packageLocation": "./.yarn/__virtual__/less-loader-virtual-bc60710051/0/cache/less-loader-npm-11.1.4-71cfa16b9e-4d8764ac1c.zip/node_modules/less-loader/",\
+      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/less-loader-virtual-c673bd7ba0/0/cache/less-loader-npm-12.2.0-19b77fcf7d-b952705346.zip/node_modules/less-loader/",\
         "packageDependencies": [\
-          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.4"],\
+          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0"],\
+          ["@rspack/core", null],\
           ["@types/less", null],\
+          ["@types/rspack__core", null],\
           ["@types/webpack", "npm:5.28.5"],\
           ["less", "npm:4.2.0"],\
           ["webpack", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.93.0"]\
         ],\
         "packagePeers": [\
+          "@rspack/core",\
           "@types/less",\
+          "@types/rspack__core",\
           "@types/webpack",\
           "less",\
           "webpack"\
@@ -3481,7 +3485,7 @@ const RAW_RUNTIME_STATE =
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
           ["i18next-http-backend", "npm:2.5.2"],\
           ["less", "npm:4.2.0"],\
-          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:11.1.4"],\
+          ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0"],\
           ["moment", "npm:2.30.1"],\
           ["normalize.css", "npm:8.0.1"],\
           ["react", "npm:18.3.1"],\
