@@ -28,7 +28,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
-          ["@types/node", "npm:18.18.2"],\
+          ["@types/node", "npm:20.14.11"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
@@ -547,13 +547,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/node", [\
-      ["npm:18.18.2", {\
-        "packageLocation": "./.yarn/cache/@types-node-npm-18.18.2-ed653017bf-7585ed0c8f.zip/node_modules/@types/node/",\
-        "packageDependencies": [\
-          ["@types/node", "npm:18.18.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:20.14.11", {\
         "packageLocation": "./.yarn/cache/@types-node-npm-20.14.11-5ca92cae2d-344e1ce1ed.zip/node_modules/@types/node/",\
         "packageDependencies": [\
@@ -3545,7 +3538,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["mini-app", "workspace:."],\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
-          ["@types/node", "npm:18.18.2"],\
+          ["@types/node", "npm:20.14.11"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
@@ -5434,7 +5427,7 @@ const RAW_RUNTIME_STATE =
           ["@tsconfig/node12", "npm:1.0.11"],\
           ["@tsconfig/node14", "npm:1.0.3"],\
           ["@tsconfig/node16", "npm:1.0.4"],\
-          ["@types/node", "npm:18.18.2"],\
+          ["@types/node", "npm:20.14.11"],\
           ["@types/swc__core", null],\
           ["@types/swc__wasm", null],\
           ["@types/typescript", null],\
