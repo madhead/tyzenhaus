@@ -46,7 +46,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
           ["react-fast-marquee", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:1.6.5"],\
           ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:15.0.0"],\
-          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4"],\
+          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:4.0.0"],\
           ["ts-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:9.5.1"],\
           ["ts-node", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:10.9.2"],\
           ["typescript", "patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=379a07"],\
@@ -3556,7 +3556,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
           ["react-fast-marquee", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:1.6.5"],\
           ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:15.0.0"],\
-          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4"],\
+          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:4.0.0"],\
           ["ts-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:9.5.1"],\
           ["ts-node", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:10.9.2"],\
           ["typescript", "patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=379a07"],\
@@ -5142,17 +5142,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["style-loader", [\
-      ["npm:3.3.4", {\
-        "packageLocation": "./.yarn/cache/style-loader-npm-3.3.4-e2ff5c12be-2dd2a77d4f.zip/node_modules/style-loader/",\
+      ["npm:4.0.0", {\
+        "packageLocation": "./.yarn/cache/style-loader-npm-4.0.0-e0f957f3d6-93f25b7e70.zip/node_modules/style-loader/",\
         "packageDependencies": [\
-          ["style-loader", "npm:3.3.4"]\
+          ["style-loader", "npm:4.0.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4", {\
-        "packageLocation": "./.yarn/__virtual__/style-loader-virtual-16efe1daab/0/cache/style-loader-npm-3.3.4-e2ff5c12be-2dd2a77d4f.zip/node_modules/style-loader/",\
+      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:4.0.0", {\
+        "packageLocation": "./.yarn/__virtual__/style-loader-virtual-2d749c3cfe/0/cache/style-loader-npm-4.0.0-e0f957f3d6-93f25b7e70.zip/node_modules/style-loader/",\
         "packageDependencies": [\
-          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:3.3.4"],\
+          ["style-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:4.0.0"],\
           ["@types/webpack", "npm:5.28.5"],\
           ["webpack", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.93.0"]\
         ],\
