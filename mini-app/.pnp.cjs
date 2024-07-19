@@ -35,7 +35,7 @@ const RAW_RUNTIME_STATE =
           ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
           ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.1.2"],\
           ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
-          ["i18next", "npm:23.12.1"],\
+          ["i18next", "npm:23.12.2"],\
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
           ["i18next-http-backend", "npm:2.5.2"],\
           ["less", "npm:4.2.0"],\
@@ -2843,10 +2843,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["i18next", [\
-      ["npm:23.12.1", {\
-        "packageLocation": "./.yarn/cache/i18next-npm-23.12.1-ffe18f3cd0-201e525bdc.zip/node_modules/i18next/",\
+      ["npm:23.12.2", {\
+        "packageLocation": "./.yarn/cache/i18next-npm-23.12.2-ec24459ee0-d7a743c54b.zip/node_modules/i18next/",\
         "packageDependencies": [\
-          ["i18next", "npm:23.12.1"],\
+          ["i18next", "npm:23.12.2"],\
           ["@babel/runtime", "npm:7.24.8"]\
         ],\
         "linkType": "HARD"\
@@ -3545,7 +3545,7 @@ const RAW_RUNTIME_STATE =
           ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
           ["css-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.1.2"],\
           ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
-          ["i18next", "npm:23.12.1"],\
+          ["i18next", "npm:23.12.2"],\
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
           ["i18next-http-backend", "npm:2.5.2"],\
           ["less", "npm:4.2.0"],\
@@ -4460,7 +4460,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/react-native", null],\
           ["html-parse-stringify", "npm:3.0.1"],\
-          ["i18next", "npm:23.12.1"],\
+          ["i18next", "npm:23.12.2"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
           ["react-native", null]\
