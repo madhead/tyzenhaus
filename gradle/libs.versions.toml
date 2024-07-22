@@ -17,7 +17,7 @@ picocli = "4.7.6"
 
 jacoco = "0.8.10"
 
-asciidoctor = "4.0.2"
+asciidoctor = "4.0.3"
 
 [libraries]
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
