@@ -12,7 +12,7 @@ micrometer = "1.13.2"
 junit = "5.10.3"
 mockk = "1.13.12"
 
-liquibase = "4.29.0"
+liquibase = "4.29.1"
 picocli = "4.7.6"
 
 jacoco = "0.8.10"
