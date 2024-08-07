@@ -28,7 +28,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
-          ["@types/node", "npm:22.0.2"],\
+          ["@types/node", "npm:22.1.0"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
@@ -555,11 +555,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:22.0.2", {\
-        "packageLocation": "./.yarn/cache/@types-node-npm-22.0.2-bc1248a18f-7f5937f22d.zip/node_modules/@types/node/",\
+      ["npm:22.1.0", {\
+        "packageLocation": "./.yarn/cache/@types-node-npm-22.1.0-3ca0e36ca8-c2ac134050.zip/node_modules/@types/node/",\
         "packageDependencies": [\
-          ["@types/node", "npm:22.0.2"],\
-          ["undici-types", "npm:6.11.1"]\
+          ["@types/node", "npm:22.1.0"],\
+          ["undici-types", "npm:6.13.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3546,7 +3546,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["mini-app", "workspace:."],\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
-          ["@types/node", "npm:22.0.2"],\
+          ["@types/node", "npm:22.1.0"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
@@ -5435,7 +5435,7 @@ const RAW_RUNTIME_STATE =
           ["@tsconfig/node12", "npm:1.0.11"],\
           ["@tsconfig/node14", "npm:1.0.3"],\
           ["@tsconfig/node16", "npm:1.0.4"],\
-          ["@types/node", "npm:22.0.2"],\
+          ["@types/node", "npm:22.1.0"],\
           ["@types/swc__core", null],\
           ["@types/swc__wasm", null],\
           ["@types/typescript", null],\
@@ -5498,10 +5498,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:6.11.1", {\
-        "packageLocation": "./.yarn/cache/undici-types-npm-6.11.1-3a2172800d-bdee4c3d67.zip/node_modules/undici-types/",\
+      ["npm:6.13.0", {\
+        "packageLocation": "./.yarn/cache/undici-types-npm-6.13.0-3ce6ceead9-da52e37cbc.zip/node_modules/undici-types/",\
         "packageDependencies": [\
-          ["undici-types", "npm:6.11.1"]\
+          ["undici-types", "npm:6.13.0"]\
         ],\
         "linkType": "HARD"\
       }]\
