@@ -5,7 +5,7 @@
     "packageManager": "yarn@4.3.1",
     "dependencies": {
         "@twa-dev/sdk": "^7.0.0",
-        "i18next": "^23.12.2",
+        "i18next": "^23.12.3",
         "i18next-browser-languagedetector": "^8.0.0",
         "i18next-http-backend": "^2.2.2",
         "moment": "^2.30.1",
