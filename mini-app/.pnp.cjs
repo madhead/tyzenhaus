@@ -37,7 +37,7 @@ const RAW_RUNTIME_STATE =
           ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
           ["i18next", "npm:23.12.2"],\
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
-          ["i18next-http-backend", "npm:2.5.2"],\
+          ["i18next-http-backend", "npm:2.6.0"],\
           ["less", "npm:4.2.0"],\
           ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0"],\
           ["moment", "npm:2.30.1"],\
@@ -2871,10 +2871,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["i18next-http-backend", [\
-      ["npm:2.5.2", {\
-        "packageLocation": "./.yarn/cache/i18next-http-backend-npm-2.5.2-6cbbe5e7c3-3cdaea60df.zip/node_modules/i18next-http-backend/",\
+      ["npm:2.6.0", {\
+        "packageLocation": "./.yarn/cache/i18next-http-backend-npm-2.6.0-0397b55e2b-c7c083ce09.zip/node_modules/i18next-http-backend/",\
         "packageDependencies": [\
-          ["i18next-http-backend", "npm:2.5.2"],\
+          ["i18next-http-backend", "npm:2.6.0"],\
           ["cross-fetch", "npm:4.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -3555,7 +3555,7 @@ const RAW_RUNTIME_STATE =
           ["html-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:5.6.0"],\
           ["i18next", "npm:23.12.2"],\
           ["i18next-browser-languagedetector", "npm:8.0.0"],\
-          ["i18next-http-backend", "npm:2.5.2"],\
+          ["i18next-http-backend", "npm:2.6.0"],\
           ["less", "npm:4.2.0"],\
           ["less-loader", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.2.0"],\
           ["moment", "npm:2.30.1"],\
