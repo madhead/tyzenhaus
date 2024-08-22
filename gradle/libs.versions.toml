@@ -7,7 +7,7 @@ kotlinx-serialization = "1.7.1"
 tgbotapi = "15.2.0"
 postgresql = "42.7.3"
 log4j = "2.23.1"
-micrometer = "1.13.2"
+micrometer = "1.13.3"
 
 junit = "5.11.0"
 mockk = "1.13.12"
