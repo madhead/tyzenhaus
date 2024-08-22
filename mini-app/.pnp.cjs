@@ -27,7 +27,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
+          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
           ["@types/node", "npm:22.1.0"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
@@ -370,18 +370,18 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@twa-dev/sdk", [\
-      ["npm:7.0.0", {\
-        "packageLocation": "./.yarn/cache/@twa-dev-sdk-npm-7.0.0-7ef4b6534a-947e144b85.zip/node_modules/@twa-dev/sdk/",\
+      ["npm:7.8.0", {\
+        "packageLocation": "./.yarn/cache/@twa-dev-sdk-npm-7.8.0-9fe7f79f59-f113c48e3a.zip/node_modules/@twa-dev/sdk/",\
         "packageDependencies": [\
-          ["@twa-dev/sdk", "npm:7.0.0"]\
+          ["@twa-dev/sdk", "npm:7.8.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0", {\
-        "packageLocation": "./.yarn/__virtual__/@twa-dev-sdk-virtual-705a27e836/0/cache/@twa-dev-sdk-npm-7.0.0-7ef4b6534a-947e144b85.zip/node_modules/@twa-dev/sdk/",\
+      ["virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0", {\
+        "packageLocation": "./.yarn/__virtual__/@twa-dev-sdk-virtual-5ce3af0a54/0/cache/@twa-dev-sdk-npm-7.8.0-9fe7f79f59-f113c48e3a.zip/node_modules/@twa-dev/sdk/",\
         "packageDependencies": [\
-          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
-          ["@twa-dev/types", "npm:7.0.0"],\
+          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
+          ["@twa-dev/types", "npm:7.8.0"],\
           ["@types/react", "npm:18.3.3"],\
           ["react", "npm:18.3.1"]\
         ],\
@@ -393,10 +393,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@twa-dev/types", [\
-      ["npm:7.0.0", {\
-        "packageLocation": "./.yarn/cache/@twa-dev-types-npm-7.0.0-64a12e5c65-2945d14f7c.zip/node_modules/@twa-dev/types/",\
+      ["npm:7.8.0", {\
+        "packageLocation": "./.yarn/cache/@twa-dev-types-npm-7.8.0-be7168d528-62488c11d6.zip/node_modules/@twa-dev/types/",\
         "packageDependencies": [\
-          ["@twa-dev/types", "npm:7.0.0"]\
+          ["@twa-dev/types", "npm:7.8.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3545,7 +3545,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["mini-app", "workspace:."],\
-          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.0.0"],\
+          ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
           ["@types/node", "npm:22.1.0"],\
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
