@@ -2303,12 +2303,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^2.2.2":
-  version: 2.5.2
-  resolution: "i18next-http-backend@npm:2.5.2"
+"i18next-http-backend@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "i18next-http-backend@npm:2.6.1"
   dependencies:
     cross-fetch: "npm:4.0.0"
-  checksum: 10/3cdaea60df9d199366dd9b4c5c0f4bbd55cd4480b49d13037381a2ba825b514cc6fda7c0bb475e879eb7e94daa62d88d96d3c74bed3e57443d3b527d70abf64b
+  checksum: 10/17f716934c9d21e307e85b7f8684662cc3942df1e7f0998dc7733599449fd24e2268803d5a14625d86a593011f308e35471d28b4ef48ebb112a3afed31b82f05
   languageName: node
   linkType: hard
 
@@ -2908,7 +2908,7 @@ __metadata:
     html-webpack-plugin: "npm:^5.6.0"
     i18next: "npm:^23.12.2"
     i18next-browser-languagedetector: "npm:^8.0.0"
-    i18next-http-backend: "npm:^2.2.2"
+    i18next-http-backend: "npm:^2.6.1"
     less: "npm:^4.2.0"
     less-loader: "npm:^12.2.0"
     moment: "npm:^2.30.1"
