@@ -29,7 +29,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
           ["@types/node", "npm:22.5.0"],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
           ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
@@ -382,7 +382,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
           ["@twa-dev/types", "npm:7.8.0"],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["react", "npm:18.3.1"]\
         ],\
         "packagePeers": [\
@@ -611,10 +611,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:18.3.4", {\
-        "packageLocation": "./.yarn/cache/@types-react-npm-18.3.4-8046f42f77-359973924b.zip/node_modules/@types/react/",\
+      ["npm:18.3.5", {\
+        "packageLocation": "./.yarn/cache/@types-react-npm-18.3.5-85b093554b-ba0477c5ad.zip/node_modules/@types/react/",\
         "packageDependencies": [\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["@types/prop-types", "npm:15.7.12"],\
           ["csstype", "npm:3.1.3"]\
         ],\
@@ -3565,7 +3565,7 @@ const RAW_RUNTIME_STATE =
           ["mini-app", "workspace:."],\
           ["@twa-dev/sdk", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:7.8.0"],\
           ["@types/node", "npm:22.5.0"],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/webpack", "npm:5.28.5"],\
           ["copy-webpack-plugin", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:12.0.2"],\
@@ -4430,7 +4430,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/react-dom-virtual-d11c0a8359/0/cache/react-dom-npm-18.3.1-a805663f38-3f4b73a3aa.zip/node_modules/react-dom/",\
         "packageDependencies": [\
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["loose-envify", "npm:1.4.0"],\
           ["react", "npm:18.3.1"],\
           ["scheduler", "npm:0.23.2"]\
@@ -4454,7 +4454,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/react-fast-marquee-virtual-95e2af8fc1/0/cache/react-fast-marquee-npm-1.6.5-163d9544e6-ac77bc2106.zip/node_modules/react-fast-marquee/",\
         "packageDependencies": [\
           ["react-fast-marquee", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:1.6.5"],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:18.3.1"]\
@@ -4482,7 +4482,7 @@ const RAW_RUNTIME_STATE =
           ["react-i18next", "virtual:6f29ce2b06d06f6dc6fdaf3f6016e455e3c3e6e14ec778c24b26e4c1f5ee54858be14ff7500c16cac0df6f0c61629b42cda9b6a566664ff9d0ee4c936d18def9#npm:15.0.1"],\
           ["@babel/runtime", "npm:7.24.8"],\
           ["@types/i18next", null],\
-          ["@types/react", "npm:18.3.4"],\
+          ["@types/react", "npm:18.3.5"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["@types/react-native", null],\
           ["html-parse-stringify", "npm:3.0.1"],\
