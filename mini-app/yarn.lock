@@ -398,12 +398,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22.5.0":
-  version: 22.5.0
-  resolution: "@types/node@npm:22.5.0"
+"@types/node@npm:22.5.3":
+  version: 22.5.3
+  resolution: "@types/node@npm:22.5.3"
   dependencies:
     undici-types: "npm:~6.19.2"
-  checksum: 10/89af3bd217b1559b645a9ed16d4ae3add75749814cbd8eefddd1b96003d1973afb1c8a2b23d69f3a8cc6c532e3aa185eaf5cc29a6e7c42c311a2aad4c99430ae
+  checksum: 10/a969c8df3becf326938ff17b0bd9114b0d1d3c5fe6292c8a9f3db1576a3567dc6db4e7b253830bbfcd92cb49e0d799592d56daf56d8a0c1446d0ea6658324450
   languageName: node
   linkType: hard
 
@@ -2919,7 +2919,7 @@ __metadata:
   resolution: "mini-app@workspace:."
   dependencies:
     "@twa-dev/sdk": "npm:^7.8.0"
-    "@types/node": "npm:22.5.0"
+    "@types/node": "npm:22.5.3"
     "@types/react": "npm:^18.3.4"
     "@types/react-dom": "npm:^18.2.13"
     "@types/webpack": "npm:^5.28.3"
