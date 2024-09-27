@@ -16,7 +16,7 @@
         "react-i18next": "^15.0.1"
     },
     "devDependencies": {
-        "@types/node": "22.5.0",
+        "@types/node": "22.7.3",
         "@types/react": "^18.3.4",
         "@types/react-dom": "^18.2.13",
         "@types/webpack": "^5.28.3",
