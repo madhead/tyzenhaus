@@ -10,7 +10,7 @@ jobs:
     name: DB backup
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt install wireguard-tools openresolv
+      - run: sudo apt install wireguard-tools
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: printf "${{ secrets.FLY_WG_CONF }}" | sudo tee /etc/wireguard/fly.conf
       - run: wg-quick up fly
