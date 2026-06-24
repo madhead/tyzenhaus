@@ -15,4 +15,5 @@ dependencies {
     testImplementation(libs.mockk)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

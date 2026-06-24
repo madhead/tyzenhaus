@@ -21,6 +21,7 @@ dependencies {
     testImplementation(libs.postgresql)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.log4j.core)
 
     liquibaseRuntime(libs.liquibase.core)
@@ -52,7 +53,7 @@ tasks {
         }
     }
 
-    val dbTest by registering(Test::class) {
+    val dbTest = register<Test>("dbTest") {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         description = "Runs the DB tests."
         shouldRunAfter("test")
@@ -62,7 +63,7 @@ tasks {
         }
     }
 
-    val jacocoDbTestReport by registering(JacocoReport::class) {
+    register<JacocoReport>("jacocoDbTestReport") {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         description = "Generates code coverage report for the dbTest task."
         executionData(dbTest.get())
@@ -77,7 +78,7 @@ tasks {
                 }
 
                 is RegularFileProperty -> {
-                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this@registering.name + "." + this.name))
+                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this@register.name + "." + this.name))
                 }
             }
         }

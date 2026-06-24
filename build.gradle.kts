@@ -2,6 +2,15 @@ import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.liquibase.core)
+    }
+}
+
 plugins {
     kotlin("jvm").version(Versions.Plugins.KOTLIN).apply(false)
     kotlin("plugin.serialization").version(Versions.Plugins.KOTLIN).apply(false)

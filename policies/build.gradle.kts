@@ -1,4 +1,3 @@
-import java.io.ByteArrayOutputStream
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
@@ -26,11 +25,6 @@ tasks {
 }
 
 private fun shellout(vararg command: String): String =
-    ByteArrayOutputStream().use { stdout ->
-        exec {
-            commandLine(*command)
-            standardOutput = stdout
-        }
-
-        stdout.toString()
-    }
+    providers.exec {
+        commandLine(*command)
+    }.standardOutput.asText.get().trim()
