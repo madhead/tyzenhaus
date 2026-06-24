@@ -5,32 +5,12 @@ ifdef::env-github[]
 <p align="center">
   <img src="./assets/logo.svg" alt="Tyzenhaus logo">
 </p>
-<p align="center">
-  <a href="https://producthunt.com/posts/tyzenhaus">
-    <img src="./assets/ph.png" alt="Product Hunt link">
-  </a>
-  <a href="https://news.ycombinator.com/item?id=28556366">
-    <img src="./assets/hackernews.png" alt="Hacker News link">
-  </a>
-  <a href="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot">
-    <img src="./assets/reddit.png" alt="Reddit link">
-  </a>
-  <a href="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah">
-    <img src="./assets/vc.png" alt="vc.ru link">
-  </a>
-</p>
 ++++
 
 endif::[]
 ifndef::env-github[]
 
 image::./assets/logo.svg[align="center"]
-
-[.text-center]
-image:./assets/ph.png[link="https://producthunt.com/posts/tyzenhaus"]
-image:./assets/hackernews.png[link="https://news.ycombinator.com/item?id=28556366"]
-image:./assets/reddit.png[link="https://www.reddit.com/r/TelegramBots/comments/pn5mya/tyzenhaus_shared_expenses_tracking_bot"]
-image:./assets/vc.png[link="https://vc.ru/tribuna/293842-tyzenhaus-bot-dlya-uproshcheniya-vzaimnyh-dolgov-v-telegram-chatah"]
 
 endif::[]
 
