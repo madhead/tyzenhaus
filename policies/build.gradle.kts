@@ -1,7 +1,7 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
-    alias(libs.plugins.asciidoctor)
+    id("asciidoctor-convention")
 }
 
 tasks {

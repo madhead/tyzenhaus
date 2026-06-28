@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("kotlin-convention")
+    id("kotlin-serialization-convention")
 }
 
 dependencies {
