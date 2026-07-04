@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("kotlin-convention")
+    id("kotlin-serialization-convention")
 }
 
 dependencies {
@@ -15,4 +15,5 @@ dependencies {
     testImplementation(libs.mockk)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

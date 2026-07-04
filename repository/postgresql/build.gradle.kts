@@ -1,8 +1,7 @@
 import java.net.URI
 
 plugins {
-    kotlin("jvm")
-    id("org.liquibase.gradle")
+    id("liquibase-convention")
 }
 
 dependencies {
@@ -21,6 +20,7 @@ dependencies {
     testImplementation(libs.postgresql)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.log4j.core)
 
     liquibaseRuntime(libs.liquibase.core)
@@ -41,45 +41,6 @@ liquibase {
                 "searchPath" to project.projectDir,
                 "changelogFile" to "src/main/liquibase/changelog.yml"
             )
-        }
-    }
-}
-
-tasks {
-    test {
-        useJUnitPlatform {
-            excludeTags("db")
-        }
-    }
-
-    val dbTest by registering(Test::class) {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-        description = "Runs the DB tests."
-        shouldRunAfter("test")
-        outputs.upToDateWhen { false }
-        useJUnitPlatform {
-            includeTags("db")
-        }
-    }
-
-    val jacocoDbTestReport by registering(JacocoReport::class) {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-        description = "Generates code coverage report for the dbTest task."
-        executionData(dbTest.get())
-        sourceSets(sourceSets.main.orNull)
-
-        val reportsDirectory = project.extensions.getByType<JacocoPluginExtension>().reportsDirectory.get().asFile
-
-        reports.all {
-            when (val outputLocation = this.outputLocation) {
-                is DirectoryProperty -> {
-                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this.name))
-                }
-
-                is RegularFileProperty -> {
-                    outputLocation.set(File(reportsDirectory, "dbTest" + "/" + this@registering.name + "." + this.name))
-                }
-            }
         }
     }
 }

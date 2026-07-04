@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    id("kotlin-convention")
 }
 
 dependencies {
@@ -11,4 +11,5 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
