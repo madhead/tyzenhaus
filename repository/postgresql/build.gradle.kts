@@ -1,4 +1,5 @@
 import java.net.URI
+import org.gradle.api.plugins.jvm.JvmTestSuite
 
 plugins {
     id("liquibase-convention")
@@ -15,17 +16,20 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api)
 
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
-    testImplementation(libs.postgresql)
-
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.platform.launcher)
-    testRuntimeOnly(libs.log4j.core)
-
     liquibaseRuntime(libs.liquibase.core)
     liquibaseRuntime(libs.picocli)
     liquibaseRuntime(libs.postgresql)
+}
+
+testing {
+    suites {
+        named<JvmTestSuite>("dbTest") {
+            dependencies {
+                implementation(libs.postgresql)
+                runtimeOnly(libs.log4j.core)
+            }
+        }
+    }
 }
 
 liquibase {

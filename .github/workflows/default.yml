@@ -92,7 +92,7 @@ jobs:
       - run: ./gradlew :repository:postgresql:liquibaseUpdate
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
-      - run: psql -h ${{env.POSTGRES_HOST}} -U ${{env.POSTGRES_USER}} -d ${{env.POSTGRES_DB}} <repository/postgresql/src/test/sql/seed.sql
+      - run: psql -h ${{env.POSTGRES_HOST}} -U ${{env.POSTGRES_USER}} -d ${{env.POSTGRES_DB}} <repository/postgresql/src/dbTest/sql/seed.sql
       - run: ./gradlew dbTest jacocoDbTestReport
         env:
           DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}

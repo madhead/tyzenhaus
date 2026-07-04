@@ -33,7 +33,7 @@ comments:
   KDocReferencesNonPublicProperty:
     active: false
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   OutdatedDocumentation:
     active: false
     matchTypeParameters: true
@@ -42,7 +42,7 @@ comments:
   UndocumentedPublicClass:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
@@ -50,11 +50,11 @@ comments:
   UndocumentedPublicFunction:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   UndocumentedPublicProperty:
     active: false
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
 
 complexity:
   active: true
@@ -120,7 +120,7 @@ complexity:
   StringLiteralDuplication:
     active: false
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -128,7 +128,7 @@ complexity:
   TooManyFunctions:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -204,7 +204,7 @@ exceptions:
   InstanceOfCheckForException:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   NotImplementedDeclaration:
     active: false
   ObjectExtendsThrowable:
@@ -231,7 +231,7 @@ exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
       - 'Exception'
@@ -247,7 +247,7 @@ exceptions:
   TooGenericExceptionCaught:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
       - 'Error'
@@ -295,7 +295,7 @@ naming:
   FunctionNaming:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
@@ -357,11 +357,11 @@ performance:
   ForEachOnRange:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   SpreadOperator:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   UnnecessaryTemporaryInstantiation:
     active: true
 
@@ -424,7 +424,7 @@ potential-bugs:
   LateinitUsage:
     active: false
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: true
@@ -454,7 +454,7 @@ potential-bugs:
   UnsafeCallOnNullableType:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
   UnsafeCast:
     active: true
   UnusedUnaryOperator:
@@ -542,7 +542,7 @@ style:
   MagicNumber:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'
     ignoreNumbers:
       - '-1'
       - '0'
@@ -690,4 +690,4 @@ style:
   WildcardImport:
     active: true
     excludes:
-      - '**/test/**'
+      - '**/{test,dbTest}/**'

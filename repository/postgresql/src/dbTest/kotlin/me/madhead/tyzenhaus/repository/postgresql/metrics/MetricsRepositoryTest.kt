@@ -4,13 +4,11 @@ import java.net.URI
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
 @Disabled("This one is flaky: it depends on the order of execution of other tests")
 class MetricsRepositoryTest {
     private lateinit var metricsRepository: MetricsRepository

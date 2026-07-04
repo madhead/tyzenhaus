@@ -7,13 +7,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.postgresql.ds.PGSimpleDataSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
 class TransactionRepositoryTest {
     private lateinit var transactionRepository: TransactionRepository
 

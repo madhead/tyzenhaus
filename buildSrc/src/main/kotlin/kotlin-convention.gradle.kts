@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -22,6 +23,22 @@ configure<JacocoPluginExtension> {
     toolVersion = libs.versions.jacoco.get()
 }
 
+testing {
+    suites {
+        withType<JvmTestSuite>().configureEach {
+            useJUnitJupiter(libs.versions.junit.get())
+
+            targets.configureEach {
+                testTask.configure {
+                    testLogging {
+                        showStandardStreams = true
+                    }
+                }
+            }
+        }
+    }
+}
+
 tasks {
     withType<KotlinCompile>().configureEach {
         compilerOptions {
@@ -31,12 +48,6 @@ tasks {
     withType<Jar>().configureEach {
         // Workaround for https://stackoverflow.com/q/42174572/750510
         archiveBaseName.set(rootProject.name + "-" + project.path.removePrefix(":").replace(":", "-"))
-    }
-    withType<Test>().configureEach {
-        useJUnitPlatform()
-        testLogging {
-            showStandardStreams = true
-        }
     }
     withType<JacocoReport>().configureEach {
         reports {
