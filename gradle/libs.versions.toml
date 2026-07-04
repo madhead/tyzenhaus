@@ -16,6 +16,7 @@ log4j = "2.23.1"
 micrometer = "1.13.3"
 junit = "5.11.0"
 mockk = "1.13.12"
+testcontainers = "1.20.4"
 liquibase = "4.29.1"
 picocli = "4.7.6"
 jacoco = "0.8.10"
@@ -40,6 +41,7 @@ log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "lo
 log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 

@@ -63,22 +63,6 @@ jobs:
   db-test:
     name: DB test
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_USER: tyzenhaus
-      POSTGRES_PASSWORD: tyzenhaus
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: tyzenhaus
-    services:
-      postgres:
-        image: postgres:14
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: ${{env.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
-          POSTGRES_DB: ${{env.POSTGRES_DB}}
-          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -89,13 +73,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-      - run: ./gradlew :repository:postgresql:liquibaseUpdate
-        env:
-          DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
-      - run: psql -h ${{env.POSTGRES_HOST}} -U ${{env.POSTGRES_USER}} -d ${{env.POSTGRES_DB}} <repository/postgresql/src/dbTest/sql/seed.sql
       - run: ./gradlew dbTest jacocoDbTestReport
-        env:
-          DATABASE_URL: postgres://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

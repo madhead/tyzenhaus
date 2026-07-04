@@ -26,6 +26,8 @@ testing {
         named<JvmTestSuite>("dbTest") {
             dependencies {
                 implementation(libs.postgresql)
+                implementation(libs.testcontainers.postgresql)
+                implementation(libs.liquibase.core)
                 runtimeOnly(libs.log4j.core)
             }
         }
