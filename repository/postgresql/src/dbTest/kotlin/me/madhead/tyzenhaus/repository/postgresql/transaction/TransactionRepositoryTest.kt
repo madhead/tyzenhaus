@@ -1,33 +1,20 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
-import java.net.URI
 import java.time.Instant
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.postgresql.ds.PGSimpleDataSource
+import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
-class TransactionRepositoryTest {
+class TransactionRepositoryTest : AbstractRepositoryTest() {
     private lateinit var transactionRepository: TransactionRepository
 
     @BeforeAll
     fun setUp() {
-        val databaseUri = URI(System.getenv("DATABASE_URL")!!)
-
-        transactionRepository = TransactionRepository(
-            PGSimpleDataSource().apply {
-                setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
-                user = databaseUri.userInfo.split(":")[0]
-                password = databaseUri.userInfo.split(":")[1]
-            }
-        )
+        transactionRepository = TransactionRepository(dataSource)
     }
 
     @Test

@@ -1,31 +1,18 @@
 package me.madhead.tyzenhaus.repository.postgresql.balance
 
-import java.net.URI
 import me.madhead.tyzenhaus.entity.balance.Balance
+import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.postgresql.ds.PGSimpleDataSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
-class BalanceRepositoryTest {
+class BalanceRepositoryTest : AbstractRepositoryTest() {
     private lateinit var balanceRepository: BalanceRepository
 
     @BeforeAll
     fun setUp() {
-        val databaseUri = URI(System.getenv("DATABASE_URL")!!)
-
-        balanceRepository = BalanceRepository(
-            PGSimpleDataSource().apply {
-                setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
-                user = databaseUri.userInfo.split(":")[0]
-                password = databaseUri.userInfo.split(":")[1]
-            }
-        )
+        balanceRepository = BalanceRepository(dataSource)
     }
 
     @Test

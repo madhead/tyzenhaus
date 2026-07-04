@@ -1,11 +1,11 @@
 package me.madhead.tyzenhaus.repository.postgresql.supergroup
 
-import java.net.URI
 import java.time.Instant
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository
 import me.madhead.tyzenhaus.repository.postgresql.dialog.state.DialogStateRepository
 import me.madhead.tyzenhaus.repository.postgresql.group.config.GroupConfigRepository
@@ -13,14 +13,9 @@ import me.madhead.tyzenhaus.repository.postgresql.transaction.TransactionReposit
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.postgresql.ds.PGSimpleDataSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
-class SupergroupRepositoryTest {
+class SupergroupRepositoryTest : AbstractRepositoryTest() {
     private lateinit var supergroupRepository: SupergroupRepository
     private lateinit var groupConfigRepository: GroupConfigRepository
     private lateinit var dialogStateRepository: DialogStateRepository
@@ -29,13 +24,6 @@ class SupergroupRepositoryTest {
 
     @BeforeAll
     fun setUp() {
-        val databaseUri = URI(System.getenv("DATABASE_URL")!!)
-        val dataSource = PGSimpleDataSource().apply {
-            setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
-            user = databaseUri.userInfo.split(":")[0]
-            password = databaseUri.userInfo.split(":")[1]
-        }
-
         supergroupRepository = SupergroupRepository(dataSource)
         groupConfigRepository = GroupConfigRepository(dataSource)
         dialogStateRepository = DialogStateRepository(dataSource)

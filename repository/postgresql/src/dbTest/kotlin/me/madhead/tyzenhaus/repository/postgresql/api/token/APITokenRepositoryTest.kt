@@ -1,34 +1,21 @@
 package me.madhead.tyzenhaus.repository.postgresql.api.token
 
-import java.net.URI
 import java.time.Instant
 import java.util.UUID
 import me.madhead.tyzenhaus.entity.api.token.APIToken
 import me.madhead.tyzenhaus.entity.api.token.Scope
+import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.postgresql.ds.PGSimpleDataSource
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("db")
-class APITokenRepositoryTest {
+class APITokenRepositoryTest : AbstractRepositoryTest() {
     private lateinit var apiTokenRepository: APITokenRepository
 
     @BeforeAll
     fun setUp() {
-        val databaseUri = URI(System.getenv("DATABASE_URL")!!)
-
-        apiTokenRepository = APITokenRepository(
-            PGSimpleDataSource().apply {
-                setUrl("jdbc:postgresql://${databaseUri.host}:${databaseUri.port}${databaseUri.path}")
-                user = databaseUri.userInfo.split(":")[0]
-                password = databaseUri.userInfo.split(":")[1]
-            }
-        )
+        apiTokenRepository = APITokenRepository(dataSource)
     }
 
     @Test
