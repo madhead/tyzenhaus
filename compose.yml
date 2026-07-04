@@ -1,0 +1,36 @@
+name: tyzenhaus
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: tyzenhaus
+      POSTGRES_USER: tyzenhaus
+      POSTGRES_PASSWORD: tyzenhaus
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U tyzenhaus -d tyzenhaus" ]
+      interval: 1s
+      timeout: 5s
+      retries: 30
+
+  migrate:
+    image: liquibase/liquibase:5.0.3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./repository/postgresql/src/main:/liquibase/changelog:ro
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        set -e
+        lpm add postgresql --global
+        liquibase \
+          --search-path=/liquibase/changelog \
+          update \
+          --changelog-file=liquibase/changelog.yml \
+          --url=jdbc:postgresql://postgres:5432/tyzenhaus \
+          --username=tyzenhaus \
+          --password=tyzenhaus
