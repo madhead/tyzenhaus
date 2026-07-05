@@ -5,13 +5,14 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch:
 
+permissions: { }
+
 jobs:
   backup:
     name: DB backup
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt install wireguard-tools
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: sudo apt-get update && sudo apt-get install -y wireguard-tools
       - run: printf "${{ secrets.FLY_WG_CONF }}" | sudo tee /etc/wireguard/fly.conf
       - run: wg-quick up fly
       - run: >-

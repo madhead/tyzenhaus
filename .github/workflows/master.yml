@@ -6,23 +6,30 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   build-policies:
     name: Build policies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: gradle/actions/wrapper-validation@v4
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: policies
           path: |
@@ -34,13 +41,15 @@ jobs:
     needs:
       - build-policies
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
           node-version-file: 'mini-app/.nvmrc'
-      - run: yarn install
+          cache: 'yarn'
+          cache-dependency-path: 'mini-app/yarn.lock'
+      - run: yarn install --immutable
         working-directory: mini-app
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: policies
       - run: |
@@ -48,7 +57,7 @@ jobs:
       - run: yarn run build
         working-directory: mini-app
       - run: tar -cvf mini-app.tar mini-app/build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: mini-app
           path: |
@@ -58,22 +67,31 @@ jobs:
     name: Build backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: gradle/actions/wrapper-validation@v4
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - run: ./gradlew clean :launcher:fly:installDist
       - run: tar -cvf backend.tar launcher/fly/build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: backend
           path: |
             backend.tar
+
+  tests:
+    name: Tests
+    uses: ./.github/workflows/tests.yml
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    secrets: inherit
 
   deploy-flyio:
     name: Fly.io deployment
@@ -81,36 +99,41 @@ jobs:
     needs:
       - build-mini-app
       - build-backend
+      - tests
+    permissions:
+      contents: read
+      packages: write
     environment:
       name: fly.io
       url: https://tyzenhaus.fly.dev
     steps:
-      - uses: actions/checkout@v4
-      - uses: madhead/read-java-properties@latest
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: madhead/read-java-properties@8f47787e3eac3c6e7db5f4bed40b79def6ecd17c
         id: project-version
         with:
           file: gradle.properties
           property: version
-      - uses: madhead/semver-utils@latest
+      - uses: madhead/semver-utils@4cf918affe9106ea59f86c6250e5ec4570ac4389
         id: version
         with:
           version: ${{ steps.project-version.outputs.value }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: mini-app
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: backend
       - run: |
           tar xvf mini-app.tar
           tar xvf backend.tar
           mv mini-app/build launcher/fly/build/mini-app
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c
+      - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
           context: launcher/fly
           push: true
@@ -119,7 +142,9 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }},
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }},
             ghcr.io/${{ github.repository }}:latest
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - uses: superfly/flyctl-actions/setup-flyctl@fc53c09e1bc3be6f54706524e3b82c4f462f77be
       - run: >-
           flyctl deploy
           --app tyzenhaus
@@ -127,9 +152,3 @@ jobs:
           --image ghcr.io/${{ github.repository }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - run: >-
-          curl
-          -X POST
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/setWebhook
-          --header "Content-Type: application/json"
-          --data '{ "url": "https://tyzenhaus.fly.dev/${{ secrets.TELEGRAM_BOT_TOKEN }}" }'

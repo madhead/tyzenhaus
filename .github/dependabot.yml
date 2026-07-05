@@ -1,20 +1,40 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - madhead
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "daily"
     assignees:
       - madhead
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    assignees:
-      - madhead
+    groups:
+      gradle:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
   - package-ecosystem: "npm"
     directory: "/mini-app"
     schedule:
       interval: "daily"
     assignees:
       - madhead
+    groups:
+      npm:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
