@@ -57,19 +57,19 @@ class I18NTest {
         Arguments.of(
             "message.formatted",
             Locale("en"),
-            arrayOf(3, "a disturbance in the Force"),
+            arrayOf<Any?>(3, "a disturbance in the Force"),
             "There was a disturbance in the Force on planet 3"
         ),
         Arguments.of(
             "message.formatted",
             Locale("de"),
-            arrayOf(3, "a disturbance in the Force"),
+            arrayOf<Any?>(3, "a disturbance in the Force"),
             "There was a disturbance in the Force on planet 3"
         ),
         Arguments.of(
             "message.formatted",
             Locale("ru"),
-            arrayOf(3, "возмущение в Силе"),
+            arrayOf<Any?>(3, "возмущение в Силе"),
             "На планете 3 было возмущение в Силе"
         ),
     ).stream()
