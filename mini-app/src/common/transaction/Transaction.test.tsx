@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import moment from "moment";
 import { describe, expect, it } from "vitest";
+import dayjs from "../../datetime";
 import TransactionCard, { Transaction } from "./Transaction";
 
 function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
@@ -34,7 +34,7 @@ describe("TransactionCard", () => {
             const timestamp = Date.UTC(2024, 0, 5, 12, 0, 0);
             render(<TransactionCard {...makeTransaction({ timestamp })} />);
 
-            const m = moment(timestamp);
+            const m = dayjs(timestamp);
             expect(screen.getByText(m.format("MMM"))).toBeInTheDocument();
             expect(screen.getByText(m.format("DD"))).toBeInTheDocument();
         });
@@ -44,7 +44,7 @@ describe("TransactionCard", () => {
             const { container } = render(<TransactionCard {...makeTransaction({ timestamp })} />);
 
             const el = container.querySelector(".timestamp");
-            expect(el).toHaveAttribute("title", moment(timestamp).format("llll"));
+            expect(el).toHaveAttribute("title", dayjs(timestamp).format("llll"));
         });
     });
 

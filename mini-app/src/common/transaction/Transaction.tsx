@@ -1,6 +1,6 @@
-import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
+import dayjs from "../../datetime";
 import "./Transaction.less";
 
 export type Transaction = {
@@ -27,7 +27,7 @@ export default function TransactionCard(transaction: Transaction) {
 }
 
 function Timestamp({ timestamp }: { timestamp: number }) {
-    const m = moment(timestamp);
+    const m = dayjs(timestamp);
 
     return (
         <div className="timestamp" title={m.format("llll")}>
