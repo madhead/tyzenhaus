@@ -802,21 +802,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twa-dev/sdk@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "@twa-dev/sdk@npm:7.8.0"
+"@twa-dev/sdk@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "@twa-dev/sdk@npm:8.0.2"
   dependencies:
-    "@twa-dev/types": "npm:^7.8.0"
+    "@twa-dev/types": "npm:^8.0.1"
   peerDependencies:
-    react: ">=16.0.0"
-  checksum: 10/f113c48e3a22a9fca04f9906d518da3a121fcb091dc318f9fbee126c835ea2415113dcac9763a4b8dbaf134a7b474626bc16c23b03a351b9ae3b32aa9b2e00cf
+    react: ^18.0.0 || ^19.0.0
+  checksum: 10/f05dd03c5802dcd727597da61252bad38d728b64f99b09313b263d6c15549bd86612b499208d661f7b4ffc0d9865787711f470065c54a292f3f6a1c30e0f1bb7
   languageName: node
   linkType: hard
 
-"@twa-dev/types@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "@twa-dev/types@npm:7.8.0"
-  checksum: 10/62488c11d62e796b21cb3b28e09ff90373e467773daac4f1de837cfea65bbcbbfaf44152bdba81a28a5f4709f3e4c4ecbf571ee19bc301d9e98ef1b1f015aac9
+"@twa-dev/types@npm:^8.0.1":
+  version: 8.0.2
+  resolution: "@twa-dev/types@npm:8.0.2"
+  checksum: 10/8a239924135f0c4717d24b0b97491a1cbba3eedab38563e287709d03b76a9ef9786ba14b3ea399d85e27bc5f6c3fb80231e84e71bf157c5b2e3c1343911c8c12
   languageName: node
   linkType: hard
 
@@ -3797,7 +3797,7 @@ __metadata:
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.2"
-    "@twa-dev/sdk": "npm:^7.8.0"
+    "@twa-dev/sdk": "npm:^8.0.2"
     "@types/eslint-plugin-jsx-a11y": "npm:^6"
     "@types/node": "npm:^24"
     "@types/react": "npm:^18.3.4"
