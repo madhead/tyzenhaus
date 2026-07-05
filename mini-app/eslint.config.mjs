@@ -40,10 +40,18 @@ export default defineConfig(
     },
 
     {
-        files: ["webpack/**/*.ts"],
+        files: ["webpack/**/*.ts", "vitest.config.ts"],
         extends: [tseslint.configs.recommended],
         languageOptions: {
             globals: globals.node,
+        },
+    },
+
+    {
+        files: ["vitest.setup.ts"],
+        extends: [tseslint.configs.recommended],
+        languageOptions: {
+            globals: globals.browser,
         },
     },
 
