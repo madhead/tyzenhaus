@@ -1,11 +1,11 @@
 import "./Error.less";
 
 type ErrorProps = {
-  error: string;
+    error: string;
 };
 
 function Error({ error }: ErrorProps) {
-  return <div id="error">{error}</div>;
+    return <div id="error">{error}</div>;
 }
 
 export default Error;

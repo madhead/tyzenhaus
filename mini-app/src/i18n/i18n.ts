@@ -18,7 +18,7 @@ const languageDetector = new LanguageDetector(null, {
     order: ["htmlTag"],
 });
 
-i18next.use(httpBackend).use(languageDetector).use(initReactI18next).init({
+void i18next.use(httpBackend).use(languageDetector).use(initReactI18next).init({
     fallbackLng: "en",
 });
 

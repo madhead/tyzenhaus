@@ -1,11 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "strict": true,
-    "lib": ["dom", "es5"],
-    "jsx": "react-jsx"
-  }
+    "compilerOptions": {
+        "target": "es2022",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "jsx": "react-jsx"
+    },
+
+    "ts-node": {
+        "compilerOptions": {
+            "module": "commonjs",
+            "moduleResolution": "node"
+        }
+    }
 }
