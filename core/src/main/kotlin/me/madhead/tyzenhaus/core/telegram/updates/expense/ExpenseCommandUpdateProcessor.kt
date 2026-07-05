@@ -5,7 +5,7 @@ import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.MarkdownV2
-import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
+import dev.inmo.tgbotapi.types.message.abstracts.CommonContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -35,7 +35,7 @@ class ExpenseCommandUpdateProcessor(
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
-        val message = update.data as? CommonMessage<*> ?: return null
+        val message = update.data as? CommonContentMessage<*> ?: return null
         val content = message.content as? TextContent ?: return null
 
         if (content.textSources.none { "expense" == (it as? BotCommandTextSource)?.command }) return null

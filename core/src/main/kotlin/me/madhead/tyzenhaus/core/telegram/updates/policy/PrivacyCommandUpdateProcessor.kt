@@ -6,7 +6,7 @@ import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineK
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.chat.ExtendedBot
 import dev.inmo.tgbotapi.types.message.MarkdownV2
-import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
+import dev.inmo.tgbotapi.types.message.abstracts.CommonContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.update.MessageUpdate
@@ -38,8 +38,8 @@ class PrivacyCommandUpdateProcessor(
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
-        val message = update.data as? CommonMessage<*> ?: return null
-        val content = (message as? CommonMessage<*>)?.content as? TextContent ?: return null
+        val message = update.data as? CommonContentMessage<*> ?: return null
+        val content = (message as? CommonContentMessage<*>)?.content as? TextContent ?: return null
 
         return if (content.textSources.any { "privacy" == (it as? BotCommandTextSource)?.command }) {
             {
