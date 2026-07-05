@@ -8,7 +8,7 @@ import prettier from "eslint-config-prettier";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig(
-    globalIgnores(["build/**", ".yarn/**", ".pnp.cjs", ".pnp.loader.mjs"]),
+    globalIgnores(["build/**", ".yarn/**", "node_modules/**"]),
 
     js.configs.recommended,
 
@@ -40,7 +40,7 @@ export default defineConfig(
     },
 
     {
-        files: ["webpack/**/*.ts", "vitest.config.ts"],
+        files: ["vite.config.ts", "vitest.config.ts"],
         extends: [tseslint.configs.recommended],
         languageOptions: {
             globals: globals.node,
