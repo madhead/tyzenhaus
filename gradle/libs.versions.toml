@@ -7,7 +7,7 @@ plugin-asciidoctor = "4.0.3"
 
 kotlin = "2.0.20"
 kotlinx-coroutines = "1.8.1"
-ktor = "2.3.12"
+ktor = "3.5.1"
 koin = "3.5.6"
 kotlinx-serialization = "1.7.1"
 tgbotapi = "17.0.0"
