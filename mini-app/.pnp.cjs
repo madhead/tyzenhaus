@@ -6436,12 +6436,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["launch-editor", [\
-      ["npm:2.8.0", {\
-        "packageLocation": "./.yarn/cache/launch-editor-npm-2.8.0-4c524f1ef3-495009163f.zip/node_modules/launch-editor/",\
+      ["npm:2.14.1", {\
+        "packageLocation": "./.yarn/cache/launch-editor-npm-2.14.1-72c53f4965-335d12ca43.zip/node_modules/launch-editor/",\
         "packageDependencies": [\
-          ["launch-editor", "npm:2.8.0"],\
-          ["picocolors", "npm:1.0.1"],\
-          ["shell-quote", "npm:1.8.1"]\
+          ["launch-editor", "npm:2.14.1"],\
+          ["picocolors", "npm:1.1.1"],\
+          ["shell-quote", "npm:1.9.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8781,10 +8781,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["shell-quote", [\
-      ["npm:1.8.1", {\
-        "packageLocation": "./.yarn/cache/shell-quote-npm-1.8.1-fcccf06093-af19ab5a1e.zip/node_modules/shell-quote/",\
+      ["npm:1.9.0", {\
+        "packageLocation": "./.yarn/cache/shell-quote-npm-1.9.0-50e37d57df-c3bc91e74a.zip/node_modules/shell-quote/",\
         "packageDependencies": [\
-          ["shell-quote", "npm:1.8.1"]\
+          ["shell-quote", "npm:1.9.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10380,7 +10380,7 @@ const RAW_RUNTIME_STATE =
           ["html-entities", "npm:2.5.2"],\
           ["http-proxy-middleware", "virtual:05095483b205c1a0a2a15da9e79500d97535f3e6efa0ce76305451f26fcca002d6ad7f973c5316af7cfa8f40e5eb003f41fcebf26b7d62a125a6927fcbed5999#npm:2.0.6"],\
           ["ipaddr.js", "npm:2.2.0"],\
-          ["launch-editor", "npm:2.8.0"],\
+          ["launch-editor", "npm:2.14.1"],\
           ["open", "npm:10.1.0"],\
           ["p-retry", "npm:6.2.0"],\
           ["rimraf", "npm:5.0.9"],\
