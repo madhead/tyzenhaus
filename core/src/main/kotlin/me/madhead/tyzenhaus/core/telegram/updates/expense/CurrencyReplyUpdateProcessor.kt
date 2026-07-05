@@ -5,7 +5,7 @@ import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ReplyParameters
 import dev.inmo.tgbotapi.types.buttons.ReplyForce
 import dev.inmo.tgbotapi.types.message.MarkdownV2
-import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
+import dev.inmo.tgbotapi.types.message.abstracts.CommonContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
@@ -36,7 +36,7 @@ class CurrencyReplyUpdateProcessor(
     override suspend fun process(update: Update, groupConfig: GroupConfig?, dialogState: DialogState?): UpdateReaction? {
         @Suppress("NAME_SHADOWING")
         val update = update as? MessageUpdate ?: return null
-        val message = update.data as? CommonMessage<*> ?: return null
+        val message = update.data as? CommonContentMessage<*> ?: return null
 
         @Suppress("NAME_SHADOWING")
         val dialogState = dialogState as? WaitingForCurrency ?: return null
