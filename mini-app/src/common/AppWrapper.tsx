@@ -26,7 +26,7 @@ function AuthWrapper({ children }: AuthWrapperProps) {
 
     useEffect(() => {
         async function authenticate() {
-            let response = await fetch("/app/api/auth/validation", {
+            const response = await fetch("/app/api/auth/validation", {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${WebApp.initDataUnsafe.start_param}`,
@@ -40,8 +40,8 @@ function AuthWrapper({ children }: AuthWrapperProps) {
             }
         }
 
-        authenticate();
-    }, [WebApp, WebApp.initData, WebApp.initDataUnsafe, WebApp.initDataUnsafe.start_param]);
+        void authenticate();
+    }, []);
 
     const { t } = useTranslation();
 
