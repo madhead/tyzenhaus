@@ -8,6 +8,5 @@ build
 out
 
 .env
-repository/postgresql/src/main/sql/seed.sql
 
 *.private.env.json

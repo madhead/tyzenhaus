@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+rootProject.name = "buildSrc"
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()

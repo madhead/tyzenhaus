@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.net.URI
 import org.gradle.api.plugins.jvm.JvmTestSuite
 

@@ -24,9 +24,9 @@ class TransactionsSearchService(
     private val transactionRepository: TransactionRepository,
 ) {
     /**
-     * Lists transactions of the [group], matching the given [searchParams].
+     * Lists transactions of the [group], matching the given [ignored].
      */
-    fun search(group: Long, searchParams: TransactionsSearchParams): List<Transaction> {
+    fun search(group: Long, ignored: TransactionsSearchParams): List<Transaction> {
         return transactionRepository.search(group)
     }
 }
