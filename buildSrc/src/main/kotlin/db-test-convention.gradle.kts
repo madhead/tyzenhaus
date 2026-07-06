@@ -1,4 +1,4 @@
-import org.gradle.api.plugins.jvm.JvmTestSuite
+@file:Suppress("UnstableApiUsage")
 
 plugins {
     id("kotlin-convention")
@@ -37,6 +37,7 @@ tasks {
                 is DirectoryProperty -> {
                     outputLocation.set(File(reportsDirectory, "dbTest/" + this.name))
                 }
+
                 is RegularFileProperty -> {
                     outputLocation.set(File(reportsDirectory, "dbTest/" + this@register.name + "." + this.name))
                 }

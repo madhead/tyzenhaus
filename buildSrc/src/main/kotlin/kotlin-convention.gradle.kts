@@ -1,6 +1,9 @@
+@file:Suppress("UnstableApiUsage")
+
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -17,6 +20,7 @@ configure<DetektExtension> {
     config.from(files("${rootProject.rootDir}/detekt.yml"))
     buildUponDefaultConfig = false
     source.from(files(projectDir))
+    basePath = rootProject.rootDir.absolutePath
 }
 
 configure<JacocoPluginExtension> {
@@ -45,14 +49,26 @@ tasks {
             jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.get()))
         }
     }
+
     withType<Jar>().configureEach {
         // Workaround for https://stackoverflow.com/q/42174572/750510
         archiveBaseName.set(rootProject.name + "-" + project.path.removePrefix(":").replace(":", "-"))
     }
+
     withType<JacocoReport>().configureEach {
         reports {
             xml.required.set(true)
             html.required.set(true)
+        }
+    }
+
+    withType<Detekt>().configureEach {
+        val sarifReport = sarifReportFile
+        val reportMerge = rootProject.tasks.named<ReportMergeTask>("detektReportMerge")
+
+        finalizedBy(reportMerge)
+        reportMerge.configure {
+            input.from(sarifReport)
         }
     }
 }

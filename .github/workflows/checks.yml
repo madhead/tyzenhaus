@@ -1,0 +1,193 @@
+name: Tests
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check-gradle-version:
+    name: Check Gradle version
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: madhead/check-gradle-version@7714dc78376fe1d030dbb74ddf5ae6118874cbae
+
+  check-mini-app:
+    name: "Mini App checks: ${{ matrix.name }}"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Lint
+            task: lint
+          - name: Format
+            task: format:check
+          - name: Typecheck
+            task: typecheck
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-mini-app
+
+      - run: yarn run ${{ matrix.task }}
+        working-directory: mini-app
+
+  detekt:
+    name: Detekt
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-jvm
+
+      - run: ./gradlew detekt --continue
+
+      - uses: github/codeql-action/upload-sarif@c35d1b164463ee62a100735382aaaa525c5d3496
+        if: always()
+        with:
+          sarif_file: build/reports/detekt/merge.sarif
+          category: detekt
+
+  test-mini-app:
+    name: Mini App tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-mini-app
+
+      - run: yarn run test:coverage
+        working-directory: mini-app
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: test-mini-app-results
+          retention-days: 1
+          path: |
+            mini-app/build/coverage
+            mini-app/build/test-results
+
+  test-jvm:
+    name: JVM tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-jvm
+
+      - run: ./gradlew check -x detekt jacocoTestReport
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: test-jvm-results
+          retention-days: 1
+          path: |
+            **/build/reports
+            **/build/test-results
+            **/build/jacoco
+
+  test-db:
+    name: DB tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-jvm
+
+      - run: ./gradlew dbTest jacocoDbTestReport
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: test-db-results
+          retention-days: 1
+          path: |
+            **/build/reports
+            **/build/test-results
+            **/build/jacoco
+
+  checks-publish:
+    name: Publish check results
+    runs-on: ubuntu-latest
+    needs:
+      - test-mini-app
+      - test-jvm
+      - test-db
+    if: ${{ !cancelled() }}
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-mini-app-results
+          path: mini-app/build
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-jvm-results
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-db-results
+
+      - uses: mikepenz/action-junit-report@d9f48fc87bc235f7e214acf696ca5abc0a986f16
+        with:
+          check_name: 'Test results'
+          report_paths: |
+            **/test-results/**/TEST-*.xml
+            mini-app/build/test-results/junit.xml
+
+  codecov:
+    name: CodeCov
+    runs-on: ubuntu-latest
+    needs:
+      - test-mini-app
+      - test-jvm
+      - test-db
+    if: ${{ !cancelled() }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-mini-app-results
+          path: mini-app/build
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-jvm-results
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: test-db-results
+
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: backend
+          files: '**/build/reports/jacoco/**/*.xml'
+
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: mini-app
+          files: 'mini-app/build/coverage/lcov.info'
+
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          files: '**/test-results/**/TEST-*.xml'

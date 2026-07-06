@@ -1,0 +1,13 @@
+name: 'Setup JVM'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92
+
+    - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92

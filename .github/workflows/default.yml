@@ -14,62 +14,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-gradle-version:
-    name: Check Gradle version
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: madhead/check-gradle-version@7714dc78376fe1d030dbb74ddf5ae6118874cbae
-    continue-on-error: true
-
-  build-policies:
-    name: Build policies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-      - uses: gradle/actions/wrapper-validation@3f131e8634966bd73d06cc69884922b02e6faf92
-      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-      - run: ./gradlew :policies:privacy
-      - run: tar -cvf policies.tar policies/build
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: policies
-          path: |
-            policies.tar
-
-  build-mini-app:
-    name: Build Mini App
-    runs-on: ubuntu-latest
-    needs:
-      - build-policies
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version-file: 'mini-app/.node-version'
-          cache: 'yarn'
-          cache-dependency-path: 'mini-app/yarn.lock'
-      - run: yarn install --immutable
-        working-directory: mini-app
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
-        with:
-          name: policies
-      - run: |
-          tar xvf policies.tar
-      - run: yarn run build
-        working-directory: mini-app
-
-  tests:
-    name: Tests
-    uses: ./.github/workflows/tests.yml
+  checks:
+    name: Checks
+    uses: ./.github/workflows/checks.yml
+    secrets: inherit
     permissions:
       contents: read
       checks: write
       pull-requests: write
-    secrets: inherit
+      security-events: write
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: ./.github/actions/setup-jvm
+
+      - run: ./gradlew :policies:privacy :launcher:fly:installDist
+
+      - uses: ./.github/actions/setup-mini-app
+
+      - run: yarn run build
+        working-directory: mini-app

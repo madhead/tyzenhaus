@@ -6,6 +6,7 @@ plugins {
 
 tasks {
     register<AsciidoctorTask>("privacy") {
+        description = "Build privacy policy"
         setSourceDir(file("src/main/asciidoc"))
         sources {
             include("privacy.adoc")

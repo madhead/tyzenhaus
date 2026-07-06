@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import "dayjs/locale/pt";
 import "dayjs/locale/ru";
-import localizedFormat from "dayjs/plugin/localizedFormat"; // enables the "llll" token
+import localizedFormat from "dayjs/plugin/localizedFormat";
 
 dayjs.extend(localizedFormat);
 
-export default dayjs; // "en" is built into the core, no import needed
+export default dayjs;
