@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.tgbotapi)
     implementation(libs.postgresql)
+    implementation(libs.hikari)
     implementation(libs.log4j.slf4j.impl)
     implementation(libs.micrometer.registry.prometheus)
     implementation(projects.repository.postgresql)

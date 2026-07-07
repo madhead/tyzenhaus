@@ -12,6 +12,7 @@ koin = "4.2.2"
 kotlinx-serialization = "1.11.0"
 tgbotapi = "35.1.0"
 postgresql = "42.7.13"
+hikari = "7.1.0"
 log4j = "2.26.1"
 micrometer = "1.17.0"
 junit = "5.11.0"
@@ -36,6 +37,7 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 tgbotapi = { module = "dev.inmo:tgbotapi", version.ref = "tgbotapi" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
