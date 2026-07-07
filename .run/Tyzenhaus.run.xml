@@ -1,0 +1,36 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tyzenhaus" type="KtorApplicationConfigurationType" factoryName="Ktor">
+    <option name="MAIN_CLASS_NAME" value="me.madhead.tyzenhaus.launcher.fly.TyzenhausKt" />
+    <module name="tyzenhaus.launcher.fly.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="me.madhead.tyzenhaus.launcher.fly.*" />
+        <option name="ENABLED" value="false" />
+      </pattern>
+    </extension>
+    <extension name="net.ashald.envfile">
+      <option name="IS_ENABLED" value="true" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+      <option name="IS_IGNORE_MISSING_FILES" value="false" />
+      <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+      <ENTRIES>
+        <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="launcher/fly/local.env" />
+      </ENTRIES>
+    </extension>
+    <option name="alternativeJrePath" />
+    <option name="alternativeJrePathEnabled" value="false" />
+    <option name="includeProvidedScope" value="false" />
+    <option name="mainClass" value="me.madhead.tyzenhaus.launcher.fly.TyzenhausKt" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" value="" />
+    <option name="shortenCommandLine" />
+    <option name="vmParameters" />
+    <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="compose.yml" run_configuration_type="docker-deploy" />
+    </method>
+  </configuration>
+</component>
