@@ -19,7 +19,7 @@ class GroupConfigRepository(dataSource: DataSource)
     override fun get(id: Long): GroupConfig? {
         logger.debug("get {}", id)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
                 .use { preparedStatement ->
@@ -35,7 +35,7 @@ class GroupConfigRepository(dataSource: DataSource)
     override fun save(entity: GroupConfig) {
         logger.debug("save {}", entity)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("""
                         INSERT INTO "group_config" ("id", "invited_by", "invited_at", "language", "members")

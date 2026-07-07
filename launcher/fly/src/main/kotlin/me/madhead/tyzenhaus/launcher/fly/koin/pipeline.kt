@@ -98,6 +98,7 @@ val pipelineModule = module {
     single {
         ConfirmationOKCallbackQueryUpdateProcessor(
             requestsExecutor = get(),
+            transactionManager = get(),
             dialogStateRepository = get(),
             transactionRepository = get(),
             balanceRepository = get(),

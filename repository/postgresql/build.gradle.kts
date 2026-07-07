@@ -16,6 +16,7 @@ dependencies {
     api(projects.entity)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.log4j.api)
 
     liquibaseRuntime(libs.liquibase.core)
@@ -27,6 +28,8 @@ testing {
     suites {
         named<JvmTestSuite>("dbTest") {
             dependencies {
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.postgresql)
                 implementation(libs.testcontainers.postgresql)
                 implementation(libs.liquibase.core)

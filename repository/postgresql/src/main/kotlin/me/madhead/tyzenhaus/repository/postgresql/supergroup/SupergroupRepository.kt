@@ -17,7 +17,7 @@ class SupergroupRepository(dataSource: DataSource)
     override fun update(from: Long, to: Long) {
         logger.debug("update {} -> {}", from, to)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection.autoCommit = false
             connection.transactionIsolation = TRANSACTION_SERIALIZABLE
 

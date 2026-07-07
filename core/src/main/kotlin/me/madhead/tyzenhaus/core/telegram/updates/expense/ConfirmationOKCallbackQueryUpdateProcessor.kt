@@ -27,6 +27,7 @@ import me.madhead.tyzenhaus.entity.transaction.Transaction
 import me.madhead.tyzenhaus.i18.I18N
 import me.madhead.tyzenhaus.repository.BalanceRepository
 import me.madhead.tyzenhaus.repository.DialogStateRepository
+import me.madhead.tyzenhaus.repository.TransactionManager
 import me.madhead.tyzenhaus.repository.TransactionRepository
 import org.apache.logging.log4j.LogManager
 
@@ -35,6 +36,7 @@ import org.apache.logging.log4j.LogManager
  */
 class ConfirmationOKCallbackQueryUpdateProcessor(
     private val requestsExecutor: RequestsExecutor,
+    private val transactionManager: TransactionManager,
     private val dialogStateRepository: DialogStateRepository,
     private val transactionRepository: TransactionRepository,
     private val balanceRepository: BalanceRepository,
@@ -77,21 +79,23 @@ class ConfirmationOKCallbackQueryUpdateProcessor(
 
             logger.debug("Creating shared expense: {}", transaction)
 
-            val balance = balanceRepository.get(update.groupId) ?: Balance(update.groupId)
-            val groupBalance = balance.balance.toMutableMap()
-            val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
-            val share = transaction.amount.setScale(@Suppress("MagicNumber") 6, RoundingMode.HALF_UP) /
-                transaction.recipients.size.toBigDecimal()
+            transactionManager.transaction {
+                val balance = balanceRepository.get(update.groupId) ?: Balance(update.groupId)
+                val groupBalance = balance.balance.toMutableMap()
+                val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
+                val share = transaction.amount.setScale(@Suppress("MagicNumber") 6, RoundingMode.HALF_UP) /
+                    transaction.recipients.size.toBigDecimal()
 
-            currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
-            transaction.recipients.forEach { recipient ->
-                currencyBalance[recipient] = (currencyBalance[recipient] ?: BigDecimal.ZERO) - share
+                currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
+                transaction.recipients.forEach { recipient ->
+                    currencyBalance[recipient] = (currencyBalance[recipient] ?: BigDecimal.ZERO) - share
+                }
+                groupBalance[transaction.currency] = currencyBalance
+
+                balanceRepository.save(balance.copy(balance = groupBalance))
+                transactionRepository.save(transaction)
+                dialogStateRepository.delete(update.groupId, dialogState.userId)
             }
-            groupBalance[transaction.currency] = currencyBalance
-
-            balanceRepository.save(balance.copy(balance = groupBalance))
-            transactionRepository.save(transaction)
-            dialogStateRepository.delete(update.groupId, dialogState.userId)
 
             val members = (transaction.recipients + transaction.payer).toSet()
             val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }

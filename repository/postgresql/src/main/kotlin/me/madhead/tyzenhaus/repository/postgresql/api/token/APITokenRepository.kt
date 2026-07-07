@@ -20,7 +20,7 @@ class APITokenRepository(dataSource: DataSource)
     override fun get(id: UUID): APIToken? {
         logger.debug("get {}", id)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("""SELECT * FROM "api_token" WHERE "token" = ?;""")
                 .use { preparedStatement ->
@@ -36,21 +36,19 @@ class APITokenRepository(dataSource: DataSource)
     override fun save(entity: APIToken) {
         logger.debug("save {}", entity)
 
-        dataSource
-            .connection
-            .use { connection ->
-                connection
-                    .prepareStatement("""
-                                INSERT INTO "api_token" ("token", "group_id", "scope", "valid_until")
-                                VALUES (?, ?, ?, ?)
-                            """.trimIndent())
-                    .use { preparedStatement ->
-                        preparedStatement.setObject(@Suppress("MagicNumber") 1, entity.token)
-                        preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.groupId)
-                        preparedStatement.setString(@Suppress("MagicNumber") 3, entity.scope.name)
-                        preparedStatement.setTimestamp(@Suppress("MagicNumber") 4, Timestamp.from(entity.validUntil))
-                        preparedStatement.executeUpdate()
-                    }
-            }
+        withConnection { connection ->
+            connection
+                .prepareStatement("""
+                            INSERT INTO "api_token" ("token", "group_id", "scope", "valid_until")
+                            VALUES (?, ?, ?, ?)
+                        """.trimIndent())
+                .use { preparedStatement ->
+                    preparedStatement.setObject(@Suppress("MagicNumber") 1, entity.token)
+                    preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.groupId)
+                    preparedStatement.setString(@Suppress("MagicNumber") 3, entity.scope.name)
+                    preparedStatement.setTimestamp(@Suppress("MagicNumber") 4, Timestamp.from(entity.validUntil))
+                    preparedStatement.executeUpdate()
+                }
+        }
     }
 }

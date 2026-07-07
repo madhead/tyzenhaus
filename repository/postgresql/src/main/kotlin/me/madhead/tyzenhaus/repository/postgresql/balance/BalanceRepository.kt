@@ -20,7 +20,7 @@ class BalanceRepository(dataSource: DataSource)
     override fun get(id: Long): Balance? {
         logger.debug("get {}", id)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("SELECT * FROM balance WHERE group_id = ?;")
                 .use { preparedStatement ->
@@ -36,23 +36,21 @@ class BalanceRepository(dataSource: DataSource)
     override fun save(entity: Balance) {
         logger.debug("save {}", entity)
 
-        dataSource
-            .connection
-            .use { connection ->
-                connection
-                    .prepareStatement("""
-                                INSERT INTO balance ("group_id", "version", "balance")
-                                VALUES (?, ?, ?::jsonb)
-                                ON CONFLICT ("group_id", "version")
-                                    DO UPDATE SET "version" = EXCLUDED."version" + 1,
-                                                  "balance" = EXCLUDED."balance";
-                            """.trimIndent())
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
-                        preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.version)
-                        preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
-                        preparedStatement.executeUpdate()
-                    }
-            }
+        withConnection { connection ->
+            connection
+                .prepareStatement("""
+                            INSERT INTO balance ("group_id", "version", "balance")
+                            VALUES (?, ?, ?::jsonb)
+                            ON CONFLICT ("group_id", "version")
+                                DO UPDATE SET "version" = EXCLUDED."version" + 1,
+                                              "balance" = EXCLUDED."balance";
+                        """.trimIndent())
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
+                    preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.version)
+                    preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
+                    preparedStatement.executeUpdate()
+                }
+        }
     }
 }

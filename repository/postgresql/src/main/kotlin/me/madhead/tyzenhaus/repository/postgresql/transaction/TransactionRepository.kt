@@ -19,7 +19,7 @@ class TransactionRepository(dataSource: DataSource)
     override fun get(id: Long): Transaction? {
         logger.debug("get {}", id)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("""SELECT * FROM "transaction" WHERE "id" = ?;""")
                 .use { preparedStatement ->
@@ -38,7 +38,7 @@ class TransactionRepository(dataSource: DataSource)
     override fun save(entity: Transaction) {
         logger.debug("save {}", entity)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             if (entity.id == null) {
                 connection
                     .prepareStatement("""
@@ -95,7 +95,7 @@ class TransactionRepository(dataSource: DataSource)
     override fun groupCurrencies(groupId: Long): List<String> {
         logger.debug("groupCurrencies {}", groupId)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("""SELECT DISTINCT("currency") FROM "transaction" WHERE "group_id" = ?;""")
                 .use { preparedStatement ->
@@ -110,7 +110,7 @@ class TransactionRepository(dataSource: DataSource)
     override fun search(groupId: Long): List<Transaction> {
         logger.debug("search {}", groupId)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             connection
                 .prepareStatement("""SELECT * FROM "transaction" WHERE "group_id" = ? ORDER BY "timestamp" DESC;""")
                 .use { preparedStatement ->

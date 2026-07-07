@@ -13,7 +13,9 @@ import me.madhead.tyzenhaus.repository.DialogStateRepository
 import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import me.madhead.tyzenhaus.repository.MetricsRepository
 import me.madhead.tyzenhaus.repository.SupergroupRepository
+import me.madhead.tyzenhaus.repository.TransactionManager
 import me.madhead.tyzenhaus.repository.TransactionRepository
+import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlTransactionManager
 import org.koin.dsl.module
 import me.madhead.tyzenhaus.repository.postgresql.api.token.APITokenRepository as PostgreSQLAPITokenRepository
 import me.madhead.tyzenhaus.repository.postgresql.balance.BalanceRepository as PostgreSQLBalanceRepository
@@ -39,6 +41,10 @@ val dbModule = module {
                 password = userInfo.getOrNull(1)?.urlDecoded()
             }
         )
+    }
+
+    single<TransactionManager> {
+        PostgreSqlTransactionManager(get())
     }
 
     single<GroupConfigRepository> {

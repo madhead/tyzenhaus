@@ -46,7 +46,7 @@ class MetricsRepository(dataSource: DataSource)
         }
 
     private fun <T> execute(sql: String, action: (ResultSet) -> T): T {
-        return dataSource.connection.use { connection ->
+        return withConnection { connection ->
             connection
                 .prepareStatement(sql)
                 .use { statement ->
