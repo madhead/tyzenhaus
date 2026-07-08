@@ -16,23 +16,23 @@ class GroupConfigRepository(dataSource: DataSource)
         private val logger = LogManager.getLogger(GroupConfigRepository::class.java)!!
     }
 
-    override fun get(id: Long): GroupConfig? {
+    override suspend fun get(id: Long): GroupConfig? {
         logger.debug("get {}", id)
 
-        withConnection { connection ->
+        return withConnection { connection ->
             connection
                 .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@get resultSet.toGroupConfig()
+                        resultSet.toGroupConfig()
                     }
                 }
         }
     }
 
     @Suppress("ComplexMethod")
-    override fun save(entity: GroupConfig) {
+    override suspend fun save(entity: GroupConfig) {
         logger.debug("save {}", entity)
 
         withConnection { connection ->

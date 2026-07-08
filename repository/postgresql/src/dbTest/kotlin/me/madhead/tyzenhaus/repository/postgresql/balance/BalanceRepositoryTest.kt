@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.balance
 
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,7 +17,7 @@ class BalanceRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun get() {
+    fun get() = runTest {
         assertEquals(
             balance,
             balanceRepository.get(1)
@@ -24,12 +25,12 @@ class BalanceRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun getNonExisting() {
+    fun getNonExisting() = runTest {
         assertNull(balanceRepository.get(0))
     }
 
     @Test
-    fun save() {
+    fun save() = runTest {
         balanceRepository.save(
             balance.copy(groupId = -1, version = 1)
         )

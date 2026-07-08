@@ -26,7 +26,7 @@ class TransactionsSearchService(
     /**
      * Lists transactions of the [group], matching the given [ignored].
      */
-    fun search(group: Long, ignored: TransactionsSearchParams): List<Transaction> {
+    suspend fun search(group: Long, ignored: TransactionsSearchParams): List<Transaction> {
         return transactionRepository.search(group)
     }
 }

@@ -17,24 +17,24 @@ class DialogStateRepository(dataSource: DataSource)
         private val json = Json { serializersModule = DialogState.serializers }
     }
 
-    override fun get(groupId: Long, userId: Long): DialogState? {
+    override suspend fun get(groupId: Long, userId: Long): DialogState? {
         logger.debug("get {}@{}", userId, groupId)
 
-        withConnection { connection ->
+        return withConnection { connection ->
             connection
                 .prepareStatement("SELECT * FROM dialog_state WHERE group_id = ? AND user_id = ?;")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@get resultSet.toDialogState(json)
+                        resultSet.toDialogState(json)
                     }
                 }
         }
     }
 
     @Suppress("DuplicatedCode")
-    override fun save(entity: DialogState) {
+    override suspend fun save(entity: DialogState) {
         logger.debug("save {}", entity)
 
         withConnection { connection ->
@@ -54,7 +54,7 @@ class DialogStateRepository(dataSource: DataSource)
         }
     }
 
-    override fun delete(groupId: Long, userId: Long) {
+    override suspend fun delete(groupId: Long, userId: Long) {
         logger.debug("get {}@{}", userId, groupId)
 
         withConnection { connection ->

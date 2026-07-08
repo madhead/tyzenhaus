@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.repository.postgresql.group.config
 
 import java.time.Instant
 import java.util.Locale
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
 import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,7 +19,7 @@ class GroupConfigRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun get() {
+    fun get() = runTest {
         assertEquals(GroupConfig(1, 1, Instant.ofEpochMilli(808174800000), Locale("en")), groupConfigRepository.get(1))
         assertEquals(GroupConfig(2, 2, Instant.ofEpochMilli(808174800000), null), groupConfigRepository.get(2))
         assertEquals(GroupConfig(3, 3, null, null), groupConfigRepository.get(3))
@@ -30,12 +31,12 @@ class GroupConfigRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun getNonExisting() {
+    fun getNonExisting() = runTest {
         assertNull(groupConfigRepository.get(0))
     }
 
     @Test
-    fun save() {
+    fun save() = runTest {
         groupConfigRepository.save(GroupConfig(-1, -1, Instant.ofEpochMilli(808174800000), Locale("by"), setOf(1, 2, 3)))
 
         assertEquals(
@@ -45,7 +46,7 @@ class GroupConfigRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun update() {
+    fun update() = runTest {
         groupConfigRepository.save(GroupConfig(-2))
 
         assertEquals(GroupConfig(-2), groupConfigRepository.get(-2))

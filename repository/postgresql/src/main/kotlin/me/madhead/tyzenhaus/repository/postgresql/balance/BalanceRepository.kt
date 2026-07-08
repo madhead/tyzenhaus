@@ -17,23 +17,23 @@ class BalanceRepository(dataSource: DataSource)
         private val json = Json { encodeDefaults = true }
     }
 
-    override fun get(id: Long): Balance? {
+    override suspend fun get(id: Long): Balance? {
         logger.debug("get {}", id)
 
-        withConnection { connection ->
+        return withConnection { connection ->
             connection
                 .prepareStatement("SELECT * FROM balance WHERE group_id = ?;")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@get resultSet.toBalance(json)
+                        resultSet.toBalance(json)
                     }
                 }
         }
     }
 
     @Suppress("DuplicatedCode")
-    override fun save(entity: Balance) {
+    override suspend fun save(entity: Balance) {
         logger.debug("save {}", entity)
 
         withConnection { connection ->

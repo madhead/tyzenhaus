@@ -2,6 +2,7 @@ package me.madhead.tyzenhaus.repository.postgresql.api.token
 
 import java.time.Instant
 import java.util.UUID
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.api.token.APIToken
 import me.madhead.tyzenhaus.entity.api.token.Scope
 import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
@@ -19,7 +20,7 @@ class APITokenRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun get() {
+    fun get() = runTest {
         assertEquals(
             APIToken(UUID.fromString("00000000-0000-0000-0000-000000000000"), 1, Scope.HISTORY, Instant.ofEpochMilli(253400572800000)),
             apiTokenRepository.get(UUID.fromString("00000000-0000-0000-0000-000000000000"))
@@ -27,12 +28,12 @@ class APITokenRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun getNonExisting() {
+    fun getNonExisting() = runTest {
         assertNull(apiTokenRepository.get(UUID.fromString("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")))
     }
 
     @Test
-    fun save() {
+    fun save() = runTest {
         apiTokenRepository.save(
             APIToken(UUID.fromString("00000000-0000-0000-0000-000000000001"), 2, Scope.HISTORY, Instant.ofEpochMilli(808174800000)),
         )

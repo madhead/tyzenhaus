@@ -14,7 +14,7 @@ class SupergroupRepository(dataSource: DataSource)
         private val logger = LogManager.getLogger(SupergroupRepository::class.java)!!
     }
 
-    override fun update(from: Long, to: Long) {
+    override suspend fun update(from: Long, to: Long) {
         logger.debug("update {} -> {}", from, to)
 
         withConnection { connection ->

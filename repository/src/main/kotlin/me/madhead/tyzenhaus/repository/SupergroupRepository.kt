@@ -7,5 +7,5 @@ interface SupergroupRepository {
     /**
      * Update the group [from] to the supergroup [to].
      */
-    fun update(from: Long, to: Long)
+    suspend fun update(from: Long, to: Long)
 }

@@ -9,15 +9,15 @@ interface DialogStateRepository {
     /**
      * Get a state for a given user in a given group.
      */
-    fun get(groupId: Long, userId: Long): DialogState?
+    suspend fun get(groupId: Long, userId: Long): DialogState?
 
     /**
      * Save the entity.
      */
-    fun save(entity: DialogState)
+    suspend fun save(entity: DialogState)
 
     /**
      * Clear dialog state.
      */
-    fun delete(groupId: Long, userId: Long)
+    suspend fun delete(groupId: Long, userId: Long)
 }
