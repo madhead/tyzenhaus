@@ -15,7 +15,7 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
     return {
         id: 1,
         payer: 42,
-        recipients: [1, 2] as unknown as Set<number>,
+        recipients: [1, 2],
         amount: "10.00",
         currency: "EUR",
         title: "Groceries",
