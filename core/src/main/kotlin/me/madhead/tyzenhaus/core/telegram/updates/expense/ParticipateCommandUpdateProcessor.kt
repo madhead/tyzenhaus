@@ -9,10 +9,6 @@ import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.message.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.update.MessageUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
-import kotlin.coroutines.coroutineContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
@@ -48,9 +44,7 @@ class ParticipateCommandUpdateProcessor(
 
             val newGroupConfig = groupConfig ?: GroupConfig(update.data.chat.id.chatId.long)
 
-            CoroutineScope(coroutineContext + Dispatchers.IO).launch {
-                groupConfigRepository.save(newGroupConfig.copy(members = newGroupConfig.members + update.userId))
-            }
+            groupConfigRepository.save(newGroupConfig.copy(members = newGroupConfig.members + update.userId))
 
             requestsExecutor.sendMessage(
                 chatId = update.data.chat.id,
