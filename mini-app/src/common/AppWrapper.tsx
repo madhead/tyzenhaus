@@ -14,7 +14,7 @@ export default function AppWrapper(props: AppWrapperProps) {
     if (platform === "unknown") {
         return <Error error={t("errors.outsideOfTelegram")} />;
     } else {
-        return AuthWrapper(props);
+        return <AuthWrapper {...props} />;
     }
 }
 
