@@ -1,0 +1,351 @@
+ ▐▛███▜▌   Claude Code v2.1.205
+▝▜█████▛▘  Opus 4.8 · Claude Pro
+  ▘▘ ▝▝    ~/Projects/tyzenhaus
+
+ ▎ Extended: Fable 5 is included in your weekly limit
+ ▎ Through July 12, you can use up to 50% of your weekly usage limit on Fable 5. If you hit your limit, you can continue on Fable 5 with usage credits. Fable 5 draws down usage faster than Opus 4.8. Run /model and select Fable to use it. Learn more
+   +1 more · /status
+
+❯ Read the TG Bot updates processing pipeline in this repo: @core/src/main/kotl 
+  in/me/madhead/tyzenhaus/core/telegram/updates/UpdateProcessingPipeline.kt and 
+  related classes. As you see, in this repo it is not fully abstract: it        
+  relies on some sort of an FSM, specific to this bot. Is it possible to have a 
+  fully abstract update processing pipeline?                                    
+                                                                                
+  The problem here is that update processing need some state. For group bots    
+  state is tricky: there might be group-level state for some commands as well   
+  as user-level states for others. Let's say, in a TG text-based reply-based    
+  multi-command dialog in a group with the bot, one user can be changing their  
+  preferences: language → (user 1 here) their pronounce → confirmation → user   
+  settings updated. The other user might have their own workflow in the same    
+  group. Finally, the group itself might have a state. Let's say this group is  
+  a game "babylon tower building". Haha, so that's why everyone speaks          
+  different language. And the tower height is a state of the whole group. I     
+  cannot provide a better example now.                                          
+                                                                                
+  But the problem is that there might be multiple states at a time, and they    
+  can even be "nested".                                                         
+                                                                                
+  Now, every Processor can, of course, read it's specific state in "accepts",   
+  and pass it somehow to "invoke" / "process". But if multiple processor share  
+  state / state type (like the preference settings workflow), they will read it 
+  multiple times, which is inefficient. That's why in this repo state is        
+  readed at a pipeline level. However, that's not extensible enough.            
+                                                                                
+  Propose something.                                                            
+  ⎿  Read core/src/main/kotlin/me/madhead/tyzenhaus/core/telegram/updates/Update
+     ProcessingPipeline.kt (63 lines)
+
+● I'll read the related classes to ground my proposal in how this actually works
+  today.
+
+  Searched for 1 pattern, read 8 files (ctrl+o to expand)
+
+● Read the full picture now — the two hardcoded reads in the pipeline
+  (UpdateProcessingPipeline.kt:44-45), the fixed 3-arg
+  UpdateProcessor.process(update, groupConfig, dialogState), and the fact that
+  reactions write state back inline (AmountReplyUpdateProcessor.kt:72,86,101,122
+  call dialogStateRepository.save(...) themselves). Here's my read and a
+  proposal.
+
+  What actually couples the pipeline
+
+  The pipeline isn't abstract because it hardcodes three decisions:
+
+  1. Which state families exist — exactly GroupConfig and DialogState.
+  2. How each is keyed — GroupConfig by groupId, DialogState by (groupId, 
+  userId). These two key shapes are baked into process().
+  3. That there is exactly one of each per update.
+
+  Your babylon-tower example breaks all three: N concurrent user dialogs, a
+  group-level game state, and possibly sub-states. You can't express that in a
+  signature with two nullable slots.
+
+  The reason state lives at the pipeline level today is deduplication — you
+  didn't want five expense-flow processors each hitting the DB for the same
+  DialogState. That's the one property worth preserving. Everything else about
+  the current design should go.
+
+  The key insight
+
+  You can keep read-once dedup without the pipeline knowing any state type — via
+  request-scoped memoization. That decouples "read it once" from "know what it
+  is," which is the whole tension in your question.
+
+  Proposal: a memoized StateContext over addressable scopes
+
+  Replace the two concrete concepts (GroupConfig, DialogState) with two abstract
+  ones: a Scope (an addressable key for a slice of state, derived from the
+  update) and a StateContext (a per-update, memoized resolver over scopes).
+
+  /** Addresses a slice of state. Identity = storage key = cache key. */
+  interface Scope
+
+  data class GroupScope(val groupId: Long) : Scope
+  data class UserScope(val groupId: Long, val userId: Long) : Scope
+  // a new scope is just a new data class — the pipeline never changes
+
+  /** Loads/saves one state family for one scope type. Registered, not 
+  hardcoded. */
+  interface StateRepository<S : Scope, T : Any> {
+      suspend fun load(scope: S): T?
+      suspend fun save(scope: S, value: T)
+      suspend fun delete(scope: S)
+  }
+
+  The context is where dedup lives:
+
+  class StateContext(val update: Update, private val registry: StateRegistry) {
+      private val cache = HashMap<Scope, Any?>()   // memoized reads
+      private val dirty = HashMap<Scope, Any?>()   // pending writes (null = 
+  delete)
+
+      suspend fun <T : Any> get(scope: Scope): T? =
+          dirty[scope] as T? ?: cache.getOrPut(scope) { registry.load(scope) }
+  as T?
+
+      fun set(scope: Scope, value: Any) { dirty[scope] = value }
+      fun clear(scope: Scope)          { dirty[scope] = null }
+
+      internal suspend fun flush() { /* apply dirty via registry, in one tx + 
+  optimistic lock */ }
+  }
+
+  The pipeline becomes fully abstract — it names no state type:
+
+  class UpdateProcessingPipeline(
+      private val processors: List<UpdateProcessor>,
+      private val registry: StateRegistry,
+  ) {
+      suspend fun process(update: Update) {
+          val ctx = StateContext(update, registry)
+          processors
+              .mapNotNull { it.process(ctx) }
+              .singleOrNull()
+              ?.let { reaction -> reaction(); ctx.flush() }
+      }
+  }
+
+  interface UpdateProcessor {
+      suspend fun process(ctx: StateContext): UpdateReaction?
+  }
+
+  And a processor pulls exactly the state it wants:
+
+  override suspend fun process(ctx: StateContext): UpdateReaction? {
+      val update = ctx.update as? MessageUpdate ?: return null
+      val state  = ctx.get<DialogState>(UserScope(update.groupId,
+  update.userId)) as? WaitingForAmount
+          ?: return null
+      val config = ctx.get<GroupConfig>(GroupScope(update.groupId))   // free — 
+  same read the last processor did
+      ...
+      return { /* ... */ ctx.set(UserScope(...), WaitingForCurrency(...)) }  // 
+  no direct repo.save
+  }
+
+  The first processor that touches UserScope(g,u) pays the one DB read; the
+  other four expense processors get the cached value. You get today's dedup, but
+  the pipeline no longer knows what DialogState or GroupConfig are. GroupConfig
+  stops being special — it's just another family under GroupScope, which
+  removes the config-vs-state asymmetry in the current code.
+
+  How this answers each of your concerns
+
+  Multiple states at once / different scopes — a processor reads as many scopes
+  as it needs. Group-level game state (GroupScope) and per-user dialog
+  (UserScope) coexist trivially because they're just different keys.
+
+  Concurrent per-user workflows (user 1's preferences flow vs. their expense
+  flow) — today you're limited to one DialogState per (group,user). Add a
+  discriminator to the scope: UserScope(group, user, workflow = "expense"). Now
+  the same user can have independent concurrent dialogs, each its own scope,
+  each memoized separately. This is the real fix for "multiple states at a
+  time."
+
+  "Nested" states — separate the two meanings:
+  - Scope containment (group ⊃ user ⊃ workflow) is not real nesting — it's
+  independent keys, already handled.
+  - Hierarchical state machines (a state that has sub-states) belong inside the 
+  state value as a composite DialogState, not in the pipeline. The pipeline
+  should stay a keyed, memoized blob store + dispatcher; it stores an opaque
+  serializable value and never interprets it. Pushing HSM semantics into the
+  pipeline is the trap — keep the statechart logic in a layer above it.
+
+  Efficiency — memoization, as above. Same guarantee you have now, minus the
+  coupling.
+
+  Extensibility — a new state family = a new Scope subtype + a registered
+  StateRepository. Zero pipeline edits.
+
+  Bonus: centralize writes (ties into your recent optimistic-locking work)
+
+  Right now every reaction calls dialogStateRepository.save(...) inline. Routing
+  writes through ctx.set(...) and flushing once makes flush() the single 
+  transaction + optimistic-lock boundary for the whole update — a much better
+  home for the locking you just added (5d95042, 85fdfc5) than scattered saves
+  across processors. It also gives you atomicity when a reaction mutates several
+  scopes (user dialog + group tower height together).
+
+  The alternative I considered, and why not
+
+  A two-phase design where each processor declares dependencies(update): 
+  Set<Scope> and the pipeline unions them and batch/parallel-loads upfront. It
+  buys parallel DB round-trips and a statically-known read-set — but it adds a
+  declaration surface, and you often can't compute the scope until you've
+  partially parsed the update. Lazy memoization gives you dedup for free with
+  far less machinery. Reach for the declarative two-phase only if per-update DB
+  round-trips ever become your bottleneck; otherwise the memoized context wins.
+
+  Migration path (incremental, not a rewrite)
+
+  1. Introduce Scope, StateRepository, StateRegistry, StateContext; register the
+  two existing repos under GroupScope/UserScope.
+  2. Change UpdateProcessor.process to take StateContext; keep a thin adapter
+  that calls ctx.get(...) so existing processors migrate one at a time.
+  3. Move inline repository.save calls to ctx.set + flush(), folding optimistic
+  locking into flush().
+  4. Add a workflow discriminator to UserScope when you actually need concurrent
+  per-user dialogs.
+
+  Want me to sketch the StateRegistry (the type-safe scope→repository wiring,
+  which is the one fiddly part) or prototype step 1–2 against the real
+  processors?
+
+✻ Churned for 2m 17s
+
+❯ No, that's an idea for another project.                                       
+                                                                                
+  How do these lazy reads play with concurrency / asynchrony?                   
+                                                                                
+  Can this state live in context parameters or coroutine context? I like the    
+  "implicity".                                                                  
+
+● Good question — this is where the "read at pipeline level" vs "implicit
+  context" choice actually bites. Two separate axes: how memoization survives
+  concurrency, and which implicit-delivery mechanism you pick. They're coupled,
+  because the delivery mechanism decides whether concurrent access even happens.
+
+  1. Lazy memoization under concurrency
+
+  The naive version is safe only because the pipeline is sequential:
+
+  processors.mapNotNull { it.process(ctx) }   // one at a time, each awaited
+
+  No two processors touch the cache simultaneously, so a plain HashMap +
+  getOrPut is fine. The moment a processor (or a reaction) fans out and shares
+  ctx, you have two distinct bugs:
+
+  coroutineScope {
+      val a = async { ctx.get<X>(scopeA) }
+      val b = async { ctx.get<X>(scopeA) }   // same scope, not yet cached
+  }
+
+  - Data race on the map. getOrPut on HashMap is not atomic; concurrent
+  structural modification corrupts it. Classic.
+  - Double-load — even single-threaded. This is the subtle one. Your loader
+  suspends (registry.load hits the DB). Suspension is an interleaving point:
+  coroutine A enters the getOrPut lambda, suspends on the DB, the key isn't in
+  the map yet, coroutine B misses too, and you load twice. A single dispatcher
+  thread doesn't save you, because the interleave happens at the await, not on a
+  CPU preemption.
+
+  The instinct to reach for ConcurrentHashMap is a trap here: computeIfAbsent
+  can't call a suspend function, and it holds a bin lock across the mapping
+  function — so you can't do the DB load inside it without deadlock risk.
+  Thread-safety ≠ suspension-safety.
+
+  The correct single-flight memoization stores a Deferred, not a value, and only
+  guards the map insertion (fast, non-suspending) with a Mutex; the actual load
+  is awaited outside the lock:
+
+  private val mutex = Mutex()
+  private val inFlight = HashMap<Scope, Deferred<Any?>>()
+
+  suspend fun <T : Any> get(scope: Scope): T? {
+      val deferred = mutex.withLock {
+          inFlight.getOrPut(scope) { pipelineScope.async { registry.load(scope)
+  } }
+      }
+      return deferred.await() as T?      // concurrent callers for the same 
+  scope share one load
+  }
+
+  Now N concurrent gets for one scope coalesce into one DB read. Same reasoning
+  applies to the dirty map and flush() — if reactions write concurrently you
+  need the same discipline, plus a defined read-your-writes ordering.
+
+  So: sequential access → keep it trivial; concurrent access → you must go 
+  single-flight. Which one you're in is decided by the delivery mechanism below.
+
+  2. Delivery: coroutine context vs context parameters
+
+  CoroutineContext element — maximal, dynamic implicitness
+
+  class StateCtxElement(val ctx: StateContext) :
+  AbstractCoroutineContextElement(Key) {
+      companion object Key : CoroutineContext.Key<StateCtxElement>
+  }
+  suspend fun stateContext() = coroutineContext[StateCtxElement]!!.ctx
+
+  // pipeline:
+  withContext(StateCtxElement(ctx)) { processors.forEach { it.process() } }
+
+  Any suspend function at any depth does stateContext().get(scope) — no
+  parameter threading. But child coroutines inherit the context, so launch { 
+  get(...) } deep in some reaction shares the same StateContext instance
+  automatically. That's the feature and the reason: coroutine-context delivery 
+  forces the single-flight cache from §1 — you can no longer assume sequential
+  access, because dynamic inheritance is exactly what makes concurrent access
+  easy and invisible. Failure mode is also runtime (!! / error()), and it only
+  works in suspend code.
+
+  Context parameters (Kotlin 2.2) — compile-time, lexical implicitness
+
+  context(ctx: StateContext)
+  suspend fun currentDialog(update: MessageUpdate): DialogState? =
+      ctx.get(UserScope(update.groupId, update.userId))
+
+  The compiler threads it. No runtime lookup, no coroutine requirement,
+  type-safe, and absence is a compile error, not a crash. Implicit at call
+  sites, explicit at declarations (context(ctx: StateContext) is right there in
+  the signature — you see the dependency). It's lexical: inside async { } the
+  closure captures ctx, so it still works, but it does not magically cross into
+  coroutines you didn't lexically nest. That's arguably the safer flavor of
+  implicit — the flow is visible, and it doesn't tempt you into hidden
+  shared-mutable-state fan-out.
+
+  For your taste
+
+  If you want "I never pass it and it's just there everywhere, even through
+  third-party suspend chains I can't annotate" → coroutine context, and pay for
+  it with the single-flight cache. If you want "implicit but honest,
+  type-checked, and I can see who depends on it" → context parameters, which is
+  the more principled fit and keeps you in the sequential-safe regime by
+  default. A common hybrid: store it in the coroutine context (survives
+  arbitrary depth) but expose it through a context(...) accessor for type
+  safety.
+
+  3. The gotcha that ties both together
+
+  Implicit delivery makes it trivially easy to touch ctx from a coroutine that
+  outlives flush() — you fire a launch {} in a reaction, the pipeline flushes,
+  and the background coroutine then reads stale state or writes after the
+  transaction closed. Structured concurrency is the fix: bind the context's
+  lifetime to a scope the pipeline awaits before flushing.
+
+  coroutineScope {                 // all implicit users are children here
+      reaction()                   // may fan out; all children complete before 
+  we leave
+  }
+  ctx.flush()                      // now safe: nothing else can touch ctx
+
+  With explicit parameter passing this discipline is visible; with implicit
+  delivery you have to impose it, because the whole point is that the callers
+  are invisible. That's the real trade-off of the implicit style — nicer
+  ergonomics, but you owe the codebase a hard lifetime boundary around the
+  context.
+
+✻ Worked for 1m 24s
+
+※ recap: Design discussion only, no code: exploring a fully abstract update-processing pipeline with a memoized StateContext, and how lazy reads behave under concurrency and implicit delivery. Next: decide between coroutine-context or context-parameter delivery, or move on. (disable recaps in /config)
