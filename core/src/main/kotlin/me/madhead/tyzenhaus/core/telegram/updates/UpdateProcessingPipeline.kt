@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager
 /**
  * A pipeline of [UpdateProcessor]s.
  * Basically, the heart of all input processing of the bot: every update is passed to [process] and processed by one
- * of the [UpdateProcessor]s, the first whose [UpdateProcessor.process] returned non-null [UpdateReaction].
+ * of the [UpdateProcessor]s, the only one whose [UpdateProcessor.process] returned non-null [UpdateReaction].
  */
 class UpdateProcessingPipeline(
     private val processors: List<UpdateProcessor>,
@@ -28,11 +28,12 @@ class UpdateProcessingPipeline(
      * Tyzenhaus is intended to be used in groups, so chat id will represent a group.
      *
      * Second, group's [config][GroupConfig] and [dialog state][DialogState] are resolved from the DB.
-     * This pair of classes represents server-side state of a dialog with a user of a group.
+     * This pair of classes represents the server-side state of a dialog with a user of a group.
      * Config is used to store group-wide settings and state is used in FSM.
      *
-     * Third, suitable [processor][UpdateProcessor] is selected based on the update, config and state.
-     * Suitable processor is the first one from the list of processors whose [process][UpdateProcessor.process] returned non-null.
+     * Third, suitable [processor][UpdateProcessor] is selected based on the update, config, and state.
+     * Suitable processor is the first (and the only) one from the list of processors whose [process][UpdateProcessor.process] returned
+     * non-null.
      * If there is no suitable processor, the update is ignored.
      *
      * Finally, the update is processed.
