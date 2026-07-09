@@ -19,7 +19,7 @@ data class Balance(
     val groupId: Long,
 
     @Transient
-    val version: Long = 1,
+    val version: Long = 0,
 
     val balance: GroupBalance = emptyMap(),
 )

@@ -46,7 +46,7 @@ class SupergroupRepositoryTest : AbstractRepositoryTest() {
         assertEquals(WaitingForAmount(6, 2, 43), dialogStateRepository.get(7, 2))
 
         assertNull(balanceRepository.get(6))
-        assertEquals(Balance(7), balanceRepository.get(7))
+        assertEquals(Balance(7, version = 1), balanceRepository.get(7))
 
         assertEquals(
             Transaction(2, 7, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", "Breakfast", Instant.ofEpochMilli(808174800000)),

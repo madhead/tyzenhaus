@@ -1,7 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.balance
 
 import javax.sql.DataSource
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
@@ -32,7 +31,6 @@ class BalanceRepository(dataSource: DataSource)
         }
     }
 
-    @Suppress("DuplicatedCode")
     override suspend fun save(entity: Balance) {
         logger.debug("save {}", entity)
 
@@ -40,16 +38,20 @@ class BalanceRepository(dataSource: DataSource)
             connection
                 .prepareStatement("""
                             INSERT INTO balance ("group_id", "version", "balance")
-                            VALUES (?, ?, ?::jsonb)
-                            ON CONFLICT ("group_id", "version")
-                                DO UPDATE SET "version" = EXCLUDED."version" + 1,
-                                              "balance" = EXCLUDED."balance";
+                            VALUES (?, 1, ?::jsonb)
+                            ON CONFLICT ("group_id")
+                                DO UPDATE SET "version" = balance."version" + 1,
+                                              "balance" = EXCLUDED."balance"
+                                WHERE balance."version" = ?;
                         """.trimIndent())
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
-                    preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.version)
-                    preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
-                    preparedStatement.executeUpdate()
+                    preparedStatement.setString(@Suppress("MagicNumber") 2, json.encodeToString(entity))
+                    preparedStatement.setLong(@Suppress("MagicNumber") 3, entity.version)
+
+                    if (preparedStatement.executeUpdate() == 0) {
+                        throw ConcurrentModificationException()
+                    }
                 }
         }
     }

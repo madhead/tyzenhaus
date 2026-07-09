@@ -87,3 +87,16 @@ databaseChangeLog:
         - sqlFile:
             path: ../sql/transaction-remove-group-id-index.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 9
+      author: madhead
+      changes:
+        - sqlFile:
+            path: ../sql/balance-optimistic-locking.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../sql/balance-optimistic-locking-rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

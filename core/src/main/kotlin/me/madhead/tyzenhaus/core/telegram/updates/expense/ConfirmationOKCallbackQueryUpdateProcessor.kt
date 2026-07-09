@@ -3,9 +3,6 @@ package me.madhead.tyzenhaus.core.telegram.updates.expense
 import dev.inmo.tgbotapi.bot.RequestsExecutor
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
-import dev.inmo.tgbotapi.types.ChatId
-import dev.inmo.tgbotapi.types.RawChatId
-import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.types.message.MarkdownV2
 import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.toChatId
@@ -79,23 +76,7 @@ class ConfirmationOKCallbackQueryUpdateProcessor(
 
             logger.debug("Creating shared expense: {}", transaction)
 
-            transactionManager.transaction {
-                val balance = balanceRepository.get(update.groupId) ?: Balance(update.groupId)
-                val groupBalance = balance.balance.toMutableMap()
-                val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
-                val share = transaction.amount.setScale(@Suppress("MagicNumber") 6, RoundingMode.HALF_UP) /
-                    transaction.recipients.size.toBigDecimal()
-
-                currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
-                transaction.recipients.forEach { recipient ->
-                    currencyBalance[recipient] = (currencyBalance[recipient] ?: BigDecimal.ZERO) - share
-                }
-                groupBalance[transaction.currency] = currencyBalance
-
-                balanceRepository.save(balance.copy(balance = groupBalance))
-                transactionRepository.save(transaction)
-                dialogStateRepository.delete(update.groupId, dialogState.userId)
-            }
+            storeExpense(transaction, dialogState.userId)
 
             val members = (transaction.recipients + transaction.payer).toSet()
             val chatMembers = members.map { requestsExecutor.getChatMemberSafe(update.groupId.toChatId(), it.toChatId()) }
@@ -119,6 +100,47 @@ class ConfirmationOKCallbackQueryUpdateProcessor(
                 parseMode = MarkdownV2,
                 replyMarkup = null,
             )
+        }
+    }
+
+    /**
+     * Folds the [transaction] into the group balance and updates it. Retries, if optimistic lock failed.
+     */
+    private suspend fun storeExpense(transaction: Transaction, userId: Long) {
+        var attempt = 0
+
+        while (true) {
+            attempt++
+
+            try {
+                transactionManager.transaction {
+                    val balance = balanceRepository.get(transaction.groupId) ?: Balance(transaction.groupId)
+                    val groupBalance = balance.balance.toMutableMap()
+                    val currencyBalance = groupBalance[transaction.currency]?.toMutableMap() ?: mutableMapOf()
+                    val share = transaction.amount.setScale(@Suppress("MagicNumber") 6, RoundingMode.HALF_UP) /
+                        transaction.recipients.size.toBigDecimal()
+
+                    currencyBalance[transaction.payer] = (currencyBalance[transaction.payer] ?: BigDecimal.ZERO) + transaction.amount
+                    transaction.recipients.forEach { recipient ->
+                        currencyBalance[recipient] = (currencyBalance[recipient] ?: BigDecimal.ZERO) - share
+                    }
+                    groupBalance[transaction.currency] = currencyBalance
+
+                    balanceRepository.save(balance.copy(balance = groupBalance))
+                    transactionRepository.save(transaction)
+                    dialogStateRepository.delete(transaction.groupId, userId)
+                }
+
+                return
+            } catch (e: ConcurrentModificationException) {
+                if (attempt >= 2) {
+                    logger.error("Failed to save the expense for group {} after {} attempts", transaction.groupId, attempt, e)
+
+                    throw e
+                }
+
+                logger.warn("Conflict on balance for group {}, retrying (attempt {})", transaction.groupId, attempt)
+            }
         }
     }
 }

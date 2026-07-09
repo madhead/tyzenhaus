@@ -30,7 +30,7 @@ class PostgreSqlTransactionManagerTest : AbstractRepositoryTest() {
             dialogStateRepository.save(WaitingForAmount(-10, -10, 42))
         }
 
-        assertEquals(Balance(-10), balanceRepository.get(-10))
+        assertEquals(Balance(-10, version = 1), balanceRepository.get(-10))
         assertEquals(WaitingForAmount(-10, -10, 42), dialogStateRepository.get(-10, -10))
     }
 
