@@ -64,7 +64,7 @@ describe("AppWrapper", () => {
         expect(await screen.findByText("protected content")).toBeInTheDocument();
     });
 
-    it("sends the start_param as a bearer token and the init data as the body", async () => {
+    it("sends the start_param as a bearer token and the init data as a header", async () => {
         const fetchMock = mockFetch({ ok: true });
 
         render(
@@ -77,13 +77,15 @@ describe("AppWrapper", () => {
 
         expect(fetchMock).toHaveBeenCalledWith("/app/api/auth/validation", {
             method: "POST",
-            headers: { Authorization: "Bearer token-123" },
-            body: "init-data-string",
+            headers: {
+                "Authorization": "Bearer token-123",
+                "X-Telegram-Init-Data": "init-data-string",
+            },
         });
     });
 
     it("shows the expired error when the token has expired", async () => {
-        mockFetch({ ok: false, headers: { "X-Token-Expired": "true" } });
+        mockFetch({ ok: false, headers: { "X-Auth-Error": "token_expired" } });
 
         render(
             <AppWrapper>
@@ -95,7 +97,33 @@ describe("AppWrapper", () => {
         expect(screen.queryByText("protected content")).not.toBeInTheDocument();
     });
 
-    it("shows the unauthorized error when authentication fails without an expiry hint", async () => {
+    it("shows the participate hint when the user is not a participant", async () => {
+        mockFetch({ ok: false, headers: { "X-Auth-Error": "not_a_participant" } });
+
+        render(
+            <AppWrapper>
+                <div>protected content</div>
+            </AppWrapper>,
+        );
+
+        expect(await screen.findByText("errors.notParticipant")).toBeInTheDocument();
+        expect(screen.queryByText("protected content")).not.toBeInTheDocument();
+    });
+
+    it("shows the outside-of-Telegram error when the init data is invalid", async () => {
+        mockFetch({ ok: false, headers: { "X-Auth-Error": "invalid_init_data" } });
+
+        render(
+            <AppWrapper>
+                <div>protected content</div>
+            </AppWrapper>,
+        );
+
+        expect(await screen.findByText("errors.outsideOfTelegram")).toBeInTheDocument();
+        expect(screen.queryByText("protected content")).not.toBeInTheDocument();
+    });
+
+    it("shows the unauthorized error when authentication fails without a reason header", async () => {
         mockFetch({ ok: false });
 
         render(
