@@ -21,7 +21,7 @@ class BalanceRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("SELECT * FROM balance WHERE group_id = ?;")
+                .prepareStatement("""SELECT "group_id", "version", "balance" FROM balance WHERE group_id = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->

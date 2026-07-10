@@ -21,7 +21,7 @@ class GroupConfigRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("SELECT * FROM group_config WHERE id = ?;")
+                .prepareStatement("""SELECT "id", "invited_by", "invited_at", "language", "members" FROM group_config WHERE id = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->

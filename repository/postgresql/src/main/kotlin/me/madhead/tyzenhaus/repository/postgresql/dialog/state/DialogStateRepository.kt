@@ -22,7 +22,7 @@ class DialogStateRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("SELECT * FROM dialog_state WHERE group_id = ? AND user_id = ?;")
+                .prepareStatement("""SELECT "state" FROM dialog_state WHERE group_id = ? AND user_id = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)

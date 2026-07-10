@@ -21,7 +21,11 @@ class TransactionRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT * FROM "transaction" WHERE "id" = ?;""")
+                .prepareStatement("""
+                    SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
+                    FROM "transaction"
+                    WHERE "id" = ?;
+                """.trimIndent())
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->
@@ -112,7 +116,12 @@ class TransactionRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT * FROM "transaction" WHERE "group_id" = ? ORDER BY "timestamp" DESC;""")
+                .prepareStatement("""
+                    SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
+                    FROM "transaction"
+                    WHERE "group_id" = ?
+                    ORDER BY "timestamp" DESC;
+                """.trimIndent())
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.executeQuery().use { resultSet ->

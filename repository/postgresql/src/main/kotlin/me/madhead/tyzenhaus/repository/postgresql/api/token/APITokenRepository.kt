@@ -22,7 +22,7 @@ class APITokenRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT * FROM "api_token" WHERE "token" = ?;""")
+                .prepareStatement("""SELECT "token", "group_id", "scope", "valid_until" FROM "api_token" WHERE "token" = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setObject(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->

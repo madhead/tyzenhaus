@@ -7,7 +7,7 @@ import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 
 internal fun ResultSet.toDialogState(json: Json): DialogState? {
     return if (this.next()) {
-        json.decodeFromString<DialogState>(this.getString(@Suppress("MagicNumber") 3))
+        json.decodeFromString<DialogState>(this.getString("state"))
     } else {
         null
     }
