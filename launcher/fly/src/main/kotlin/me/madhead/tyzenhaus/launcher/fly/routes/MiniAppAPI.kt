@@ -16,10 +16,10 @@ import me.madhead.tyzenhaus.core.service.GroupMembersService
 import me.madhead.tyzenhaus.core.service.TransactionsSearchService
 import me.madhead.tyzenhaus.entity.api.token.Scope
 import me.madhead.tyzenhaus.entity.transaction.Transaction
-import me.madhead.tyzenhaus.entity.transaction.TransactionsSearchParams
 import me.madhead.tyzenhaus.launcher.fly.security.API
 import me.madhead.tyzenhaus.launcher.fly.security.APITokenPrincipal
 import me.madhead.tyzenhaus.launcher.fly.security.AuthorizationPlugin
+import me.madhead.tyzenhaus.launcher.fly.util.toTransactionsSearchParams
 import org.koin.ktor.ext.inject
 
 /**
@@ -68,7 +68,8 @@ fun Route.miniAppAPI() {
 
                         get {
                             val principal = call.principal<APITokenPrincipal>()!!
-                            val page = transactionsSearchService.search(principal.groupId, TransactionsSearchParams())
+                            val params = call.request.queryParameters.toTransactionsSearchParams()
+                            val page = transactionsSearchService.search(principal.groupId, params)
 
                             call.respond(
                                 TransactionsPage(
