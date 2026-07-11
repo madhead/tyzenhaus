@@ -1,6 +1,8 @@
 package me.madhead.tyzenhaus.repository
 
 import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.transaction.TransactionsPage
+import me.madhead.tyzenhaus.entity.transaction.TransactionsSearchParams
 
 /**
  * Transactions repository.
@@ -12,7 +14,7 @@ interface TransactionRepository : Repository<Long, Transaction> {
     suspend fun groupCurrencies(groupId: Long): List<String>
 
     /**
-     * Retrieve transactions matching criteria.
+     * Retrieves a page of the [group][groupId]'s transactions matching the given [params].
      */
-    suspend fun search(groupId: Long): List<Transaction>
+    suspend fun search(groupId: Long, params: TransactionsSearchParams): TransactionsPage
 }
