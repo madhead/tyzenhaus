@@ -10,11 +10,13 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.localPort
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import kotlinx.serialization.Serializable
 import me.madhead.tyzenhaus.core.service.GroupCurrenciesService
 import me.madhead.tyzenhaus.core.service.GroupMembersService
-import me.madhead.tyzenhaus.core.service.TransactionsSearchParams
 import me.madhead.tyzenhaus.core.service.TransactionsSearchService
 import me.madhead.tyzenhaus.entity.api.token.Scope
+import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.transaction.TransactionsSearchParams
 import me.madhead.tyzenhaus.launcher.fly.security.API
 import me.madhead.tyzenhaus.launcher.fly.security.APITokenPrincipal
 import me.madhead.tyzenhaus.launcher.fly.security.AuthorizationPlugin
@@ -66,8 +68,14 @@ fun Route.miniAppAPI() {
 
                         get {
                             val principal = call.principal<APITokenPrincipal>()!!
+                            val page = transactionsSearchService.search(principal.groupId, TransactionsSearchParams())
 
-                            call.respond(transactionsSearchService.search(principal.groupId, TransactionsSearchParams()))
+                            call.respond(
+                                TransactionsPage(
+                                    transactions = page.transactions,
+                                    nextCursor = page.nextCursor?.encode(),
+                                )
+                            )
                         }
                     }
                 }
@@ -75,3 +83,9 @@ fun Route.miniAppAPI() {
         }
     }
 }
+
+@Serializable
+private data class TransactionsPage(
+    val transactions: List<Transaction>,
+    val nextCursor: String? = null,
+)
