@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.metrics
 
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
@@ -16,22 +17,22 @@ class MetricsRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun totalNumberOfChats() {
+    fun totalNumberOfChats() = runTest {
         assertEquals(1, metricsRepository.totalNumberOfChats())
     }
 
     @Test
-    fun numberOfGroupsWithTransactions() {
+    fun numberOfGroupsWithTransactions() = runTest {
         assertEquals(1, metricsRepository.numberOfGroupsWithTransactions())
     }
 
     @Test
-    fun numberOfTransactions() {
+    fun numberOfTransactions() = runTest {
         assertEquals(1, metricsRepository.numberOfTransactions())
     }
 
     @Test
-    fun averageGroupSize() {
+    fun averageGroupSize() = runTest {
         assertEquals(1.0, metricsRepository.averageGroupSize())
     }
 }

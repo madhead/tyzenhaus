@@ -2,6 +2,7 @@
     "errors": {
         "outsideOfTelegram": "This app must be executed inside a Telegram client",
         "expired": "Authorisation token expired. Restart the app.",
+        "notParticipant": "You are not participating in shared expenses for this group. Please, /participate!",
         "unauthorized": "You are not authorized to use this app"
     }
 }

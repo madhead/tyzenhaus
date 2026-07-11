@@ -9,7 +9,7 @@ import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
  */
 class MetricsRepository(dataSource: DataSource)
     : me.madhead.tyzenhaus.repository.MetricsRepository, PostgreSqlRepository(dataSource) {
-    override fun totalNumberOfChats(): Int =
+    override suspend fun totalNumberOfChats(): Int =
         execute("SELECT COUNT(*) FROM group_config;") {
             if (it.next()) {
                 it.getInt(1)
@@ -18,7 +18,7 @@ class MetricsRepository(dataSource: DataSource)
             }
         }
 
-    override fun numberOfGroupsWithTransactions(): Int =
+    override suspend fun numberOfGroupsWithTransactions(): Int =
         execute("SELECT COUNT(DISTINCT (group_id)) FROM transaction;") {
             if (it.next()) {
                 it.getInt(1)
@@ -27,7 +27,7 @@ class MetricsRepository(dataSource: DataSource)
             }
         }
 
-    override fun numberOfTransactions(): Int =
+    override suspend fun numberOfTransactions(): Int =
         execute("SELECT COUNT(*) FROM transaction;") {
             if (it.next()) {
                 it.getInt(1)
@@ -36,7 +36,7 @@ class MetricsRepository(dataSource: DataSource)
             }
         }
 
-    override fun averageGroupSize(): Double =
+    override suspend fun averageGroupSize(): Double =
         execute("SELECT AVG(ARRAY_LENGTH(members, 1)) FROM group_config;") {
             if (it.next()) {
                 it.getDouble(1)
@@ -45,8 +45,8 @@ class MetricsRepository(dataSource: DataSource)
             }
         }
 
-    private fun <T> execute(sql: String, action: (ResultSet) -> T): T {
-        return dataSource.connection.use { connection ->
+    private suspend fun <T> execute(sql: String, action: (ResultSet) -> T): T {
+        return withConnection { connection ->
             connection
                 .prepareStatement(sql)
                 .use { statement ->

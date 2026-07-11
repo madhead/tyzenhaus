@@ -7,10 +7,10 @@ interface Repository<ID, T> {
     /**
      * Get the entity by its identifier.
      */
-    fun get(id: ID): T?
+    suspend fun get(id: ID): T?
 
     /**
      * Save the entity.
      */
-    fun save(entity: T)
+    suspend fun save(entity: T)
 }

@@ -16,29 +16,33 @@ class TransactionRepository(dataSource: DataSource)
     }
 
     @Suppress("NestedBlockDepth")
-    override fun get(id: Long): Transaction? {
+    override suspend fun get(id: Long): Transaction? {
         logger.debug("get {}", id)
 
-        dataSource.connection.use { connection ->
+        return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT * FROM "transaction" WHERE "id" = ?;""")
+                .prepareStatement("""
+                    SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
+                    FROM "transaction"
+                    WHERE "id" = ?;
+                """.trimIndent())
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, id)
                     preparedStatement.executeQuery().use { resultSet ->
                         if (resultSet.next()) {
-                            return@get resultSet.toTransaction()
+                            resultSet.toTransaction()
                         } else {
-                            return@get null
+                            null
                         }
                     }
                 }
         }
     }
 
-    override fun save(entity: Transaction) {
+    override suspend fun save(entity: Transaction) {
         logger.debug("save {}", entity)
 
-        dataSource.connection.use { connection ->
+        withConnection { connection ->
             if (entity.id == null) {
                 connection
                     .prepareStatement("""
@@ -92,31 +96,36 @@ class TransactionRepository(dataSource: DataSource)
         }
     }
 
-    override fun groupCurrencies(groupId: Long): List<String> {
+    override suspend fun groupCurrencies(groupId: Long): List<String> {
         logger.debug("groupCurrencies {}", groupId)
 
-        dataSource.connection.use { connection ->
+        return withConnection { connection ->
             connection
                 .prepareStatement("""SELECT DISTINCT("currency") FROM "transaction" WHERE "group_id" = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@groupCurrencies resultSet.toCurrencies()
+                        resultSet.toCurrencies()
                     }
                 }
         }
     }
 
-    override fun search(groupId: Long): List<Transaction> {
+    override suspend fun search(groupId: Long): List<Transaction> {
         logger.debug("search {}", groupId)
 
-        dataSource.connection.use { connection ->
+        return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT * FROM "transaction" WHERE "group_id" = ? ORDER BY "timestamp" DESC;""")
+                .prepareStatement("""
+                    SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
+                    FROM "transaction"
+                    WHERE "group_id" = ?
+                    ORDER BY "timestamp" DESC;
+                """.trimIndent())
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@search resultSet.toTransactions()
+                        resultSet.toTransactions()
                     }
                 }
         }

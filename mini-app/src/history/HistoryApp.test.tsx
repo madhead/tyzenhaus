@@ -4,6 +4,7 @@ import { Transaction } from "../common/transaction/Transaction";
 import HistoryApp from "./HistoryApp";
 
 const webApp = vi.hoisted(() => ({
+    initData: "init-data-string",
     initDataUnsafe: { start_param: "token-123" },
 }));
 
@@ -15,7 +16,7 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
     return {
         id: 1,
         payer: 42,
-        recipients: [1, 2] as unknown as Set<number>,
+        recipients: [1, 2],
         amount: "10.00",
         currency: "EUR",
         title: "Groceries",
@@ -46,7 +47,10 @@ describe("HistoryApp", () => {
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
         expect(fetchMock).toHaveBeenCalledWith("/app/api/group/transactions", {
             method: "GET",
-            headers: { Authorization: "Bearer token-123" },
+            headers: {
+                "Authorization": "Bearer token-123",
+                "X-Telegram-Init-Data": "init-data-string",
+            },
         });
     });
 

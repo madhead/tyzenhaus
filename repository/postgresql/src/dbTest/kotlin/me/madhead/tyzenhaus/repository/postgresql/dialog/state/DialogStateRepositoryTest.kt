@@ -1,5 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.dialog.state
 
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import me.madhead.tyzenhaus.repository.postgresql.AbstractRepositoryTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,24 +17,24 @@ class DialogStateRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun get() {
+    fun get() = runTest {
         assertEquals(WaitingForAmount(1, 1, 42), dialogStateRepository.get(1, 1))
     }
 
     @Test
-    fun getNonExisting() {
+    fun getNonExisting() = runTest {
         assertNull(dialogStateRepository.get(0, 0))
     }
 
     @Test
-    fun saveChangingLanguage() {
+    fun saveChangingLanguage() = runTest {
         dialogStateRepository.save(WaitingForAmount(-1, -1, 42))
 
         assertEquals(WaitingForAmount(-1, -1, 42), dialogStateRepository.get(-1, -1))
     }
 
     @Test
-    fun update() {
+    fun update() = runTest {
         dialogStateRepository.save(WaitingForAmount(-2, -2, 42))
 
         assertEquals(WaitingForAmount(-2, -2, 42), dialogStateRepository.get(-2, -2))
@@ -44,7 +45,7 @@ class DialogStateRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun delete() {
+    fun delete() = runTest {
         dialogStateRepository.save(WaitingForAmount(-3, -3, 33))
 
         assertEquals(WaitingForAmount(-3, -3, 33), dialogStateRepository.get(-3, -3))

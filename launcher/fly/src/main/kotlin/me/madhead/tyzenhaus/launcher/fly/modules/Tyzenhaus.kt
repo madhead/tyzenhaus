@@ -1,22 +1,17 @@
 package me.madhead.tyzenhaus.launcher.fly.modules
 
-import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.bearer
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.compression.Compression
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
-import io.ktor.server.response.header
-import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
-import java.time.Instant
-import java.util.UUID
+import kotlinx.serialization.json.Json
 import me.madhead.tyzenhaus.launcher.fly.koin.configModule
 import me.madhead.tyzenhaus.launcher.fly.koin.dbModule
 import me.madhead.tyzenhaus.launcher.fly.koin.jsonModule
@@ -28,10 +23,10 @@ import me.madhead.tyzenhaus.launcher.fly.routes.metrics
 import me.madhead.tyzenhaus.launcher.fly.routes.miniApp
 import me.madhead.tyzenhaus.launcher.fly.routes.miniAppAPI
 import me.madhead.tyzenhaus.launcher.fly.routes.webhook
-import me.madhead.tyzenhaus.launcher.fly.security.APITokenPrincipal
+import me.madhead.tyzenhaus.launcher.fly.security.api
 import me.madhead.tyzenhaus.repository.APITokenRepository
+import me.madhead.tyzenhaus.repository.GroupConfigRepository
 import org.koin.ktor.ext.get
-import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 
 /**
@@ -55,7 +50,7 @@ fun Application.tyzenhaus() {
     }
 
     install(ContentNegotiation) {
-        json(this@tyzenhaus.get())
+        json(this@tyzenhaus.get<Json>())
     }
 
     install(MicrometerMetrics) {
@@ -63,29 +58,12 @@ fun Application.tyzenhaus() {
     }
 
     install(Authentication) {
-        bearer("api") {
-            authenticate { credential ->
-                val token = try {
-                    UUID.fromString(credential.token)
-                } catch (_: Exception) {
-                    return@authenticate null
-                }
-                val tokenRepository by inject<APITokenRepository>()
-                val apiToken = tokenRepository.get(token)
-
-                return@authenticate when {
-                    apiToken == null -> null
-
-                    apiToken.validUntil < Instant.now() -> {
-                        this.response.header("X-Token-Expired", apiToken.validUntil)
-                        this.respond(HttpStatusCode.Forbidden)
-                        null
-                    }
-
-                    else -> APITokenPrincipal(apiToken.groupId, apiToken.scope)
-                }
-            }
-        }
+        api(
+            this@tyzenhaus.environment.config.property("telegram.token").getString(),
+            this@tyzenhaus.get<APITokenRepository>(),
+            this@tyzenhaus.get<GroupConfigRepository>(),
+            this@tyzenhaus.get<Json>(),
+        )
     }
 
     routing {

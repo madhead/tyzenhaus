@@ -6,7 +6,7 @@ import "./Transaction.less";
 export type Transaction = {
     id: number;
     payer: number;
-    recipients: Set<number>;
+    recipients: number[];
     amount: string;
     currency: string;
     title: string;

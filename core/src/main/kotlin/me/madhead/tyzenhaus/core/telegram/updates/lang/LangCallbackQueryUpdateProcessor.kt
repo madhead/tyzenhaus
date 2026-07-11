@@ -8,10 +8,6 @@ import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.types.update.CallbackQueryUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 import java.util.Locale
-import kotlin.coroutines.coroutineContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateProcessor
 import me.madhead.tyzenhaus.core.telegram.updates.UpdateReaction
 import me.madhead.tyzenhaus.core.telegram.updates.groupId
@@ -50,9 +46,7 @@ class LangCallbackQueryUpdateProcessor(
             val newGroupConfig = (groupConfig
                 ?: GroupConfig(callbackQuery.message.chat.id.chatId.long)).copy(language = Locale.of(language))
 
-            CoroutineScope(coroutineContext + Dispatchers.IO).launch {
-                groupConfigRepository.save(newGroupConfig)
-            }
+            groupConfigRepository.save(newGroupConfig)
 
             requestsExecutor.answerCallbackQuery(callbackQuery = callbackQuery)
             requestsExecutor.editMessageText(

@@ -1,6 +1,5 @@
 package me.madhead.tyzenhaus.launcher.fly.security
 
-import io.ktor.server.auth.Principal
 import me.madhead.tyzenhaus.entity.api.token.Scope
 
 /**
@@ -9,4 +8,4 @@ import me.madhead.tyzenhaus.entity.api.token.Scope
 data class APITokenPrincipal(
     val groupId: Long,
     val scope: Scope,
-) : Principal
+)

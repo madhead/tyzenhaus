@@ -1,6 +1,7 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
 import java.time.Instant
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.transaction.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -18,7 +19,7 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun get() {
+    fun get() = runTest {
         assertEquals(
             Transaction(1, 1, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", "Lunch", Instant.ofEpochMilli(808174800000)),
             transactionRepository.get(1)
@@ -26,12 +27,12 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun getNonExisting() {
+    fun getNonExisting() = runTest {
         assertNull(transactionRepository.get(0))
     }
 
     @Test
-    fun save() {
+    fun save() = runTest {
         transactionRepository.save(
             Transaction(-1, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
@@ -43,7 +44,7 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun update() {
+    fun update() = runTest {
         transactionRepository.save(
             Transaction(-2, 2, 3, setOf(3, 2, 1), "10000.000000".toBigDecimal(), "€", "Lux hotel", Instant.ofEpochMilli(808174800000))
         )
@@ -64,7 +65,7 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun groupCurrencies() {
+    fun groupCurrencies() = runTest {
         assertEquals(
             listOf("USD"),
             transactionRepository.groupCurrencies(1)
@@ -72,7 +73,7 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun search() {
+    fun search() = runTest {
         assertTrue(
             transactionRepository.search(1).isNotEmpty()
         )

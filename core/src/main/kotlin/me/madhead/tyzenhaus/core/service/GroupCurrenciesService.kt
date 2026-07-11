@@ -11,7 +11,7 @@ class GroupCurrenciesService(
     /**
      * Lists currencies used in transactions of the [group].
      */
-    fun groupCurrencies(group: Long): List<String>? {
+    suspend fun groupCurrencies(group: Long): List<String>? {
         return transactionRepository.groupCurrencies(group).takeUnless { it.isEmpty() }
     }
 }

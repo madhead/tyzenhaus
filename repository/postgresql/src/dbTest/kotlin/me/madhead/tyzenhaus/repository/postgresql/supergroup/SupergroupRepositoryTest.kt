@@ -1,6 +1,7 @@
 package me.madhead.tyzenhaus.repository.postgresql.supergroup
 
 import java.time.Instant
+import kotlinx.coroutines.test.runTest
 import me.madhead.tyzenhaus.entity.balance.Balance
 import me.madhead.tyzenhaus.entity.dialog.state.WaitingForAmount
 import me.madhead.tyzenhaus.entity.group.config.GroupConfig
@@ -32,7 +33,7 @@ class SupergroupRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun update() {
+    fun update() = runTest {
         supergroupRepository.update(6, 7)
 
         assertNull(groupConfigRepository.get(6))
@@ -45,7 +46,7 @@ class SupergroupRepositoryTest : AbstractRepositoryTest() {
         assertEquals(WaitingForAmount(6, 2, 43), dialogStateRepository.get(7, 2))
 
         assertNull(balanceRepository.get(6))
-        assertEquals(Balance(7), balanceRepository.get(7))
+        assertEquals(Balance(7, version = 1), balanceRepository.get(7))
 
         assertEquals(
             Transaction(2, 7, 1, setOf(1, 2, 3), "42.990000".toBigDecimal(), "USD", "Breakfast", Instant.ofEpochMilli(808174800000)),

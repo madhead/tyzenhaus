@@ -17,58 +17,54 @@ class DialogStateRepository(dataSource: DataSource)
         private val json = Json { serializersModule = DialogState.serializers }
     }
 
-    override fun get(groupId: Long, userId: Long): DialogState? {
+    override suspend fun get(groupId: Long, userId: Long): DialogState? {
         logger.debug("get {}@{}", userId, groupId)
 
-        dataSource.connection.use { connection ->
+        return withConnection { connection ->
             connection
-                .prepareStatement("SELECT * FROM dialog_state WHERE group_id = ? AND user_id = ?;")
+                .prepareStatement("""SELECT "state" FROM dialog_state WHERE group_id = ? AND user_id = ?;""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
                     preparedStatement.executeQuery().use { resultSet ->
-                        return@get resultSet.toDialogState(json)
+                        resultSet.toDialogState(json)
                     }
                 }
         }
     }
 
     @Suppress("DuplicatedCode")
-    override fun save(entity: DialogState) {
+    override suspend fun save(entity: DialogState) {
         logger.debug("save {}", entity)
 
-        dataSource
-            .connection
-            .use { connection ->
-                connection
-                    .prepareStatement("""
-                                INSERT INTO dialog_state ("group_id", "user_id", "state")
-                                VALUES (?, ?, ?::jsonb)
-                                ON CONFLICT ("group_id", "user_id")
-                                    DO UPDATE SET "state" = EXCLUDED."state";
-                            """.trimIndent())
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
-                        preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.userId)
-                        preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
-                        preparedStatement.executeUpdate()
-                    }
-            }
+        withConnection { connection ->
+            connection
+                .prepareStatement("""
+                            INSERT INTO dialog_state ("group_id", "user_id", "state")
+                            VALUES (?, ?, ?::jsonb)
+                            ON CONFLICT ("group_id", "user_id")
+                                DO UPDATE SET "state" = EXCLUDED."state";
+                        """.trimIndent())
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, entity.groupId)
+                    preparedStatement.setLong(@Suppress("MagicNumber") 2, entity.userId)
+                    preparedStatement.setString(@Suppress("MagicNumber") 3, json.encodeToString(entity))
+                    preparedStatement.executeUpdate()
+                }
+        }
     }
 
-    override fun delete(groupId: Long, userId: Long) {
+    override suspend fun delete(groupId: Long, userId: Long) {
         logger.debug("get {}@{}", userId, groupId)
 
-        dataSource
-            .connection
-            .use { connection ->
-                connection
-                    .prepareStatement("DELETE FROM dialog_state WHERE group_id = ? AND user_id = ?;")
-                    .use { preparedStatement ->
-                        preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
-                        preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
-                        preparedStatement.executeUpdate()
-                    }
-            }
+        withConnection { connection ->
+            connection
+                .prepareStatement("DELETE FROM dialog_state WHERE group_id = ? AND user_id = ?;")
+                .use { preparedStatement ->
+                    preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                    preparedStatement.setLong(@Suppress("MagicNumber") 2, userId)
+                    preparedStatement.executeUpdate()
+                }
+        }
     }
 }

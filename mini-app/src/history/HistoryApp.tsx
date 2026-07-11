@@ -1,7 +1,7 @@
 import "./HistoryApp.less";
 
-import WebApp from "@twa-dev/sdk";
 import { useEffect, useState } from "react";
+import { authHeaders } from "../common/api";
 import TransactionCard, { Transaction } from "../common/transaction/Transaction";
 
 function HistoryApp() {
@@ -11,9 +11,7 @@ function HistoryApp() {
         async function loadTransactions() {
             const response = await fetch("/app/api/group/transactions", {
                 method: "GET",
-                headers: {
-                    Authorization: `Bearer ${WebApp.initDataUnsafe.start_param}`,
-                },
+                headers: authHeaders(),
             });
 
             setTransactions((await response.json()) as Transaction[]);
