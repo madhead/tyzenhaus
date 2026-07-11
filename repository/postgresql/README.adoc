@@ -1,3 +1,14 @@
 = PostgreSQL repositories
 
 PostgreSQL repositories.
+
+== Migrations
+
+Schema changes live in `src/main/liquibase/changelog.yml` and are applied via the Liquibase Gradle plugin.
+Set `DATABASE_URL` (e.g. `postgres://user:password@host:port/dbname`), then run:
+
+[source,shell]
+----
+./gradlew :repository:postgresql:liquibaseStatus # to list pending changesets
+./gradlew :repository:postgresql:liquibaseUpdate # to apply pending changesets
+----
