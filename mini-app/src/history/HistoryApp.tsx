@@ -1,7 +1,7 @@
 import "./HistoryApp.less";
 
 import { useEffect, useState } from "react";
-import { authHeaders } from "../common/api";
+import { searchTransactions } from "../common/api";
 import TransactionCard, { Transaction } from "../common/transaction/Transaction";
 
 function HistoryApp() {
@@ -9,12 +9,9 @@ function HistoryApp() {
 
     useEffect(() => {
         async function loadTransactions() {
-            const response = await fetch("/app/api/group/transactions", {
-                method: "GET",
-                headers: authHeaders(),
-            });
+            const page = await searchTransactions();
 
-            setTransactions((await response.json()) as Transaction[]);
+            setTransactions(page.transactions);
         }
 
         void loadTransactions();

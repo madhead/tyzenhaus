@@ -27,7 +27,9 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
 
 function mockFetch(transactions: Transaction[]) {
     const fetchMock = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve(transactions),
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ transactions, nextCursor: null }),
     });
     vi.stubGlobal("fetch", fetchMock);
     return fetchMock;
