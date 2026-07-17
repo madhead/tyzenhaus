@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.tgbotapi)
     implementation(libs.postgresql)
     implementation(libs.hikari)
-    implementation(libs.log4j.slf4j.impl)
+    implementation(libs.log4j.slf4j2.impl)
     implementation(libs.micrometer.registry.prometheus)
     implementation(projects.repository.postgresql)
     implementation(projects.core)
