@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import "./Transaction.less";
@@ -31,38 +30,60 @@ function Timestamp({ timestamp }: { timestamp: number }) {
     const m = dayjs(timestamp);
 
     return (
-        <div className="timestamp" title={m.format("llll")}>
+        <div className="timestamp tooltip" title={fullDateTime(timestamp)}>
             <div className="month">{m.format("MMM")}</div>
             <div className="date">{m.format("DD")}</div>
         </div>
     );
 }
 
-function Title({ title }: { title: string }) {
-    const titleContainerRef = useRef<HTMLDivElement>(null);
-    const [marquee, setMarquee] = useState(false);
+function fullDateTime(timestamp: number): string {
+    const locale = document.documentElement.lang || "en";
 
+    // Weekday/date presentation follows the locale, but the time is always 24-hour (`h23`) — never AM/PM,
+    // regardless of what the locale would otherwise pick.
+    return new Intl.DateTimeFormat(locale, {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+    }).format(timestamp);
+}
+
+function Title({ title }: { title: string }) {
+    const textRef = useRef<HTMLDivElement>(null);
+    const [truncated, setTruncated] = useState(false);
+
+    // Only titles the ellipsis actually clips get a tooltip; a fully-visible title has nothing extra to reveal.
+    // Overflow can only be measured, not expressed in CSS, so watch the element for size changes.
     useEffect(() => {
-        if (!titleContainerRef.current) {
+        const element = textRef.current;
+
+        if (!element) {
             return;
         }
 
-        const element = titleContainerRef.current;
+        const measure = () => setTruncated(element.scrollWidth > element.clientWidth);
 
-        if (element.offsetWidth < element.scrollWidth || element.offsetHeight < element.scrollHeight) {
-            setMarquee(true);
-        }
-    }, [titleContainerRef]);
+        measure();
 
+        const observer = new ResizeObserver(measure);
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, [title]);
+
+    // The `.text` child is the single-line, ellipsis-truncated part; when clipped, the full title lives on the
+    // outer element's `title` attribute — shown natively on desktop hover and via the shared `.tooltip` popup on touch.
     return (
-        <div className="title" ref={titleContainerRef}>
-            {marquee && (
-                <Marquee delay={3}>
-                    {title}
-                    <span className="spacer" />
-                </Marquee>
-            )}
-            {!marquee && <span>{title}</span>}
+        <div className={truncated ? "title tooltip" : "title"} title={truncated ? title : undefined}>
+            <div className="text" ref={textRef}>
+                {title}
+            </div>
         </div>
     );
 }

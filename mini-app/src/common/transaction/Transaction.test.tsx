@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import TransactionCard, { Transaction } from "./Transaction";
@@ -50,12 +50,55 @@ describe("TransactionCard", () => {
             expect(screen.getByText(m.format("DD"))).toBeInTheDocument();
         });
 
-        it("exposes the full localized date as a tooltip", () => {
-            const timestamp = Date.UTC(2024, 0, 5, 12, 0, 0);
+        it("exposes the full date as a tooltip using a 24-hour time (never AM/PM)", () => {
+            const timestamp = Date.UTC(2024, 0, 5, 15, 30, 0);
             const { container } = renderCard({ timestamp });
 
-            const el = container.querySelector(".timestamp");
-            expect(el).toHaveAttribute("title", dayjs(timestamp).format("llll"));
+            const title = container.querySelector(".timestamp")?.getAttribute("title") ?? "";
+
+            expect(title).not.toBe("");
+            expect(title).not.toMatch(/[AP]M/i);
+            expect(title).toMatch(/\d{1,2}:\d{2}/);
+        });
+    });
+
+    describe("title tooltip", () => {
+        function mockOverflow(scrollWidth: number, clientWidth: number) {
+            const scroll = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth);
+            const client = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth);
+
+            return () => {
+                scroll.mockRestore();
+                client.mockRestore();
+            };
+        }
+
+        it("attaches the tooltip and full title only when the title is truncated", () => {
+            const restore = mockOverflow(200, 100);
+
+            try {
+                const { container } = renderCard({ title: "A rather long title that does not fit" });
+                const title = container.querySelector(".title");
+
+                expect(title).toHaveClass("tooltip");
+                expect(title).toHaveAttribute("title", "A rather long title that does not fit");
+            } finally {
+                restore();
+            }
+        });
+
+        it("does not attach a tooltip when the title fits", () => {
+            const restore = mockOverflow(100, 100);
+
+            try {
+                const { container } = renderCard({ title: "Short" });
+                const title = container.querySelector(".title");
+
+                expect(title).not.toHaveClass("tooltip");
+                expect(title).not.toHaveAttribute("title");
+            } finally {
+                restore();
+            }
         });
     });
 
