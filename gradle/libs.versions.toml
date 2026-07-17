@@ -5,7 +5,7 @@ plugin-liquibase = "3.1.0"
 plugin-detekt = "1.23.6"
 plugin-asciidoctor = "4.0.3"
 
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 kotlinx-coroutines = "1.11.0"
 ktor = "3.5.1"
 koin = "4.2.2"
