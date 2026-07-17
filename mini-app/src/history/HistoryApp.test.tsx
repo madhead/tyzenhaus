@@ -1,5 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { GroupMember } from "../common/api";
+import { membersCache } from "../common/members";
 import { Transaction } from "../common/transaction/Transaction";
 import HistoryApp from "./HistoryApp";
 
@@ -11,6 +13,11 @@ const webApp = vi.hoisted(() => ({
 vi.mock("@twa-dev/sdk", () => ({
     default: webApp,
 }));
+
+const expectedHeaders = {
+    "Authorization": "Bearer token-123",
+    "X-Telegram-Init-Data": "init-data-string",
+};
 
 function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
     return {
@@ -25,11 +32,11 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
     };
 }
 
-function mockFetch(transactions: Transaction[]) {
-    const fetchMock = vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve({ transactions, nextCursor: null }),
+function mockFetch(transactions: Transaction[], members: GroupMember[] = []) {
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+        const body = url === "/app/api/group/members" ? { id: 1, members } : { transactions, nextCursor: null };
+
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
     });
     vi.stubGlobal("fetch", fetchMock);
     return fetchMock;
@@ -39,20 +46,23 @@ describe("HistoryApp", () => {
     afterEach(() => {
         vi.unstubAllGlobals();
         vi.clearAllMocks();
+        membersCache.reset();
     });
 
-    it("requests the transactions with the bearer token", async () => {
+    it("requests the transactions and the members with the bearer token", async () => {
         const fetchMock = mockFetch([]);
 
         render(<HistoryApp />);
 
-        await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-        expect(fetchMock).toHaveBeenCalledWith("/app/api/group/transactions", {
+        await waitFor(() =>
+            expect(fetchMock).toHaveBeenCalledWith("/app/api/group/transactions", {
+                method: "GET",
+                headers: expectedHeaders,
+            }),
+        );
+        expect(fetchMock).toHaveBeenCalledWith("/app/api/group/members", {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer token-123",
-                "X-Telegram-Init-Data": "init-data-string",
-            },
+            headers: expectedHeaders,
         });
     });
 
@@ -69,6 +79,20 @@ describe("HistoryApp", () => {
         expect(screen.getByText("Rent")).toBeInTheDocument();
         expect(screen.getByText("Coffee")).toBeInTheDocument();
         expect(container.querySelectorAll(".transaction")).toHaveLength(3);
+    });
+
+    it("renders resolved member names in the cards", async () => {
+        mockFetch(
+            [makeTransaction({ payer: 42, recipients: [1] })],
+            [
+                { id: 42, firstName: "Ada", lastName: "Lovelace", username: null },
+                { id: 1, firstName: "Grace", lastName: "Hopper", username: null },
+            ],
+        );
+
+        render(<HistoryApp />);
+
+        expect(await screen.findByText(/Ada Lovelace → Grace Hopper/)).toBeInTheDocument();
     });
 
     it("renders no cards when the history is empty", async () => {
