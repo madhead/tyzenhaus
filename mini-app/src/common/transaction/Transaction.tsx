@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import dayjs from "../../datetime";
+import { Members } from "../members";
 import "./Transaction.less";
 
 export type Transaction = {
@@ -13,7 +14,7 @@ export type Transaction = {
     timestamp: number;
 };
 
-export default function TransactionCard(transaction: Transaction) {
+export default function TransactionCard({ transaction, members }: { transaction: Transaction; members: Members }) {
     return (
         <div className="transaction">
             <div className="info">
@@ -21,7 +22,7 @@ export default function TransactionCard(transaction: Transaction) {
                 <Title title={transaction.title} />
                 <Amount amount={transaction.amount} currency={transaction.currency} />
             </div>
-            <div className="participants"></div>
+            <Participants payer={transaction.payer} recipients={transaction.recipients} members={members} />
         </div>
     );
 }
@@ -67,24 +68,55 @@ function Title({ title }: { title: string }) {
 }
 
 function Amount({ amount, currency }: { amount: string; currency: string }) {
-    function formatAmount(amount: string) {
-        let result = parseFloat(amount).toFixed(2);
-
-        while (result[result.length - 1] === "0") {
-            result = result.slice(0, result.length - 1);
-        }
-
-        if (result[result.length - 1] === ".") {
-            result = result.slice(0, result.length - 1);
-        }
-
-        return result;
-    }
-
     return (
         <div className="amount">
             <div className="currency">{currency}</div>
-            <div className="quantity">{formatAmount(amount)}</div>
+            <div className="quantity">{formatAmount(amount, currency)}</div>
         </div>
     );
+}
+
+function Participants({ payer, recipients, members }: { payer: number; recipients: number[]; members: Members }) {
+    const payerName = members.name(payer);
+    const recipientNames = recipients.map((id) => members.name(id)).join(", ");
+
+    return <div className="participants">{recipients.length > 0 ? `${payerName} → ${recipientNames}` : payerName}</div>;
+}
+
+function formatAmount(amount: string, currency: string): string {
+    const value = parseFloat(amount);
+    const locale = document.documentElement.lang || "en";
+
+    try {
+        // Currency-aware fraction digits (EUR → 2, JPY → 0) without repeating the code inside `.quantity`:
+        // format with the ISO code display, then drop the `currency` part and any literal whitespace touching it.
+        const parts = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency,
+            currencyDisplay: "code",
+        }).formatToParts(value);
+
+        return parts
+            .filter((part, index) => {
+                if (part.type === "currency") {
+                    return false;
+                }
+
+                if (part.type === "literal" && part.value.trim().length === 0) {
+                    return parts[index - 1]?.type !== "currency" && parts[index + 1]?.type !== "currency";
+                }
+
+                return true;
+            })
+            .map((part) => part.value)
+            .join("");
+    } catch (error) {
+        // Group currencies are not guaranteed to be valid ISO-4217 codes; `Intl.NumberFormat` throws
+        // `RangeError` on those, so fall back to a plain localized decimal.
+        if (error instanceof RangeError) {
+            return new Intl.NumberFormat(locale).format(value);
+        }
+
+        throw error;
+    }
 }
