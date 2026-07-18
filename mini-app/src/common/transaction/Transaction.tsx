@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import "./Transaction.less";
@@ -39,30 +38,63 @@ function Timestamp({ timestamp }: { timestamp: number }) {
 }
 
 function Title({ title }: { title: string }) {
-    const titleContainerRef = useRef<HTMLDivElement>(null);
-    const [marquee, setMarquee] = useState(false);
+    const scrollerRef = useRef<HTMLDivElement>(null);
+    const [overflowing, setOverflowing] = useState(false);
+    const [canLeft, setCanLeft] = useState(false);
+    const [canRight, setCanRight] = useState(false);
 
-    useEffect(() => {
-        if (!titleContainerRef.current) {
+    // Which scroll directions remain (mobile drags the title horizontally). Recomputed on scroll and on resize.
+    const update = useCallback(() => {
+        const element = scrollerRef.current;
+
+        if (!element) {
             return;
         }
 
-        const element = titleContainerRef.current;
+        const maxScroll = element.scrollWidth - element.clientWidth;
 
-        if (element.offsetWidth < element.scrollWidth || element.offsetHeight < element.scrollHeight) {
-            setMarquee(true);
+        setOverflowing(maxScroll > 0);
+        setCanLeft(element.scrollLeft > 0);
+        setCanRight(element.scrollLeft < maxScroll - 1);
+    }, []);
+
+    useEffect(() => {
+        const element = scrollerRef.current;
+
+        if (!element) {
+            return;
         }
-    }, [titleContainerRef]);
+
+        update();
+
+        const observer = new ResizeObserver(update);
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, [title, update]);
 
     return (
-        <div className="title" ref={titleContainerRef}>
-            {marquee && (
-                <Marquee delay={3}>
-                    {title}
-                    <span className="spacer" />
-                </Marquee>
+        <div className="title">
+            <div
+                className="scroller"
+                ref={scrollerRef}
+                onScroll={update}
+                // Desktop has no touch scrolling, so keep the full title on hover / long-press instead.
+                title={overflowing ? title : undefined}
+            >
+                <span className="text">{title}</span>
+            </div>
+            {canLeft && (
+                <span className="arrow left" aria-hidden="true">
+                    ‹
+                </span>
             )}
-            {!marquee && <span>{title}</span>}
+            {canRight && (
+                <span className="arrow right" aria-hidden="true">
+                    ›
+                </span>
+            )}
         </div>
     );
 }

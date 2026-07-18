@@ -52,17 +52,66 @@
         }
 
         & > .title {
-            display: flex;
-            flex-direction: column-reverse;
+            position: relative;
             font-size: 18pt;
+            line-height: 24pt;
             flex-grow: 1;
+            min-width: 0;
+            align-self: center;
             margin-inline: 8px 8px;
-            max-height: 36pt;
-            overflow: hidden;
 
-            .spacer {
-                display: block;
-                width: 25vw;
+            // Desktop: a single clipped line with an ellipsis (the full title is on the `title` attribute, shown on
+            // hover). Touch: a horizontally drag-scrollable line, scrollbar hidden, so the user can pan to read it.
+            & > .scroller {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                @media (pointer: coarse), (hover: none) {
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    text-overflow: clip;
+                    // Claim horizontal panning only, so vertical drags still scroll the list underneath.
+                    touch-action: pan-x;
+                    -webkit-overflow-scrolling: touch;
+                    // Hide the scrollbar (Firefox, then WebKit/Blink).
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+            }
+
+            // Direction hints, shown only on touch and only for a direction that can still be scrolled. On a
+            // gradient backdrop so the glyph stays legible over the text; `pointer-events: none` lets drags pass
+            // through to the scroller beneath.
+            & > .arrow {
+                display: none;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                align-items: center;
+                pointer-events: none;
+                color: var(--tg-theme-hint-color);
+
+                @media (pointer: coarse), (hover: none) {
+                    display: flex;
+                }
+
+                &.left {
+                    left: 0;
+                    justify-content: flex-start;
+                    padding: 0 16px 0 2px;
+                    background: linear-gradient(to right, var(--tg-theme-bg-color) 45%, transparent);
+                }
+
+                &.right {
+                    right: 0;
+                    justify-content: flex-end;
+                    padding: 0 2px 0 16px;
+                    background: linear-gradient(to left, var(--tg-theme-bg-color) 45%, transparent);
+                }
             }
         }
 

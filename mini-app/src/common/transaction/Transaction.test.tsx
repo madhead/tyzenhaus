@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import TransactionCard, { Transaction } from "./Transaction";
@@ -38,6 +38,74 @@ describe("TransactionCard", () => {
         renderCard({ currency: "USD" });
 
         expect(screen.getByText("USD")).toBeInTheDocument();
+    });
+
+    describe("title (drag to scroll)", () => {
+        // The scroll geometry that decides which direction arrows show can't be computed by jsdom; fake it.
+        function mockMetrics(scrollWidth: number, clientWidth: number, scrollLeft: number) {
+            const sw = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth);
+            const cw = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth);
+            const sl = vi.spyOn(HTMLElement.prototype, "scrollLeft", "get").mockReturnValue(scrollLeft);
+
+            return () => {
+                sw.mockRestore();
+                cw.mockRestore();
+                sl.mockRestore();
+            };
+        }
+
+        it("shows only the right arrow at the start and exposes the full title", () => {
+            const restore = mockMetrics(300, 100, 0);
+
+            try {
+                const { container } = renderCard({ title: "A very long grocery run title" });
+
+                expect(container.querySelector(".arrow.right")).not.toBeNull();
+                expect(container.querySelector(".arrow.left")).toBeNull();
+                expect(container.querySelector(".scroller")).toHaveAttribute("title", "A very long grocery run title");
+            } finally {
+                restore();
+            }
+        });
+
+        it("shows both arrows while scrolled in the middle", () => {
+            const restore = mockMetrics(300, 100, 100);
+
+            try {
+                const { container } = renderCard({ title: "Long title" });
+
+                expect(container.querySelector(".arrow.left")).not.toBeNull();
+                expect(container.querySelector(".arrow.right")).not.toBeNull();
+            } finally {
+                restore();
+            }
+        });
+
+        it("shows only the left arrow at the end", () => {
+            const restore = mockMetrics(300, 100, 200);
+
+            try {
+                const { container } = renderCard({ title: "Long title" });
+
+                expect(container.querySelector(".arrow.left")).not.toBeNull();
+                expect(container.querySelector(".arrow.right")).toBeNull();
+            } finally {
+                restore();
+            }
+        });
+
+        it("shows no arrows and no tooltip when the title fits", () => {
+            const restore = mockMetrics(100, 100, 0);
+
+            try {
+                const { container } = renderCard({ title: "Short" });
+
+                expect(container.querySelector(".arrow")).toBeNull();
+                expect(container.querySelector(".scroller")).not.toHaveAttribute("title");
+            } finally {
+                restore();
+            }
+        });
     });
 
     describe("timestamp", () => {
