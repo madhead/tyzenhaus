@@ -52,18 +52,18 @@
         }
 
         & > .title {
-            display: flex;
-            flex-direction: column-reverse;
             font-size: 18pt;
             flex-grow: 1;
+            // Let the flex item shrink below its content width so the clamp/ellipsis can kick in.
+            min-width: 0;
+            align-self: center;
             margin-inline: 8px 8px;
-            max-height: 36pt;
-            overflow: hidden;
 
-            .spacer {
-                display: block;
-                width: 25vw;
-            }
+            // Show up to two lines, then truncate with an ellipsis.
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         & > .amount {

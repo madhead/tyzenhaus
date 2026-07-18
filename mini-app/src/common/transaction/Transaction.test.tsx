@@ -40,6 +40,12 @@ describe("TransactionCard", () => {
         expect(screen.getByText("USD")).toBeInTheDocument();
     });
 
+    it("exposes the full title via the native tooltip attribute", () => {
+        const { container } = renderCard({ title: "A very long grocery run title" });
+
+        expect(container.querySelector(".title")).toHaveAttribute("title", "A very long grocery run title");
+    });
+
     describe("timestamp", () => {
         it("shows the abbreviated month and zero-padded day of the transaction", () => {
             const timestamp = Date.UTC(2024, 0, 5, 12, 0, 0);

@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import "./Transaction.less";
@@ -39,30 +37,10 @@ function Timestamp({ timestamp }: { timestamp: number }) {
 }
 
 function Title({ title }: { title: string }) {
-    const titleContainerRef = useRef<HTMLDivElement>(null);
-    const [marquee, setMarquee] = useState(false);
-
-    useEffect(() => {
-        if (!titleContainerRef.current) {
-            return;
-        }
-
-        const element = titleContainerRef.current;
-
-        if (element.offsetWidth < element.scrollWidth || element.offsetHeight < element.scrollHeight) {
-            setMarquee(true);
-        }
-    }, [titleContainerRef]);
-
+    // Clamp to two lines, then ellipsis; the full title is available via the native tooltip / long-press.
     return (
-        <div className="title" ref={titleContainerRef}>
-            {marquee && (
-                <Marquee delay={3}>
-                    {title}
-                    <span className="spacer" />
-                </Marquee>
-            )}
-            {!marquee && <span>{title}</span>}
+        <div className="title" title={title}>
+            {title}
         </div>
     );
 }
