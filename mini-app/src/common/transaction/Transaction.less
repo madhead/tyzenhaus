@@ -53,16 +53,77 @@
 
         & > .title {
             display: flex;
-            flex-direction: column-reverse;
+            align-items: baseline;
             font-size: 18pt;
+            line-height: 24pt;
             flex-grow: 1;
+            min-width: 0;
+            // Anchor the top edge (not the centre) so expanding adds lines strictly downward — a centred title
+            // would grow symmetrically and push the first line up. The padding then drops the collapsed single
+            // line to where centring would have put it: (36pt row [12pt month + 24pt date] − 24pt line) / 2 = 6pt.
+            align-self: flex-start;
+            padding-top: 6pt;
             margin-inline: 8px 8px;
-            max-height: 36pt;
-            overflow: hidden;
 
-            .spacer {
-                display: block;
-                width: 25vw;
+            // Collapsed: a single clipped line. The sibling `.ellipsis` draws an animated ellipsis instead of the
+            // native one; `min-width: 0` lets the item shrink so it clips. `overflow: clip` (not `hidden`) keeps
+            // `.text` from becoming a scroll container — that would synthesise its baseline from the box bottom and
+            // drop the dots below the text instead of onto the baseline.
+            & > .text {
+                flex: 1;
+                min-width: 0;
+                overflow: clip;
+                white-space: nowrap;
+            }
+
+            // Fade the clipped edge into the dots rather than hard-cutting a glyph — only while actually truncated.
+            &.interactive:not(.expanded) > .text {
+                -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1em), transparent);
+                mask-image: linear-gradient(to right, #000 calc(100% - 1em), transparent);
+            }
+
+            // Animated stand-in for the ellipsis: three real dots so each can be coloured independently.
+            & > .ellipsis {
+                display: inline-flex;
+                flex-shrink: 0;
+                gap: 3px;
+                padding-inline-start: 4px;
+
+                & > i {
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 50%;
+                    background-color: var(--tg-theme-hint-color);
+                    // Each dot pulses to the theme accent and back; staggering the delay makes the accent
+                    // travel dot-to-dot, hinting the title expands.
+                    animation: title-ellipsis 1.5s ease-in-out infinite;
+
+                    &:nth-child(2) {
+                        animation-delay: 0.25s;
+                    }
+
+                    &:nth-child(3) {
+                        animation-delay: 0.5s;
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    & > i {
+                        animation: none;
+                    }
+                }
+            }
+
+            &.interactive {
+                cursor: pointer;
+                // Suppress the WebView's translucent blue tap-highlight on the (now tappable) title.
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            // Expanded: let the text wrap to as many lines as it needs (grows downward from the anchored top).
+            &.expanded > .text {
+                white-space: normal;
+                overflow: visible;
             }
         }
 
@@ -70,7 +131,7 @@
             display: flex;
             flex-direction: column;
 
-            color: var(--tg-theme-link-color);
+            color: var(--tg-theme-accent-text-color, var(--tg-theme-link-color));
             text-align: end;
 
             margin-inline-start: 8px;
@@ -93,5 +154,16 @@
         font-size: 10pt;
         line-height: 12pt;
         margin-top: 4px;
+    }
+}
+
+@keyframes title-ellipsis {
+    0%,
+    100% {
+        background-color: var(--tg-theme-hint-color);
+    }
+
+    50% {
+        background-color: var(--tg-theme-accent-text-color, var(--tg-theme-link-color));
     }
 }

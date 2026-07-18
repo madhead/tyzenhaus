@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import TransactionCard, { Transaction } from "./Transaction";
@@ -38,6 +38,63 @@ describe("TransactionCard", () => {
         renderCard({ currency: "USD" });
 
         expect(screen.getByText("USD")).toBeInTheDocument();
+    });
+
+    describe("title (tap to expand)", () => {
+        // Truncation is detected via scrollWidth > clientWidth, which jsdom can't compute, so fake the measurement.
+        function mockOverflow(scrollWidth: number, clientWidth: number) {
+            const scroll = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth);
+            const client = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth);
+
+            return () => {
+                scroll.mockRestore();
+                client.mockRestore();
+            };
+        }
+
+        it("shows the animated ellipsis and toggles expanded on tap when the title is truncated", () => {
+            const restore = mockOverflow(200, 100);
+
+            try {
+                const { container } = renderCard({ title: "A very long grocery run title" });
+                const title = container.querySelector(".title") as HTMLElement;
+
+                expect(title).toHaveAttribute("role", "button");
+                expect(title).toHaveAttribute("aria-expanded", "false");
+                expect(title).toHaveAttribute("title", "A very long grocery run title");
+                expect(container.querySelectorAll(".ellipsis > i")).toHaveLength(3);
+
+                fireEvent.click(title);
+
+                expect(title).toHaveAttribute("aria-expanded", "true");
+                expect(title).toHaveClass("expanded");
+                expect(title).not.toHaveAttribute("title");
+                expect(container.querySelector(".ellipsis")).toBeNull();
+
+                fireEvent.click(title);
+
+                expect(title).toHaveAttribute("aria-expanded", "false");
+                expect(title).not.toHaveClass("expanded");
+                expect(container.querySelectorAll(".ellipsis > i")).toHaveLength(3);
+            } finally {
+                restore();
+            }
+        });
+
+        it("is not interactive and has no ellipsis when the title fits", () => {
+            const restore = mockOverflow(100, 100);
+
+            try {
+                const { container } = renderCard({ title: "Short" });
+                const title = container.querySelector(".title") as HTMLElement;
+
+                expect(title).not.toHaveAttribute("role");
+                expect(title).not.toHaveClass("interactive");
+                expect(container.querySelector(".ellipsis")).toBeNull();
+            } finally {
+                restore();
+            }
+        });
     });
 
     describe("timestamp", () => {

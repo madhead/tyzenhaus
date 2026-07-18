@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import "./Transaction.less";
@@ -39,30 +38,80 @@ function Timestamp({ timestamp }: { timestamp: number }) {
 }
 
 function Title({ title }: { title: string }) {
-    const titleContainerRef = useRef<HTMLDivElement>(null);
-    const [marquee, setMarquee] = useState(false);
+    const textRef = useRef<HTMLSpanElement>(null);
+    const [expanded, setExpanded] = useState(false);
+    const [truncatable, setTruncatable] = useState(false);
 
+    // Overflow can only be measured. Detect it while the title is a single clipped line so we only offer the
+    // tap-to-expand affordance (and animated ellipsis) when there's more to reveal; keep the last measurement
+    // while expanded (the text wraps then, so there's no horizontal overflow to see).
     useEffect(() => {
-        if (!titleContainerRef.current) {
+        const element = textRef.current;
+
+        if (!element) {
             return;
         }
 
-        const element = titleContainerRef.current;
+        const measure = () => {
+            if (!expanded) {
+                setTruncatable(element.scrollWidth > element.clientWidth);
+            }
+        };
 
-        if (element.offsetWidth < element.scrollWidth || element.offsetHeight < element.scrollHeight) {
-            setMarquee(true);
-        }
-    }, [titleContainerRef]);
+        measure();
+
+        const observer = new ResizeObserver(measure);
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, [title, expanded]);
+
+    const interactive = truncatable || expanded;
+    const showEllipsis = truncatable && !expanded;
+
+    const classes = ["title"];
+
+    if (interactive) {
+        classes.push("interactive");
+    }
+
+    if (expanded) {
+        classes.push("expanded");
+    }
+
+    const toggle = () => setExpanded((value) => !value);
 
     return (
-        <div className="title" ref={titleContainerRef}>
-            {marquee && (
-                <Marquee delay={3}>
-                    {title}
-                    <span className="spacer" />
-                </Marquee>
+        <div
+            className={classes.join(" ")}
+            // While collapsed, the native tooltip / long-press still surfaces the full title on desktop.
+            title={showEllipsis ? title : undefined}
+            role={interactive ? "button" : undefined}
+            tabIndex={interactive ? 0 : undefined}
+            aria-expanded={interactive ? expanded : undefined}
+            onClick={interactive ? toggle : undefined}
+            onKeyDown={
+                interactive
+                    ? (event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              toggle();
+                          }
+                      }
+                    : undefined
+            }
+        >
+            <span className="text" ref={textRef}>
+                {title}
+            </span>
+            {showEllipsis && (
+                <span className="ellipsis" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                </span>
             )}
-            {!marquee && <span>{title}</span>}
         </div>
     );
 }
