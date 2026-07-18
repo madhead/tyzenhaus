@@ -12,7 +12,7 @@
             display: flex;
             flex-direction: column;
 
-            color: var(--tg-theme-hint-color);
+            color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
             text-align: justify;
             text-justify: auto;
             min-width: 40px;
@@ -93,7 +93,7 @@
                 bottom: 0;
                 align-items: center;
                 pointer-events: none;
-                color: var(--tg-theme-hint-color);
+                color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
 
                 @media (pointer: coarse), (hover: none) {
                     display: flex;
@@ -119,7 +119,7 @@
             display: flex;
             flex-direction: column;
 
-            color: var(--tg-theme-link-color);
+            color: var(--tg-theme-accent-text-color, var(--tg-theme-link-color));
             text-align: end;
 
             margin-inline-start: 8px;
@@ -138,7 +138,7 @@
     }
 
     & > .participants {
-        color: var(--tg-theme-hint-color);
+        color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
         font-size: 10pt;
         line-height: 12pt;
         margin-top: 4px;
