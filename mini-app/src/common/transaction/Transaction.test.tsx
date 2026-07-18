@@ -129,6 +129,14 @@ describe("TransactionCard", () => {
             // Fixed `YYYY-MM-DD HH:mm` shape, independent of the runner's timezone.
             expect(title).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
         });
+
+        it("renders as a <time> element with a machine-readable dateTime", () => {
+            const { container } = renderCard({ timestamp: Date.UTC(2024, 0, 5, 15, 30, 0) });
+
+            const el = container.querySelector(".timestamp");
+            expect(el?.tagName.toLowerCase()).toBe("time");
+            expect(el?.getAttribute("datetime")).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
+        });
     });
 
     describe("participants", () => {

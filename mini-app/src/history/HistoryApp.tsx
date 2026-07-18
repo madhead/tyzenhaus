@@ -21,11 +21,16 @@ function HistoryApp() {
     }, []);
 
     return (
-        <div className="history">
-            {transactions.map((transaction) => (
-                <TransactionCard key={transaction.id} transaction={transaction} members={members} />
-            ))}
-        </div>
+        <main aria-label="Transaction history">
+            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+            <ul className="history" role="list">
+                {transactions.map((transaction) => (
+                    <li key={transaction.id}>
+                        <TransactionCard transaction={transaction} members={members} />
+                    </li>
+                ))}
+            </ul>
+        </main>
     );
 }
 

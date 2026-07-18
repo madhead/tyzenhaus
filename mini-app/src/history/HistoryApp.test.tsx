@@ -81,6 +81,16 @@ describe("HistoryApp", () => {
         expect(container.querySelectorAll(".transaction")).toHaveLength(3);
     });
 
+    it("renders the transactions as a semantic list", async () => {
+        mockFetch([makeTransaction({ id: 1, title: "Rent" }), makeTransaction({ id: 2, title: "Coffee" })]);
+
+        const { container } = render(<HistoryApp />);
+
+        await screen.findByText("Rent");
+        expect(screen.getByRole("list")).toBeInTheDocument();
+        expect(container.querySelectorAll("ul.history > li")).toHaveLength(2);
+    });
+
     it("renders resolved member names in the cards", async () => {
         mockFetch(
             [makeTransaction({ payer: 42, recipients: [1] })],

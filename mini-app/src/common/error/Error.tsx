@@ -5,7 +5,11 @@ type ErrorProps = {
 };
 
 function Error({ error }: ErrorProps) {
-    return <div id="error">{error}</div>;
+    return (
+        <div id="error" role="alert">
+            {error}
+        </div>
+    );
 }
 
 export default Error;

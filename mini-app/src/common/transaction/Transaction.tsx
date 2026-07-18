@@ -15,14 +15,14 @@ export type Transaction = {
 
 export default function TransactionCard({ transaction, members }: { transaction: Transaction; members: Members }) {
     return (
-        <div className="transaction">
+        <article className="transaction">
             <div className="info">
                 <Timestamp timestamp={transaction.timestamp} />
                 <Title title={transaction.title} />
                 <Amount amount={transaction.amount} currency={transaction.currency} />
             </div>
             <Participants payer={transaction.payer} recipients={transaction.recipients} members={members} />
-        </div>
+        </article>
     );
 }
 
@@ -30,10 +30,10 @@ function Timestamp({ timestamp }: { timestamp: number }) {
     const m = dayjs(timestamp);
 
     return (
-        <div className="timestamp" title={m.format("YYYY-MM-DD HH:mm")}>
+        <time className="timestamp" dateTime={m.format("YYYY-MM-DDTHH:mm")} title={m.format("YYYY-MM-DD HH:mm")}>
             <div className="month">{m.format("MMM")}</div>
             <div className="date">{m.format("DD")}</div>
-        </div>
+        </time>
     );
 }
 
