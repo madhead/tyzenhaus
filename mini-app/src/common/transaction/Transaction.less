@@ -6,6 +6,7 @@
     & > .info {
         display: flex;
         flex-direction: row;
+        align-items: last baseline;
 
         & > .timestamp {
             display: flex;
@@ -20,6 +21,7 @@
             @media (pointer: coarse), (hover: none) {
                 &::after {
                     content: "";
+                    position: absolute;
                 }
 
                 &:hover::after {
@@ -52,17 +54,64 @@
         }
 
         & > .title {
-            display: flex;
-            flex-direction: column-reverse;
+            position: relative;
             font-size: 18pt;
+            line-height: 24pt;
             flex-grow: 1;
+            min-width: 0;
             margin-inline: 8px 8px;
-            max-height: 36pt;
-            overflow: hidden;
 
-            .spacer {
-                display: block;
-                width: 25vw;
+            & > .scroller {
+                overflow: visible;
+                white-space: nowrap;
+            }
+
+            &.scrollable > .scroller {
+                // Desktop: clip with an ellipsis (the full title is on the `title` attribute, shown on hover).
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                // Touch: a horizontally drag-scrollable line, scrollbar hidden, so the user can pan to read it.
+                @media (pointer: coarse), (hover: none) {
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    text-overflow: clip;
+                    touch-action: pan-x;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+            }
+
+            & > .arrow {
+                display: none;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                align-items: center;
+                pointer-events: none;
+                color: var(--tg-theme-hint-color);
+
+                @media (pointer: coarse), (hover: none) {
+                    display: flex;
+                }
+
+                &.left {
+                    left: 0;
+                    justify-content: flex-start;
+                    padding: 0 16px 0 2px;
+                    background: linear-gradient(to right, var(--tg-theme-bg-color) 45%, transparent);
+                }
+
+                &.right {
+                    right: 0;
+                    justify-content: flex-end;
+                    padding: 0 2px 0 16px;
+                    background: linear-gradient(to left, var(--tg-theme-bg-color) 45%, transparent);
+                }
             }
         }
 
