@@ -2645,7 +2645,6 @@ __metadata:
     prettier: "npm:^3.9.10"
     react: "npm:^19.3.1"
     react-dom: "npm:^19.3.1"
-    react-fast-marquee: "npm:^1.6.5"
     react-i18next: "npm:^17.1.0"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.72.0"
@@ -2987,16 +2986,6 @@ __metadata:
   peerDependencies:
     react: ^19.3.1
   checksum: 10/0b44dcb3352d85b9e27d32018b92a511b8982bf1133d83a8644eae54b26f0d86361ae3cc5f3802c80f21233c15bbd13ff26584ba0b95317f03e0371a96134e2e
-  languageName: node
-  linkType: hard
-
-"react-fast-marquee@npm:^1.6.5":
-  version: 1.6.5
-  resolution: "react-fast-marquee@npm:1.6.5"
-  peerDependencies:
-    react: ">= 16.8.0 || ^18.0.0"
-    react-dom: ">= 16.8.0 || ^18.0.0"
-  checksum: 10/ac77bc21060c359df1d56864f355dbe46422c58fdcab47c24763a17e50ab40f6ba8506b209f6e076e0ab06500edf86bb011781559d105c65421e7f681fabaaa4
   languageName: node
   linkType: hard
 

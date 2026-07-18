@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import dayjs from "../../datetime";
 import { Members } from "../members";
 import TransactionCard, { Transaction } from "./Transaction";
@@ -40,6 +40,76 @@ describe("TransactionCard", () => {
         expect(screen.getByText("USD")).toBeInTheDocument();
     });
 
+    describe("title (scrollable when long)", () => {
+        // The scroll geometry that decides truncation and which arrows show can't be computed by jsdom; fake it.
+        function mockMetrics(scrollWidth: number, clientWidth: number, scrollLeft: number) {
+            const sw = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth);
+            const cw = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth);
+            const sl = vi.spyOn(HTMLElement.prototype, "scrollLeft", "get").mockReturnValue(scrollLeft);
+
+            return () => {
+                sw.mockRestore();
+                cw.mockRestore();
+                sl.mockRestore();
+            };
+        }
+
+        it("stays plain text with no tooltip or arrows when it fits", () => {
+            const restore = mockMetrics(100, 100, 0);
+
+            try {
+                const { container } = renderCard({ title: "Short" });
+
+                expect(container.querySelector(".title")).not.toHaveClass("scrollable");
+                expect(container.querySelector(".scroller")).not.toHaveAttribute("title");
+                expect(container.querySelector(".arrow")).toBeNull();
+            } finally {
+                restore();
+            }
+        });
+
+        it("becomes scrollable with the full title and only the right arrow at the start", () => {
+            const restore = mockMetrics(300, 100, 0);
+
+            try {
+                const { container } = renderCard({ title: "A very long grocery run title" });
+
+                expect(container.querySelector(".title")).toHaveClass("scrollable");
+                expect(container.querySelector(".scroller")).toHaveAttribute("title", "A very long grocery run title");
+                expect(container.querySelector(".arrow.right")).not.toBeNull();
+                expect(container.querySelector(".arrow.left")).toBeNull();
+            } finally {
+                restore();
+            }
+        });
+
+        it("shows both arrows while scrolled in the middle", () => {
+            const restore = mockMetrics(300, 100, 100);
+
+            try {
+                const { container } = renderCard({ title: "Long title" });
+
+                expect(container.querySelector(".arrow.left")).not.toBeNull();
+                expect(container.querySelector(".arrow.right")).not.toBeNull();
+            } finally {
+                restore();
+            }
+        });
+
+        it("shows only the left arrow at the end", () => {
+            const restore = mockMetrics(300, 100, 200);
+
+            try {
+                const { container } = renderCard({ title: "Long title" });
+
+                expect(container.querySelector(".arrow.left")).not.toBeNull();
+                expect(container.querySelector(".arrow.right")).toBeNull();
+            } finally {
+                restore();
+            }
+        });
+    });
+
     describe("timestamp", () => {
         it("shows the abbreviated month and zero-padded day of the transaction", () => {
             const timestamp = Date.UTC(2024, 0, 5, 12, 0, 0);
@@ -50,12 +120,14 @@ describe("TransactionCard", () => {
             expect(screen.getByText(m.format("DD"))).toBeInTheDocument();
         });
 
-        it("exposes the full localized date as a tooltip", () => {
-            const timestamp = Date.UTC(2024, 0, 5, 12, 0, 0);
+        it("exposes the full date as an ISO-8601 tooltip (24-hour, never AM/PM)", () => {
+            const timestamp = Date.UTC(2024, 0, 5, 15, 30, 0);
             const { container } = renderCard({ timestamp });
 
-            const el = container.querySelector(".timestamp");
-            expect(el).toHaveAttribute("title", dayjs(timestamp).format("llll"));
+            const title = container.querySelector(".timestamp")?.getAttribute("title") ?? "";
+
+            // Fixed `YYYY-MM-DD HH:mm` shape, independent of the runner's timezone.
+            expect(title).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
         });
     });
 
