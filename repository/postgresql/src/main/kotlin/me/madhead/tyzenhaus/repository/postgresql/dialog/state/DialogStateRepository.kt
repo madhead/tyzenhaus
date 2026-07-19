@@ -1,7 +1,6 @@
 package me.madhead.tyzenhaus.repository.postgresql.dialog.state
 
 import javax.sql.DataSource
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.madhead.tyzenhaus.entity.dialog.state.DialogState
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository

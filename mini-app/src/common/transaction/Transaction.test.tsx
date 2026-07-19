@@ -61,7 +61,7 @@ describe("TransactionCard", () => {
                 const { container } = renderCard({ title: "Short" });
 
                 expect(container.querySelector(".title")).not.toHaveClass("scrollable");
-                expect(container.querySelector(".scroller")).not.toHaveAttribute("title");
+                expect(container.querySelector(".title .scroller")).not.toHaveAttribute("title");
                 expect(container.querySelector(".title .arrow")).toBeNull();
             } finally {
                 restore();
@@ -75,7 +75,10 @@ describe("TransactionCard", () => {
                 const { container } = renderCard({ title: "A very long grocery run title" });
 
                 expect(container.querySelector(".title")).toHaveClass("scrollable");
-                expect(container.querySelector(".scroller")).toHaveAttribute("title", "A very long grocery run title");
+                expect(container.querySelector(".title .scroller")).toHaveAttribute(
+                    "title",
+                    "A very long grocery run title",
+                );
                 expect(container.querySelector(".title .arrow.right")).not.toBeNull();
                 expect(container.querySelector(".title .arrow.left")).toBeNull();
             } finally {
@@ -141,39 +144,33 @@ describe("TransactionCard", () => {
 
     describe("participants", () => {
         function recipientNames(container: HTMLElement): (string | null)[] {
-            return Array.from(container.querySelectorAll(".participants .recipients li")).map((li) => li.textContent);
+            return Array.from(container.querySelectorAll(".recipients li")).map((li) => li.textContent);
         }
 
-        it("renders the payer and the recipients", () => {
+        it("renders the payer on the top line of the details column", () => {
+            const { container } = renderCard({ payer: 42 });
+
+            expect(container.querySelector(".info .details > .payer")).toHaveTextContent("Alice");
+        });
+
+        it("renders the recipients", () => {
             const { container } = renderCard({ payer: 42, recipients: [1, 2] });
 
-            expect(container.querySelector(".participants .payer")).toHaveTextContent("Alice");
             expect(recipientNames(container)).toEqual(["Bob", "Carol"]);
         });
 
         it("falls back to #id for unknown members", () => {
             const { container } = renderCard({ payer: 7, recipients: [1, 8] });
 
-            expect(container.querySelector(".participants .payer")).toHaveTextContent("#7");
+            expect(container.querySelector(".payer")).toHaveTextContent("#7");
             expect(recipientNames(container)).toEqual(["Bob", "#8"]);
         });
 
-        it("collapses recipients past the third into a +N carrying their names", () => {
-            const many = new Members(
-                [42, 1, 2, 3, 4, 5].map((id) => ({ id, firstName: `M${id}`, lastName: "", username: null })),
-            );
-            const { container } = renderCard({ payer: 42, recipients: [1, 2, 3, 4, 5] }, many);
-
-            expect(recipientNames(container)).toEqual(["M1", "M2", "M3", "+2"]);
-            expect(container.querySelector(".participants .recipients .more")).toHaveAttribute("title", "M4, M5");
-        });
-
-        it("renders just the payer when there are no recipients", () => {
+        it("renders no recipients list at all when there are none", () => {
             const { container } = renderCard({ payer: 42, recipients: [] });
 
-            expect(container.querySelector(".participants .payer")).toHaveTextContent("Alice");
-            expect(container.querySelector(".participants .arrow")).toBeNull();
-            expect(container.querySelector(".participants .recipients")).toBeNull();
+            expect(container.querySelector(".payer")).toHaveTextContent("Alice");
+            expect(container.querySelector(".recipients")).toBeNull();
         });
     });
 

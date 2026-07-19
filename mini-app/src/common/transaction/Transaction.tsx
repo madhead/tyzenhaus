@@ -18,10 +18,13 @@ export default function TransactionCard({ transaction, members }: { transaction:
         <article className="transaction">
             <div className="info">
                 <Timestamp timestamp={transaction.timestamp} />
-                <Title title={transaction.title} />
+                <div className="details">
+                    <Scrollable className="payer" text={members.name(transaction.payer)} />
+                    <Scrollable className="title" text={transaction.title} />
+                </div>
                 <Amount amount={transaction.amount} currency={transaction.currency} />
             </div>
-            <Participants payer={transaction.payer} recipients={transaction.recipients} members={members} />
+            <Recipients recipients={transaction.recipients} members={members} />
         </article>
     );
 }
@@ -37,7 +40,11 @@ function Timestamp({ timestamp }: { timestamp: number }) {
     );
 }
 
-function Title({ title }: { title: string }) {
+/**
+ * A single line of text that never wraps: plain when it fits, and when it doesn't, an ellipsis plus the full text as a
+ * native tooltip on desktop, or a drag-scrollable line with edge arrows on touch (where there is no hover).
+ */
+function Scrollable({ className, text }: { className: string; text: string }) {
     const scrollerRef = useRef<HTMLDivElement>(null);
     const [overflowing, setOverflowing] = useState(false);
     const [canLeft, setCanLeft] = useState(false);
@@ -71,12 +78,12 @@ function Title({ title }: { title: string }) {
         observer.observe(element);
 
         return () => observer.disconnect();
-    }, [title, update]);
+    }, [text, update]);
 
     return (
-        <div className={overflowing ? "title scrollable" : "title"}>
-            <div className="scroller" ref={scrollerRef} onScroll={update} title={overflowing ? title : undefined}>
-                <span className="text">{title}</span>
+        <div className={overflowing ? `${className} scrollable` : className}>
+            <div className="scroller" ref={scrollerRef} onScroll={update} title={overflowing ? text : undefined}>
+                <span className="text">{text}</span>
             </div>
             {canLeft && (
                 <span className="arrow left" aria-hidden="true">
@@ -101,35 +108,18 @@ function Amount({ amount, currency }: { amount: string; currency: string }) {
     );
 }
 
-// Keep cards one line tall: beyond this, the rest collapse into a `+N` that carries the names as a tooltip.
-const SHOWN_RECIPIENTS = 3;
-
-function Participants({ payer, recipients, members }: { payer: number; recipients: number[]; members: Members }) {
-    const shown = recipients.slice(0, SHOWN_RECIPIENTS);
-    const hidden = recipients.slice(SHOWN_RECIPIENTS);
+function Recipients({ recipients, members }: { recipients: number[]; members: Members }) {
+    if (recipients.length === 0) {
+        return null;
+    }
 
     return (
-        <div className="participants">
-            <span className="payer">{members.name(payer)}</span>
-            {recipients.length > 0 && (
-                <>
-                    <span className="arrow" aria-hidden="true">
-                        →
-                    </span>
-                    {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-                    <ul className="recipients" role="list">
-                        {shown.map((id) => (
-                            <li key={id}>{members.name(id)}</li>
-                        ))}
-                        {hidden.length > 0 && (
-                            <li className="more" title={hidden.map((id) => members.name(id)).join(", ")}>
-                                +{hidden.length}
-                            </li>
-                        )}
-                    </ul>
-                </>
-            )}
-        </div>
+        // eslint-disable-next-line jsx-a11y/no-redundant-roles
+        <ul className="recipients" role="list">
+            {recipients.map((id) => (
+                <li key={id}>{members.name(id)}</li>
+            ))}
+        </ul>
     );
 }
 
