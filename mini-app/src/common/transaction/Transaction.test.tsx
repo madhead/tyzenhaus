@@ -62,7 +62,7 @@ describe("TransactionCard", () => {
 
                 expect(container.querySelector(".title")).not.toHaveClass("scrollable");
                 expect(container.querySelector(".scroller")).not.toHaveAttribute("title");
-                expect(container.querySelector(".arrow")).toBeNull();
+                expect(container.querySelector(".title .arrow")).toBeNull();
             } finally {
                 restore();
             }
@@ -76,8 +76,8 @@ describe("TransactionCard", () => {
 
                 expect(container.querySelector(".title")).toHaveClass("scrollable");
                 expect(container.querySelector(".scroller")).toHaveAttribute("title", "A very long grocery run title");
-                expect(container.querySelector(".arrow.right")).not.toBeNull();
-                expect(container.querySelector(".arrow.left")).toBeNull();
+                expect(container.querySelector(".title .arrow.right")).not.toBeNull();
+                expect(container.querySelector(".title .arrow.left")).toBeNull();
             } finally {
                 restore();
             }
@@ -89,8 +89,8 @@ describe("TransactionCard", () => {
             try {
                 const { container } = renderCard({ title: "Long title" });
 
-                expect(container.querySelector(".arrow.left")).not.toBeNull();
-                expect(container.querySelector(".arrow.right")).not.toBeNull();
+                expect(container.querySelector(".title .arrow.left")).not.toBeNull();
+                expect(container.querySelector(".title .arrow.right")).not.toBeNull();
             } finally {
                 restore();
             }
@@ -102,8 +102,8 @@ describe("TransactionCard", () => {
             try {
                 const { container } = renderCard({ title: "Long title" });
 
-                expect(container.querySelector(".arrow.left")).not.toBeNull();
-                expect(container.querySelector(".arrow.right")).toBeNull();
+                expect(container.querySelector(".title .arrow.left")).not.toBeNull();
+                expect(container.querySelector(".title .arrow.right")).toBeNull();
             } finally {
                 restore();
             }
@@ -140,23 +140,30 @@ describe("TransactionCard", () => {
     });
 
     describe("participants", () => {
-        it("renders the payer name followed by the recipient names", () => {
+        function recipientNames(container: HTMLElement): (string | null)[] {
+            return Array.from(container.querySelectorAll(".participants .recipients li")).map((li) => li.textContent);
+        }
+
+        it("renders the payer and the recipients", () => {
             const { container } = renderCard({ payer: 42, recipients: [1, 2] });
 
-            expect(container.querySelector(".participants")).toHaveTextContent("Alice → Bob, Carol");
+            expect(container.querySelector(".participants .payer")).toHaveTextContent("Alice");
+            expect(recipientNames(container)).toEqual(["Bob", "Carol"]);
         });
 
         it("falls back to #id for unknown members", () => {
             const { container } = renderCard({ payer: 7, recipients: [1, 8] });
 
-            expect(container.querySelector(".participants")).toHaveTextContent("#7 → Bob, #8");
+            expect(container.querySelector(".participants .payer")).toHaveTextContent("#7");
+            expect(recipientNames(container)).toEqual(["Bob", "#8"]);
         });
 
-        it("renders just the payer name when there are no recipients", () => {
+        it("renders just the payer when there are no recipients", () => {
             const { container } = renderCard({ payer: 42, recipients: [] });
 
-            expect(container.querySelector(".participants")).toHaveTextContent("Alice");
-            expect(container.querySelector(".participants")?.textContent).not.toContain("→");
+            expect(container.querySelector(".participants .payer")).toHaveTextContent("Alice");
+            expect(container.querySelector(".participants .arrow")).toBeNull();
+            expect(container.querySelector(".participants .recipients")).toBeNull();
         });
     });
 

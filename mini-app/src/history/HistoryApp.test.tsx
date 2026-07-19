@@ -87,7 +87,7 @@ describe("HistoryApp", () => {
         const { container } = render(<HistoryApp />);
 
         await screen.findByText("Rent");
-        expect(screen.getByRole("list")).toBeInTheDocument();
+        expect(container.querySelector("ul.history")).toBeInTheDocument();
         expect(container.querySelectorAll("ul.history > li")).toHaveLength(2);
     });
 
@@ -102,7 +102,8 @@ describe("HistoryApp", () => {
 
         render(<HistoryApp />);
 
-        expect(await screen.findByText(/Ada Lovelace → Grace Hopper/)).toBeInTheDocument();
+        expect(await screen.findByText("Ada Lovelace")).toBeInTheDocument();
+        expect(screen.getByText("Grace Hopper")).toBeInTheDocument();
     });
 
     it("renders no cards when the history is empty", async () => {

@@ -137,9 +137,45 @@
     }
 
     & > .participants {
+        // Payer at the start, recipients at the end, arrow between — echoes the timestamp/amount rhythm above and
+        // keeps the arrow aligned across rows regardless of name length.
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.4em;
+
         color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
         font-size: 10pt;
-        line-height: 12pt;
+        line-height: 14pt;
         margin-top: 4px;
+
+        & > .payer {
+            color: var(--tg-theme-text-color);
+            font-weight: 500;
+        }
+
+        & > .arrow {
+            // Sit the arrow at the optical middle between the payer and the slightly-lower recipients.
+            align-self: center;
+        }
+
+        & > .recipients {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            min-width: 0;
+            text-align: end;
+            // Drop the recipients a touch below the payer for a gentle "from → to" flow (tunable).
+            transform: translateY(0.25em);
+
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            & > li:not(:last-child)::after {
+                content: "·";
+                margin: 0 0.4em;
+            }
+        }
     }
 }

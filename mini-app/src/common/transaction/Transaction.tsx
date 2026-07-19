@@ -102,10 +102,23 @@ function Amount({ amount, currency }: { amount: string; currency: string }) {
 }
 
 function Participants({ payer, recipients, members }: { payer: number; recipients: number[]; members: Members }) {
-    const payerName = members.name(payer);
-    const recipientNames = recipients.map((id) => members.name(id)).join(", ");
-
-    return <div className="participants">{recipients.length > 0 ? `${payerName} → ${recipientNames}` : payerName}</div>;
+    return (
+        <div className="participants">
+            <span className="payer">{members.name(payer)}</span>
+            {recipients.length > 0 && (
+                <>
+                    <span className="arrow" aria-hidden="true">
+                        →
+                    </span>
+                    <ul className="recipients">
+                        {recipients.map((id) => (
+                            <li key={id}>{members.name(id)}</li>
+                        ))}
+                    </ul>
+                </>
+            )}
+        </div>
+    );
 }
 
 function formatAmount(amount: string, currency: string): string {
