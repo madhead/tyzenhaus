@@ -101,7 +101,13 @@ function Amount({ amount, currency }: { amount: string; currency: string }) {
     );
 }
 
+// Keep cards one line tall: beyond this, the rest collapse into a `+N` that carries the names as a tooltip.
+const SHOWN_RECIPIENTS = 3;
+
 function Participants({ payer, recipients, members }: { payer: number; recipients: number[]; members: Members }) {
+    const shown = recipients.slice(0, SHOWN_RECIPIENTS);
+    const hidden = recipients.slice(SHOWN_RECIPIENTS);
+
     return (
         <div className="participants">
             <span className="payer">{members.name(payer)}</span>
@@ -110,10 +116,16 @@ function Participants({ payer, recipients, members }: { payer: number; recipient
                     <span className="arrow" aria-hidden="true">
                         →
                     </span>
-                    <ul className="recipients">
-                        {recipients.map((id) => (
+                    {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+                    <ul className="recipients" role="list">
+                        {shown.map((id) => (
                             <li key={id}>{members.name(id)}</li>
                         ))}
+                        {hidden.length > 0 && (
+                            <li className="more" title={hidden.map((id) => members.name(id)).join(", ")}>
+                                +{hidden.length}
+                            </li>
+                        )}
                     </ul>
                 </>
             )}
