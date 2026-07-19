@@ -137,13 +137,9 @@
     }
 
     & > .participants {
-        // Payer at the start, recipients at the end, arrow between — echoes the timestamp/amount rhythm above and
-        // keeps the arrow aligned across rows regardless of name length.
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 0.4em;
-
+        // One left-aligned run of text, not two columns: the names are unpredictable in length, so anything that
+        // anchors them to opposite edges puts the arrow somewhere different on every row and wraps both sides.
+        // Plain inline flow keeps the reading order (and the arrow) in the same place on every card.
         color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
         font-size: 10pt;
         line-height: 14pt;
@@ -155,26 +151,30 @@
         }
 
         & > .arrow {
-            // Sit the arrow at the optical middle between the payer and the slightly-lower recipients.
-            align-self: center;
+            margin-inline: 0.35em;
+            // The arrow glyph sits low against lowercase text; lift it to the optical centre.
+            vertical-align: 0.05em;
         }
 
         & > .recipients {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            min-width: 0;
-            text-align: end;
-            // Drop the recipients a touch below the payer for a gentle "from → to" flow (tunable).
-            transform: translateY(0.25em);
-
+            // Inline so the names wrap as ordinary text rather than as flex items.
+            display: inline;
             list-style: none;
             margin: 0;
             padding: 0;
 
+            & > li {
+                display: inline;
+            }
+
+            // The separator is glued to the name before it, so it never orphans at the end of a wrapped line the way
+            // a free-standing `·` does; the trailing space is the break opportunity.
             & > li:not(:last-child)::after {
-                content: "·";
-                margin: 0 0.4em;
+                content: ", ";
+            }
+
+            & > .more {
+                white-space: nowrap;
             }
         }
     }

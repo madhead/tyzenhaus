@@ -158,6 +158,16 @@ describe("TransactionCard", () => {
             expect(recipientNames(container)).toEqual(["Bob", "#8"]);
         });
 
+        it("collapses recipients past the third into a +N carrying their names", () => {
+            const many = new Members(
+                [42, 1, 2, 3, 4, 5].map((id) => ({ id, firstName: `M${id}`, lastName: "", username: null })),
+            );
+            const { container } = renderCard({ payer: 42, recipients: [1, 2, 3, 4, 5] }, many);
+
+            expect(recipientNames(container)).toEqual(["M1", "M2", "M3", "+2"]);
+            expect(container.querySelector(".participants .recipients .more")).toHaveAttribute("title", "M4, M5");
+        });
+
         it("renders just the payer when there are no recipients", () => {
             const { container } = renderCard({ payer: 42, recipients: [] });
 
