@@ -1,3 +1,62 @@
+// A single non-wrapping line: ellipsis + native tooltip where there is hover, drag-to-scroll with edge arrows where
+// there isn't. Shared by the payer and the title, which differ only in size and colour.
+.scrollable-line() {
+    position: relative;
+
+    & > .scroller {
+        overflow: visible;
+        white-space: nowrap;
+    }
+
+    &.scrollable > .scroller {
+        // Desktop: clip with an ellipsis (the full text is on the `title` attribute, shown on hover).
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        // Touch: a horizontally drag-scrollable line, scrollbar hidden, so the user can pan to read it.
+        @media (pointer: coarse), (hover: none) {
+            overflow-x: auto;
+            overflow-y: hidden;
+            text-overflow: clip;
+            touch-action: pan-x;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    & > .arrow {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        align-items: center;
+        pointer-events: none;
+        color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
+
+        @media (pointer: coarse), (hover: none) {
+            display: flex;
+        }
+
+        &.left {
+            left: 0;
+            justify-content: flex-start;
+            padding: 0 16px 0 2px;
+            background: linear-gradient(to right, var(--tg-theme-bg-color) 45%, transparent);
+        }
+
+        &.right {
+            right: 0;
+            justify-content: flex-end;
+            padding: 0 2px 0 16px;
+            background: linear-gradient(to left, var(--tg-theme-bg-color) 45%, transparent);
+        }
+    }
+}
+
 .transaction {
     display: flex;
     flex-direction: column;
@@ -51,66 +110,30 @@
             }
         }
 
-        & > .title {
-            position: relative;
-            font-size: 18pt;
-            font-weight: 600;
-            line-height: 24pt;
+        & > .details {
+            display: flex;
+            flex-direction: column;
+
             flex-grow: 1;
             min-width: 0;
-            margin-inline: 8px 8px;
+            margin-inline: 8px;
 
-            & > .scroller {
-                overflow: visible;
-                white-space: nowrap;
-            }
+            // Top line of the middle column: sized and coloured to read as one muted band with the month and the
+            // currency beside it, so the eye takes the row below (date / title / amount) as the content.
+            & > .payer {
+                .scrollable-line();
 
-            &.scrollable > .scroller {
-                // Desktop: clip with an ellipsis (the full title is on the `title` attribute, shown on hover).
-                overflow: hidden;
-                text-overflow: ellipsis;
-
-                // Touch: a horizontally drag-scrollable line, scrollbar hidden, so the user can pan to read it.
-                @media (pointer: coarse), (hover: none) {
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    text-overflow: clip;
-                    touch-action: pan-x;
-                    -webkit-overflow-scrolling: touch;
-                    scrollbar-width: none;
-
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
-                }
-            }
-
-            & > .arrow {
-                display: none;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                align-items: center;
-                pointer-events: none;
                 color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
+                font-size: 12pt;
+                line-height: 12pt;
+            }
 
-                @media (pointer: coarse), (hover: none) {
-                    display: flex;
-                }
+            & > .title {
+                .scrollable-line();
 
-                &.left {
-                    left: 0;
-                    justify-content: flex-start;
-                    padding: 0 16px 0 2px;
-                    background: linear-gradient(to right, var(--tg-theme-bg-color) 45%, transparent);
-                }
-
-                &.right {
-                    right: 0;
-                    justify-content: flex-end;
-                    padding: 0 2px 0 16px;
-                    background: linear-gradient(to left, var(--tg-theme-bg-color) 45%, transparent);
-                }
+                font-size: 18pt;
+                font-weight: 600;
+                line-height: 24pt;
             }
         }
 
@@ -136,46 +159,31 @@
         }
     }
 
-    & > .participants {
-        // One left-aligned run of text, not two columns: the names are unpredictable in length, so anything that
-        // anchors them to opposite edges puts the arrow somewhere different on every row and wraps both sides.
-        // Plain inline flow keeps the reading order (and the arrow) in the same place on every card.
+    & > .recipients {
+        // Left-aligned and free to wrap over as many lines as it needs.
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 0.4em;
+
         color: var(--tg-theme-subtitle-text-color, var(--tg-theme-hint-color));
         font-size: 10pt;
         line-height: 14pt;
-        margin-top: 4px;
+        margin: 4px 0 0 0;
+        padding: 0;
+        list-style: none;
 
-        & > .payer {
-            color: var(--tg-theme-text-color);
-            font-weight: 500;
+        // A turned arrow marks the list as flowing out of the payer above it, without spending a word on saying so.
+        // A pseudo-element of a flex container is itself a flex item, so it sits inline as the first entry and only
+        // ever appears on the first line.
+        &::before {
+            content: "↳";
         }
 
-        & > .arrow {
-            margin-inline: 0.35em;
-            // The arrow glyph sits low against lowercase text; lift it to the optical centre.
-            vertical-align: 0.05em;
-        }
-
-        & > .recipients {
-            // Inline so the names wrap as ordinary text rather than as flex items.
-            display: inline;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-
-            & > li {
-                display: inline;
-            }
-
-            // The separator is glued to the name before it, so it never orphans at the end of a wrapped line the way
-            // a free-standing `·` does; the trailing space is the break opportunity.
-            & > li:not(:last-child)::after {
-                content: ", ";
-            }
-
-            & > .more {
-                white-space: nowrap;
-            }
+        // The separator leads its name instead of trailing the previous one, so a wrap carries "· name" down together
+        // and no dot is ever left dangling at the end of a line.
+        & > li:not(:first-child)::before {
+            content: "·";
+            margin-inline-end: 0.4em;
         }
     }
 }
