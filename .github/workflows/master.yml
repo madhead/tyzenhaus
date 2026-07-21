@@ -28,7 +28,7 @@ jobs:
     name: Build policies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup-jvm
       - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
@@ -44,7 +44,7 @@ jobs:
     needs:
       - build-policies
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup-mini-app
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
@@ -64,7 +64,7 @@ jobs:
     name: Build backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup-jvm
       - run: ./gradlew clean :launcher:fly:installDist
       - run: tar -cvf backend.tar launcher/fly/build
@@ -88,7 +88,7 @@ jobs:
       name: fly.io
       url: https://tyzenhaus.fly.dev
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: madhead/read-java-properties@8f47787e3eac3c6e7db5f4bed40b79def6ecd17c
         id: project-version
         with:
