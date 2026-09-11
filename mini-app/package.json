@@ -39,7 +39,7 @@
         "typescript-eslint": "^8.65.0",
         "vite": "^8.1.5",
         "vite-plugin-static-copy": "^4.1.1",
-        "vitest": "^4.1.9"
+        "vitest": "^4.1.11"
     },
     "scripts": {
         "clean": "rm -rf build",
