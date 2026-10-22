@@ -32,7 +32,7 @@ jobs:
       - uses: ./.github/actions/setup-jvm
       - run: ./gradlew :policies:privacy
       - run: tar -cvf policies.tar policies/build
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: policies
           path: |
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/setup-mini-app
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: policies
       - run: |
@@ -54,7 +54,7 @@ jobs:
       - run: yarn run build
         working-directory: mini-app
       - run: tar -cvf mini-app.tar mini-app/build
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: mini-app
           path: |
@@ -68,7 +68,7 @@ jobs:
       - uses: ./.github/actions/setup-jvm
       - run: ./gradlew clean :launcher:fly:installDist
       - run: tar -cvf backend.tar launcher/fly/build
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: backend
           path: |
@@ -89,7 +89,7 @@ jobs:
       url: https://tyzenhaus.fly.dev
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: madhead/read-java-properties@8f47787e3eac3c6e7db5f4bed40b79def6ecd17c
+      - uses: madhead/read-java-properties@71bde77f1ee2be7e11438306dfbc89d1a019f64c
         id: project-version
         with:
           file: gradle.properties
@@ -98,10 +98,10 @@ jobs:
         id: version
         with:
           version: ${{ steps.project-version.outputs.value }}
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: mini-app
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: backend
       - run: |
@@ -113,8 +113,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e
-      - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
         with:
           context: launcher/fly
           push: true
