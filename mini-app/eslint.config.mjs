@@ -1,9 +1,9 @@
 import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import react from "eslint-plugin-react";
+import eslintReact from "@eslint-react/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
-import jsxA11y from "eslint-plugin-jsx-a11y";
+import jsxA11yX from "eslint-plugin-jsx-a11y-x";
 import prettier from "eslint-config-prettier";
 import { defineConfig, globalIgnores } from "eslint/config";
 
@@ -16,9 +16,8 @@ export default defineConfig(
         files: ["src/**/*.{ts,tsx}"],
         extends: [
             tseslint.configs.recommendedTypeChecked,
-            react.configs.flat.recommended,
-            react.configs.flat["jsx-runtime"],
-            jsxA11y.flatConfigs.recommended,
+            eslintReact.configs["recommended-typescript"],
+            jsxA11yX.configs.recommended,
         ],
         languageOptions: {
             parserOptions: {
@@ -26,9 +25,6 @@ export default defineConfig(
                 tsconfigRootDir: import.meta.dirname,
             },
             globals: globals.browser,
-        },
-        settings: {
-            react: { version: "detect" },
         },
         plugins: {
             "react-hooks": reactHooks,
