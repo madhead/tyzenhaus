@@ -1,6 +1,5 @@
 package me.madhead.tyzenhaus.launcher.fly.routes
 
-import io.ktor.server.application.call
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route

@@ -1,7 +1,9 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
 import java.sql.ResultSet
+import me.madhead.tyzenhaus.entity.transaction.Cursor
 import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.transaction.TransactionsPage
 
 internal fun ResultSet.toTransaction(): Transaction =
     Transaction(
@@ -35,6 +37,18 @@ internal fun ResultSet.toTransactions(): List<Transaction> = buildList {
     while (this@toTransactions.next()) {
         this.add(this@toTransactions.toTransaction())
     }
+}
+
+internal fun ResultSet.toTransactionsPage(limit: Int): TransactionsPage {
+    val rows = this.toTransactions()
+    val hasNext = rows.size > limit
+    val page = if (hasNext) rows.take(limit) else rows
+    val nextCursor = page
+        .lastOrNull()
+        ?.takeIf { hasNext }
+        ?.let { Cursor(it.timestamp, checkNotNull(it.id)) }
+
+    return TransactionsPage(page, nextCursor)
 }
 
 internal fun ResultSet.toCurrencies(): List<String> {
