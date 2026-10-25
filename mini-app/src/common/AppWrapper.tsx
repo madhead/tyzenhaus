@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { authHeaders } from "./api";
 import Error from "./error/Error";
+import Loading from "./loading/Loading";
 import { isInsideTelegram } from "./telegram";
 
 type AppWrapperProps = {
@@ -43,7 +44,7 @@ function AuthWrapper({ children }: AuthWrapperProps) {
     const { t } = useTranslation();
 
     if (ok === null) {
-        return null;
+        return <Loading />;
     } else if (!ok) {
         return <Error error={t(errorKey(reason))} />;
     } else {

@@ -1,17 +1,46 @@
 import "./HistoryApp.less";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Error from "../common/error/Error";
+import Loading from "../common/loading/Loading";
 import { Members, membersCache } from "../common/members";
 import TransactionCard from "../common/transaction/Transaction";
 import { useTransactions } from "./useTransactions";
 
 function HistoryApp() {
-    const { transactions, nextCursor, loadMore } = useTransactions();
+    const { t } = useTranslation();
+    const { transactions, nextCursor, loading, failed, loadMore } = useTransactions();
     const [members, setMembers] = useState<Members>(() => new Members());
 
     useEffect(() => {
-        void membersCache.get().then(setMembers);
+        // Names are a nicety: if they can't be loaded, the cards fall back to the member IDs.
+        membersCache.get().then(setMembers, (error: unknown) => {
+            console.error("Failed to load the group members", error);
+        });
     }, []);
+
+    const empty = transactions.length === 0;
+
+    if (empty && loading) {
+        return <Loading />;
+    }
+
+    if (empty && failed) {
+        return (
+            <Error error={t("errors.loadFailed")}>
+                <RetryButton onClick={loadMore} />
+            </Error>
+        );
+    }
+
+    if (empty) {
+        return (
+            <main aria-label="Transaction history">
+                <p className="empty">{t("history.empty")}</p>
+            </main>
+        );
+    }
 
     return (
         <main aria-label="Transaction history">
@@ -23,8 +52,25 @@ function HistoryApp() {
                     </li>
                 ))}
             </ul>
-            {nextCursor && <Sentinel key={nextCursor} onVisible={loadMore} />}
+            {loading && <Loading />}
+            {failed && (
+                <div className="failure" role="alert">
+                    {t("errors.loadFailed")}
+                    <RetryButton onClick={loadMore} />
+                </div>
+            )}
+            {nextCursor && !loading && !failed && <Sentinel key={nextCursor} onVisible={loadMore} />}
         </main>
+    );
+}
+
+function RetryButton({ onClick }: { onClick: () => void }) {
+    const { t } = useTranslation();
+
+    return (
+        <button type="button" className="retry" onClick={onClick}>
+            {t("retry")}
+        </button>
     );
 }
 

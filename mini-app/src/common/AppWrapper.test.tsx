@@ -134,7 +134,7 @@ describe("AppWrapper", () => {
         expect(screen.queryByText("protected content")).not.toBeInTheDocument();
     });
 
-    it("renders nothing while authentication is in flight", async () => {
+    it("shows a loading indicator while authentication is in flight", async () => {
         let resolve!: (value: { ok: boolean; headers: Headers }) => void;
         const fetchMock = vi.fn().mockReturnValue(
             new Promise((r) => {
@@ -143,13 +143,13 @@ describe("AppWrapper", () => {
         );
         vi.stubGlobal("fetch", fetchMock);
 
-        const { container } = render(
+        render(
             <AppWrapper>
                 <div>protected content</div>
             </AppWrapper>,
         );
 
-        expect(container).toBeEmptyDOMElement();
+        expect(screen.getByRole("status")).toHaveTextContent("loading");
         expect(screen.queryByText("protected content")).not.toBeInTheDocument();
 
         resolve({ ok: true, headers: new Headers() });

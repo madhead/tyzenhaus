@@ -11,3 +11,33 @@
 .sentinel {
     height: 1px;
 }
+
+.empty {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 1rem;
+    color: var(--tg-theme-hint-color);
+    text-align: center;
+}
+
+.failure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--tg-theme-destructive-text-color, red);
+    text-align: center;
+}
+
+.retry {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    font: inherit;
+}
