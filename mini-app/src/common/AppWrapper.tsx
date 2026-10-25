@@ -1,18 +1,17 @@
-import WebApp from "@twa-dev/sdk";
 import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { authHeaders } from "./api";
 import Error from "./error/Error";
+import { isInsideTelegram } from "./telegram";
 
 type AppWrapperProps = {
     children: ReactNode;
 };
 
 export default function AppWrapper(props: AppWrapperProps) {
-    const { platform } = WebApp;
     const { t } = useTranslation();
 
-    if (platform === "unknown") {
+    if (!isInsideTelegram()) {
         return <Error error={t("errors.outsideOfTelegram")} />;
     } else {
         return <AuthWrapper {...props} />;
