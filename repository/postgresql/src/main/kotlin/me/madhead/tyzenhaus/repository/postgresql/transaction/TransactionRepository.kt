@@ -105,7 +105,7 @@ class TransactionRepository(dataSource: DataSource)
 
         return withConnection { connection ->
             connection
-                .prepareStatement("""SELECT DISTINCT("currency") FROM "transaction" WHERE "group_id" = ?;""")
+                .prepareStatement("""SELECT DISTINCT("currency") FROM "transaction" WHERE "group_id" = ? ORDER BY "currency";""")
                 .use { preparedStatement ->
                     preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
                     preparedStatement.executeQuery().use { resultSet ->

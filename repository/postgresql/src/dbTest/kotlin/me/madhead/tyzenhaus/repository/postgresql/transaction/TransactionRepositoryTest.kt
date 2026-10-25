@@ -75,6 +75,14 @@ class TransactionRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
+    fun groupCurrenciesAreSorted() = runTest {
+        assertEquals(
+            listOf("EUR", "USD"),
+            transactionRepository.groupCurrencies(9)
+        )
+    }
+
+    @Test
     fun search() = runTest {
         assertTrue(
             transactionRepository.search(1, TransactionsSearchParams()).transactions.isNotEmpty()
