@@ -2,13 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupMember } from "./api";
 import { Members, MembersCache } from "./members";
 
-const webApp = vi.hoisted(() => ({
-    initData: "init-data-string",
-    initDataUnsafe: { start_param: "token-123" },
-}));
-
-vi.mock("@twa-dev/sdk", () => ({
-    default: webApp,
+vi.mock("./telegram", () => ({
+    startParam: () => "token-123",
+    rawInitData: () => "init-data-string",
 }));
 
 function mockFetch(members: GroupMember[]) {

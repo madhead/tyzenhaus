@@ -5,13 +5,9 @@ import { membersCache } from "../common/members";
 import { Transaction } from "../common/transaction/Transaction";
 import HistoryApp from "./HistoryApp";
 
-const webApp = vi.hoisted(() => ({
-    initData: "init-data-string",
-    initDataUnsafe: { start_param: "token-123" },
-}));
-
-vi.mock("@twa-dev/sdk", () => ({
-    default: webApp,
+vi.mock("../common/telegram", () => ({
+    startParam: () => "token-123",
+    rawInitData: () => "init-data-string",
 }));
 
 const expectedHeaders = {

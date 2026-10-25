@@ -1,13 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getCurrencies, getMembers, GroupMembers, searchTransactions, TransactionsPage } from "./api";
 
-const webApp = vi.hoisted(() => ({
-    initData: "init-data-string",
-    initDataUnsafe: { start_param: "token-123" },
-}));
-
-vi.mock("@twa-dev/sdk", () => ({
-    default: webApp,
+vi.mock("./telegram", () => ({
+    startParam: () => "token-123",
+    rawInitData: () => "init-data-string",
 }));
 
 const expectedHeaders = {

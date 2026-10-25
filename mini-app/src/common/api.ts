@@ -1,4 +1,4 @@
-import WebApp from "@twa-dev/sdk";
+import { rawInitData, startParam } from "./telegram";
 import { Transaction } from "./transaction/Transaction";
 
 /**
@@ -8,8 +8,8 @@ import { Transaction } from "./transaction/Transaction";
  */
 export function authHeaders(): Record<string, string> {
     return {
-        "Authorization": `Bearer ${WebApp.initDataUnsafe.start_param}`,
-        "X-Telegram-Init-Data": WebApp.initData,
+        "Authorization": `Bearer ${startParam()}`,
+        "X-Telegram-Init-Data": rawInitData() ?? "",
     };
 }
 
