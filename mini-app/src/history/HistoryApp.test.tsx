@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { act } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupMember } from "../common/api";
 import { membersCache } from "../common/members";
 import { Transaction } from "../common/transaction/Transaction";
@@ -28,9 +29,16 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
     };
 }
 
-function mockFetch(transactions: Transaction[], members: GroupMember[] = []) {
+type Page = { transactions: Transaction[]; nextCursor: string | null };
+
+/**
+ * Serves the members and the pages of transactions, keyed by the requested cursor (`""` for the first page).
+ */
+function mockFetch(pages: Record<string, Page> | Transaction[], members: GroupMember[] = []) {
+    const byCursor = Array.isArray(pages) ? { "": { transactions: pages, nextCursor: null } } : pages;
     const fetchMock = vi.fn().mockImplementation((url: string) => {
-        const body = url === "/app/api/group/members" ? { id: 1, members } : { transactions, nextCursor: null };
+        const cursor = new URL(url, "http://localhost").searchParams.get("cursor") ?? "";
+        const body = url === "/app/api/group/members" ? { id: 1, members } : byCursor[cursor];
 
         return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
     });
@@ -38,7 +46,42 @@ function mockFetch(transactions: Transaction[], members: GroupMember[] = []) {
     return fetchMock;
 }
 
+class FakeIntersectionObserver {
+    static observers: FakeIntersectionObserver[] = [];
+
+    observed = false;
+
+    constructor(private readonly callback: IntersectionObserverCallback) {
+        FakeIntersectionObserver.observers.push(this);
+    }
+
+    observe() {
+        this.observed = true;
+    }
+
+    disconnect() {
+        this.observed = false;
+    }
+
+    /**
+     * Reports the sentinel as scrolled into view to every observer that's still active.
+     */
+    static scrollToEnd() {
+        for (const observer of FakeIntersectionObserver.observers.filter((o) => o.observed)) {
+            observer.callback(
+                [{ isIntersecting: true } as IntersectionObserverEntry],
+                observer as unknown as IntersectionObserver,
+            );
+        }
+    }
+}
+
 describe("HistoryApp", () => {
+    beforeEach(() => {
+        FakeIntersectionObserver.observers = [];
+        vi.stubGlobal("IntersectionObserver", FakeIntersectionObserver);
+    });
+
     afterEach(() => {
         vi.unstubAllGlobals();
         vi.clearAllMocks();
@@ -109,5 +152,58 @@ describe("HistoryApp", () => {
 
         await waitFor(() => expect(fetchMock).toHaveBeenCalled());
         expect(container.querySelectorAll(".transaction")).toHaveLength(0);
+    });
+
+    it("loads the next page by cursor when the end of the list is reached", async () => {
+        const fetchMock = mockFetch({
+            "": { transactions: [makeTransaction({ id: 2, title: "Rent" })], nextCursor: "c1" },
+            "c1": { transactions: [makeTransaction({ id: 1, title: "Coffee" })], nextCursor: null },
+        });
+
+        const { container } = render(<HistoryApp />);
+
+        await screen.findByText("Rent");
+        expect(screen.queryByText("Coffee")).not.toBeInTheDocument();
+
+        act(() => {
+            FakeIntersectionObserver.scrollToEnd();
+        });
+
+        expect(await screen.findByText("Coffee")).toBeInTheDocument();
+        expect(fetchMock).toHaveBeenCalledWith("/app/api/group/transactions?cursor=c1", {
+            method: "GET",
+            headers: expectedHeaders,
+        });
+        expect(container.querySelectorAll(".transaction")).toHaveLength(2);
+    });
+
+    it("stops paging once the last page is loaded", async () => {
+        const fetchMock = mockFetch({
+            "": { transactions: [makeTransaction({ id: 2, title: "Rent" })], nextCursor: "c1" },
+            "c1": { transactions: [makeTransaction({ id: 1, title: "Coffee" })], nextCursor: null },
+        });
+
+        const { container } = render(<HistoryApp />);
+
+        await screen.findByText("Rent");
+        act(() => {
+            FakeIntersectionObserver.scrollToEnd();
+        });
+        await screen.findByText("Coffee");
+
+        expect(container.querySelector(".sentinel")).not.toBeInTheDocument();
+        act(() => {
+            FakeIntersectionObserver.scrollToEnd();
+        });
+        expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("cursor"))).toHaveLength(1);
+    });
+
+    it("has no end-of-list marker when everything fits on one page", async () => {
+        mockFetch([makeTransaction({ title: "Rent" })]);
+
+        const { container } = render(<HistoryApp />);
+
+        await screen.findByText("Rent");
+        expect(container.querySelector(".sentinel")).not.toBeInTheDocument();
     });
 });

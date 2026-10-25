@@ -1,23 +1,16 @@
 import "./HistoryApp.less";
 
-import { useEffect, useState } from "react";
-import { searchTransactions } from "../common/api";
+import { useEffect, useRef, useState } from "react";
 import { Members, membersCache } from "../common/members";
-import TransactionCard, { Transaction } from "../common/transaction/Transaction";
+import TransactionCard from "../common/transaction/Transaction";
+import { useTransactions } from "./useTransactions";
 
 function HistoryApp() {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [members, setMembers] = useState<Members>(new Members());
+    const { transactions, nextCursor, loadMore } = useTransactions();
+    const [members, setMembers] = useState<Members>(() => new Members());
 
     useEffect(() => {
-        async function loadHistory() {
-            const [page, groupMembers] = await Promise.all([searchTransactions(), membersCache.get()]);
-
-            setTransactions(page.transactions);
-            setMembers(groupMembers);
-        }
-
-        void loadHistory();
+        void membersCache.get().then(setMembers);
     }, []);
 
     return (
@@ -30,8 +23,39 @@ function HistoryApp() {
                     </li>
                 ))}
             </ul>
+            {nextCursor && <Sentinel key={nextCursor} onVisible={loadMore} />}
         </main>
     );
+}
+
+/**
+ * An invisible marker at the end of the list. Calls [onVisible] as soon as it scrolls into view (or right away, if the
+ * loaded page didn't fill the screen).
+ */
+function Sentinel({ onVisible }: { onVisible: () => void }) {
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const element = ref.current;
+
+        if (!element) {
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+                onVisible();
+            }
+        });
+
+        observer.observe(element);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [onVisible]);
+
+    return <div ref={ref} className="sentinel" aria-hidden="true" />;
 }
 
 export default HistoryApp;
