@@ -1,0 +1,58 @@
+.filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--tg-theme-section-separator-color, var(--tg-theme-hint-color));
+
+    .title,
+    .participants,
+    .currency {
+        grid-column: 1 / -1;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+        font-size: small;
+        color: var(--tg-theme-hint-color);
+    }
+
+    input[type="search"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--tg-theme-section-separator-color, var(--tg-theme-hint-color));
+        border-radius: 0.5rem;
+        background-color: var(--tg-theme-secondary-bg-color, var(--tg-theme-bg-color));
+        color: var(--tg-theme-text-color);
+        font: inherit;
+    }
+
+    .participants {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+
+        legend {
+            padding: 0;
+            font-size: small;
+            color: var(--tg-theme-hint-color);
+        }
+
+        label {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: medium;
+            color: var(--tg-theme-text-color);
+        }
+    }
+}

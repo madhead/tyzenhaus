@@ -2,7 +2,19 @@
     "loading": "Загрузка…",
     "retry": "Повторить",
     "history": {
-        "empty": "Транзакций пока нет"
+        "empty": "Транзакций пока нет",
+        "noMatches": "Нет транзакций, подходящих под фильтры"
+    },
+    "filters": {
+        "label": "Фильтры",
+        "title": "Поиск по названию",
+        "participants": "Участвуют",
+        "currency": "Валюта",
+        "anyCurrency": "Любая валюта",
+        "amountMin": "Сумма от",
+        "amountMax": "Сумма до",
+        "dateFrom": "С",
+        "dateTo": "По"
     },
     "errors": {
         "outsideOfTelegram": "Это приложение нужно запускать внутри Telegram клиента",

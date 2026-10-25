@@ -7,6 +7,15 @@ export class Members {
         this.members = new Map(members.map((member) => [member.id, member]));
     }
 
+    /**
+     * All the members, sorted by name.
+     */
+    entries(): { id: number; name: string }[] {
+        return [...this.members.keys()]
+            .map((id) => ({ id, name: this.name(id) }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+    }
+
     name(id: number): string {
         const member = this.members.get(id);
 

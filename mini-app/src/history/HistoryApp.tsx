@@ -1,17 +1,14 @@
-import "./HistoryApp.less";
-
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import Error from "../common/error/Error";
-import Loading from "../common/loading/Loading";
+import { useEffect, useState } from "react";
 import { Members, membersCache } from "../common/members";
-import TransactionCard from "../common/transaction/Transaction";
-import { useTransactions } from "./useTransactions";
+import FilterBar from "./FilterBar";
+import { Filters, isFiltered, NO_FILTERS, SEARCH_DEBOUNCE_MS, toSearchParams } from "./filters";
+import TransactionsList from "./TransactionsList";
+import { useDebounced } from "./useDebounced";
 
 function HistoryApp() {
-    const { t } = useTranslation();
-    const { transactions, nextCursor, loading, failed, loadMore } = useTransactions();
+    const [filters, setFilters] = useState<Filters>(NO_FILTERS);
     const [members, setMembers] = useState<Members>(() => new Members());
+    const params = toSearchParams(useDebounced(filters, SEARCH_DEBOUNCE_MS));
 
     useEffect(() => {
         // Names are a nicety: if they can't be loaded, the cards fall back to the member IDs.
@@ -20,88 +17,17 @@ function HistoryApp() {
         });
     }, []);
 
-    const empty = transactions.length === 0;
-
-    if (empty && loading) {
-        return <Loading />;
-    }
-
-    if (empty && failed) {
-        return (
-            <Error error={t("errors.loadFailed")}>
-                <RetryButton onClick={loadMore} />
-            </Error>
-        );
-    }
-
-    if (empty) {
-        return (
-            <main aria-label="Transaction history">
-                <p className="empty">{t("history.empty")}</p>
-            </main>
-        );
-    }
-
     return (
-        <main aria-label="Transaction history">
-            {/* eslint-disable-next-line jsx-a11y-x/no-redundant-roles */}
-            <ul className="history" role="list">
-                {transactions.map((transaction) => (
-                    <li key={transaction.id}>
-                        <TransactionCard transaction={transaction} members={members} />
-                    </li>
-                ))}
-            </ul>
-            {loading && <Loading />}
-            {failed && (
-                <div className="failure" role="alert">
-                    {t("errors.loadFailed")}
-                    <RetryButton onClick={loadMore} />
-                </div>
-            )}
-            {nextCursor && !loading && !failed && <Sentinel key={nextCursor} onVisible={loadMore} />}
-        </main>
+        <>
+            <FilterBar filters={filters} members={members} onChange={setFilters} />
+            <TransactionsList
+                key={JSON.stringify(params)}
+                params={params}
+                filtered={isFiltered(params)}
+                members={members}
+            />
+        </>
     );
-}
-
-function RetryButton({ onClick }: { onClick: () => void }) {
-    const { t } = useTranslation();
-
-    return (
-        <button type="button" className="retry" onClick={onClick}>
-            {t("retry")}
-        </button>
-    );
-}
-
-/**
- * An invisible marker at the end of the list. Calls [onVisible] as soon as it scrolls into view (or right away, if the
- * loaded page didn't fill the screen).
- */
-function Sentinel({ onVisible }: { onVisible: () => void }) {
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const element = ref.current;
-
-        if (!element) {
-            return;
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            if (entries.some((entry) => entry.isIntersecting)) {
-                onVisible();
-            }
-        });
-
-        observer.observe(element);
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [onVisible]);
-
-    return <div ref={ref} className="sentinel" aria-hidden="true" />;
 }
 
 export default HistoryApp;

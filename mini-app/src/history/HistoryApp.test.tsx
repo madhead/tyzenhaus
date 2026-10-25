@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroupMember } from "../common/api";
 import { membersCache } from "../common/members";
@@ -34,27 +34,52 @@ function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {
 
 type Page = { transactions: Transaction[]; nextCursor: string | null };
 
+type Server = { failOn: (url: string) => boolean; currencies: string[] };
+
 /**
- * Serves the members and the pages of transactions, keyed by the requested cursor (`""` for the first page).
+ * Serves the members, the currencies and the transactions: either pages keyed by the requested cursor (`""` for the
+ * first page), or whatever [pages] makes of the transactions request.
  */
 function mockFetch(
-    pages: Record<string, Page> | Transaction[],
+    pages: Record<string, Page> | Transaction[] | ((query: URLSearchParams) => Transaction[]),
     members: GroupMember[] = [],
-    server: { failOn: (url: string) => boolean } = { failOn: () => false },
+    server: Server = { failOn: () => false, currencies: [] },
 ) {
-    const byCursor = Array.isArray(pages) ? { "": { transactions: pages, nextCursor: null } } : pages;
     const fetchMock = vi.fn().mockImplementation((url: string) => {
         if (server.failOn(url)) {
             return Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) });
         }
 
-        const cursor = new URL(url, "http://localhost").searchParams.get("cursor") ?? "";
-        const body = url === "/app/api/group/members" ? { id: 1, members } : byCursor[cursor];
+        const query = new URL(url, "http://localhost").searchParams;
+        let body: unknown;
+
+        if (url === "/app/api/group/members") {
+            body = { id: 1, members };
+        } else if (url === "/app/api/group/currencies") {
+            body = server.currencies;
+        } else if (typeof pages === "function") {
+            body = { transactions: pages(query), nextCursor: null };
+        } else if (Array.isArray(pages)) {
+            body = { transactions: pages, nextCursor: null };
+        } else {
+            body = pages[query.get("cursor") ?? ""];
+        }
 
         return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
     });
     vi.stubGlobal("fetch", fetchMock);
     return fetchMock;
+}
+
+/**
+ * The query of the latest transactions search.
+ */
+function lastSearch(fetchMock: ReturnType<typeof mockFetch>): URLSearchParams {
+    const urls = fetchMock.mock.calls
+        .map(([url]) => String(url))
+        .filter((url) => url.startsWith("/app/api/group/transactions"));
+
+    return new URL(urls[urls.length - 1], "http://localhost").searchParams;
 }
 
 class FakeIntersectionObserver {
@@ -150,10 +175,13 @@ describe("HistoryApp", () => {
             ],
         );
 
-        render(<HistoryApp />);
+        const { container } = render(<HistoryApp />);
 
-        expect(await screen.findByText("Ada Lovelace")).toBeInTheDocument();
-        expect(screen.getByText("Grace Hopper")).toBeInTheDocument();
+        await waitFor(() => expect(container.querySelector("ul.history")).toBeInTheDocument());
+        const list = container.querySelector<HTMLElement>("ul.history")!;
+
+        expect(await within(list).findByText("Ada Lovelace")).toBeInTheDocument();
+        expect(within(list).getByText("Grace Hopper")).toBeInTheDocument();
     });
 
     it("renders no cards when the history is empty", async () => {
@@ -238,7 +266,7 @@ describe("HistoryApp", () => {
 
     it("shows an error with a retry button when the first page fails, and recovers on retry", async () => {
         vi.spyOn(console, "error").mockImplementation(() => undefined);
-        const server: { failOn: (url: string) => boolean } = { failOn: (url) => url === "/app/api/group/transactions" };
+        const server: Server = { failOn: (url) => url === "/app/api/group/transactions", currencies: [] };
         mockFetch([makeTransaction({ title: "Rent" })], [], server);
 
         render(<HistoryApp />);
@@ -254,7 +282,7 @@ describe("HistoryApp", () => {
 
     it("keeps the loaded transactions when a following page fails, and retries that page", async () => {
         vi.spyOn(console, "error").mockImplementation(() => undefined);
-        const server: { failOn: (url: string) => boolean } = { failOn: (url) => url.includes("cursor=c1") };
+        const server: Server = { failOn: (url) => url.includes("cursor=c1"), currencies: [] };
         mockFetch(
             {
                 "": { transactions: [makeTransaction({ id: 2, title: "Rent" })], nextCursor: "c1" },
@@ -285,11 +313,125 @@ describe("HistoryApp", () => {
         vi.spyOn(console, "error").mockImplementation(() => undefined);
         mockFetch([makeTransaction({ payer: 42, recipients: [1] })], [], {
             failOn: (url) => url === "/app/api/group/members",
+            currencies: [],
         });
 
         render(<HistoryApp />);
 
         expect(await screen.findByText("#42")).toBeInTheDocument();
         expect(screen.getByText("#1")).toBeInTheDocument();
+    });
+
+    describe("filters", () => {
+        const members: GroupMember[] = [
+            { id: 42, firstName: "Ada", lastName: "Lovelace", username: null },
+            { id: 1, firstName: "Grace", lastName: "Hopper", username: null },
+        ];
+
+        it("doesn't search on every keystroke, but once the typing pauses", async () => {
+            const fetchMock = mockFetch([makeTransaction({ title: "Groceries" })]);
+
+            render(<HistoryApp />);
+            await screen.findByText("Groceries");
+
+            fireEvent.change(screen.getByLabelText("filters.title"), { target: { value: "ren" } });
+            fireEvent.change(screen.getByLabelText("filters.title"), { target: { value: "rent" } });
+
+            expect(lastSearch(fetchMock).has("title")).toBe(false);
+            await waitFor(() => expect(lastSearch(fetchMock).get("title")).toBe("rent"));
+            expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("title="))).toHaveLength(1);
+        });
+
+        it("replaces the loaded transactions with the matching ones", async () => {
+            mockFetch((query) =>
+                query.get("title") === "rent"
+                    ? [makeTransaction({ id: 2, title: "Rent" })]
+                    : [makeTransaction({ id: 1, title: "Groceries" })],
+            );
+
+            render(<HistoryApp />);
+            await screen.findByText("Groceries");
+
+            fireEvent.change(screen.getByLabelText("filters.title"), { target: { value: "rent" } });
+
+            expect(await screen.findByText("Rent")).toBeInTheDocument();
+            expect(screen.queryByText("Groceries")).not.toBeInTheDocument();
+        });
+
+        it("says that nothing matches when a filtered search finds nothing", async () => {
+            mockFetch((query) => (query.has("title") ? [] : [makeTransaction({ title: "Groceries" })]));
+
+            render(<HistoryApp />);
+            await screen.findByText("Groceries");
+
+            fireEvent.change(screen.getByLabelText("filters.title"), { target: { value: "nothing" } });
+
+            expect(await screen.findByText("history.noMatches")).toBeInTheDocument();
+        });
+
+        it("filters by the participants picked among the members", async () => {
+            const fetchMock = mockFetch([makeTransaction()], members);
+
+            render(<HistoryApp />);
+            fireEvent.click(await screen.findByLabelText("Ada Lovelace"));
+            fireEvent.click(screen.getByLabelText("Grace Hopper"));
+
+            await waitFor(() => expect(lastSearch(fetchMock).getAll("participant")).toEqual(["42", "1"]));
+
+            fireEvent.click(screen.getByLabelText("Ada Lovelace"));
+
+            await waitFor(() => expect(lastSearch(fetchMock).getAll("participant")).toEqual(["1"]));
+        });
+
+        it("offers the group's currencies and filters by the chosen one", async () => {
+            const fetchMock = mockFetch([makeTransaction()], [], { failOn: () => false, currencies: ["EUR", "USD"] });
+
+            render(<HistoryApp />);
+            await screen.findByRole("option", { name: "USD" });
+
+            fireEvent.change(screen.getByLabelText("filters.currency"), { target: { value: "USD" } });
+
+            await waitFor(() => expect(lastSearch(fetchMock).getAll("currency")).toEqual(["USD"]));
+        });
+
+        it("allows an amount range only for a chosen currency", async () => {
+            const fetchMock = mockFetch([makeTransaction()], [], { failOn: () => false, currencies: ["EUR"] });
+
+            render(<HistoryApp />);
+            await screen.findByRole("option", { name: "EUR" });
+
+            expect(screen.getByLabelText("filters.amountMin")).toBeDisabled();
+            expect(screen.getByLabelText("filters.amountMax")).toBeDisabled();
+
+            fireEvent.change(screen.getByLabelText("filters.currency"), { target: { value: "EUR" } });
+            fireEvent.change(screen.getByLabelText("filters.amountMin"), { target: { value: "5" } });
+            fireEvent.change(screen.getByLabelText("filters.amountMax"), { target: { value: "10.5" } });
+
+            await waitFor(() => expect(lastSearch(fetchMock).get("amountMax")).toBe("10.5"));
+            expect(lastSearch(fetchMock).get("amountMin")).toBe("5");
+            expect(lastSearch(fetchMock).get("currency")).toBe("EUR");
+
+            fireEvent.change(screen.getByLabelText("filters.currency"), { target: { value: "" } });
+
+            await waitFor(() => expect(lastSearch(fetchMock).has("amountMax")).toBe(false));
+            expect(lastSearch(fetchMock).has("amountMin")).toBe(false);
+            expect(screen.getByLabelText("filters.amountMin")).toBeDisabled();
+        });
+
+        it("filters by whole days", async () => {
+            const fetchMock = mockFetch([makeTransaction()]);
+
+            render(<HistoryApp />);
+            await screen.findByText("Groceries");
+
+            fireEvent.change(screen.getByLabelText("filters.dateFrom"), { target: { value: "2024-01-05" } });
+            fireEvent.change(screen.getByLabelText("filters.dateTo"), { target: { value: "2024-01-06" } });
+
+            await waitFor(() => expect(lastSearch(fetchMock).has("dateTo")).toBe(true));
+            expect(new Date(lastSearch(fetchMock).get("dateFrom")!).getTime()).toBe(new Date(2024, 0, 5).getTime());
+            expect(new Date(lastSearch(fetchMock).get("dateTo")!).getTime()).toBe(
+                new Date(2024, 0, 6, 23, 59, 59, 999).getTime(),
+            );
+        });
     });
 });

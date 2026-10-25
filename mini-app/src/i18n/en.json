@@ -2,7 +2,19 @@
     "loading": "Loading…",
     "retry": "Retry",
     "history": {
-        "empty": "No transactions yet"
+        "empty": "No transactions yet",
+        "noMatches": "No transactions match the filters"
+    },
+    "filters": {
+        "label": "Filters",
+        "title": "Search by title",
+        "participants": "Involving",
+        "currency": "Currency",
+        "anyCurrency": "Any currency",
+        "amountMin": "Amount from",
+        "amountMax": "Amount to",
+        "dateFrom": "From",
+        "dateTo": "To"
     },
     "errors": {
         "outsideOfTelegram": "This app must be executed inside a Telegram client",

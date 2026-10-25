@@ -24,6 +24,18 @@ describe("Members", () => {
         expect(members.name(1)).toBe("Ada Lovelace");
     });
 
+    it("lists the members sorted by name", () => {
+        const members = new Members([
+            { id: 1, firstName: "Grace", lastName: "Hopper", username: null },
+            { id: 2, firstName: "Ada", lastName: "Lovelace", username: null },
+        ]);
+
+        expect(members.entries()).toEqual([
+            { id: 2, name: "Ada Lovelace" },
+            { id: 1, name: "Grace Hopper" },
+        ]);
+    });
+
     it("skips blank name parts", () => {
         const members = new Members([
             { id: 1, firstName: "Ada", lastName: "   ", username: "ada" },
