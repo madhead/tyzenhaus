@@ -1,4 +1,12 @@
-import { init, isTMA, retrieveLaunchParams, retrieveRawInitData, themeParams } from "@tma.js/sdk-react";
+import {
+    init,
+    isTMA,
+    miniApp,
+    retrieveLaunchParams,
+    retrieveRawInitData,
+    themeParams,
+    viewport,
+} from "@tma.js/sdk-react";
 
 /**
  * Whether the app is opened inside Telegram. The launch parameters are available only there.
@@ -8,7 +16,8 @@ export function isInsideTelegram(): boolean {
 }
 
 /**
- * Initializes the SDK and exposes the Telegram theme as `--tg-theme-*` CSS variables. No-op outside Telegram.
+ * Initializes the SDK, exposes the Telegram theme as `--tg-theme-*` CSS variables and expands the app to the full
+ * height available. No-op outside Telegram.
  */
 export function initTelegram(): void {
     if (!isInsideTelegram()) {
@@ -18,6 +27,25 @@ export function initTelegram(): void {
     init();
     themeParams.mount();
     themeParams.bindCssVars();
+    miniApp.mount();
+
+    viewport
+        .mount()
+        .then(() => {
+            viewport.expand.ifAvailable();
+        })
+        .catch((error: unknown) => {
+            console.error("Failed to expand the app", error);
+        });
+}
+
+/**
+ * Tells Telegram that the app is ready to be shown, which dismisses its loading placeholder. No-op outside Telegram.
+ */
+export function notifyReady(): void {
+    if (isInsideTelegram()) {
+        miniApp.ready.ifAvailable();
+    }
 }
 
 /**

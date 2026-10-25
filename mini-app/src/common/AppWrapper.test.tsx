@@ -4,10 +4,12 @@ import AppWrapper from "./AppWrapper";
 
 const telegram = vi.hoisted(() => ({
     insideTelegram: true,
+    notifyReady: vi.fn(),
 }));
 
 vi.mock("./telegram", () => ({
     isInsideTelegram: () => telegram.insideTelegram,
+    notifyReady: telegram.notifyReady,
     startParam: () => "token-123",
     rawInitData: () => "init-data-string",
 }));
@@ -154,5 +156,42 @@ describe("AppWrapper", () => {
 
         resolve({ ok: true, headers: new Headers() });
         await waitFor(() => expect(screen.getByText("protected content")).toBeInTheDocument());
+    });
+
+    it("tells Telegram the app is ready only once the authentication is done", async () => {
+        let resolve!: (value: { ok: boolean; headers: Headers }) => void;
+        vi.stubGlobal(
+            "fetch",
+            vi.fn().mockReturnValue(
+                new Promise((r) => {
+                    resolve = r;
+                }),
+            ),
+        );
+
+        render(
+            <AppWrapper>
+                <div>protected content</div>
+            </AppWrapper>,
+        );
+
+        expect(telegram.notifyReady).not.toHaveBeenCalled();
+
+        resolve({ ok: true, headers: new Headers() });
+
+        await waitFor(() => expect(telegram.notifyReady).toHaveBeenCalledOnce());
+    });
+
+    it("tells Telegram the app is ready also when the authentication fails, as there's an error to show", async () => {
+        mockFetch({ ok: false, headers: { "X-Auth-Error": "token_expired" } });
+
+        render(
+            <AppWrapper>
+                <div>protected content</div>
+            </AppWrapper>,
+        );
+
+        await screen.findByText("errors.expired");
+        expect(telegram.notifyReady).toHaveBeenCalledOnce();
     });
 });

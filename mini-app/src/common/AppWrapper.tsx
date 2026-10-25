@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { authHeaders } from "./api";
 import Error from "./error/Error";
 import Loading from "./loading/Loading";
-import { isInsideTelegram } from "./telegram";
+import { isInsideTelegram, notifyReady } from "./telegram";
 
 type AppWrapperProps = {
     children: ReactNode;
@@ -42,6 +42,13 @@ function AuthWrapper({ children }: AuthWrapperProps) {
     }, []);
 
     const { t } = useTranslation();
+
+    useEffect(() => {
+        // Whatever the outcome of the authentication is, there's something to show now: the app or the reason it's not.
+        if (ok !== null) {
+            notifyReady();
+        }
+    }, [ok]);
 
     if (ok === null) {
         return <Loading />;
