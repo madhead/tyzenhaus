@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - uses: madhead/check-gradle-version@7714dc78376fe1d030dbb74ddf5ae6118874cbae
+      - uses: madhead/check-gradle-version@1d1861f4316daec28a8802128c660942e33cc30e
 
   check-mini-app:
     name: "Mini App checks: ${{ matrix.name }}"
