@@ -852,21 +852,88 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twa-dev/sdk@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "@twa-dev/sdk@npm:8.0.2"
+"@tma.js/bridge@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@tma.js/bridge@npm:2.3.3"
   dependencies:
-    "@twa-dev/types": "npm:^8.0.1"
-  peerDependencies:
-    react: ^18.0.0 || ^19.0.0
-  checksum: 10/f05dd03c5802dcd727597da61252bad38d728b64f99b09313b263d6c15549bd86612b499208d661f7b4ffc0d9865787711f470065c54a292f3f6a1c30e0f1bb7
+    "@tma.js/signals": "npm:^1.0.1"
+    "@tma.js/toolkit": "npm:^1.0.4"
+    "@tma.js/transformers": "npm:^1.2.0"
+    "@tma.js/types": "npm:^1.0.2"
+    better-promises: "npm:^1.0.0"
+    error-kid: "npm:^2.0.0"
+    fp-ts: "npm:^2.16.11"
+    mitt: "npm:^3.0.1"
+    valibot: "npm:^1.1.0"
+  checksum: 10/1ed3f2b25ffa31d4ec49c936298a8ea2fb74e14694d394ad16e669de45cbe629c341a40001b31dc45aa16127ffe6fd8cdef00bdb7a0ab9e1aff4f7c7203b2dd1
   languageName: node
   linkType: hard
 
-"@twa-dev/types@npm:^8.0.1":
-  version: 8.0.2
-  resolution: "@twa-dev/types@npm:8.0.2"
-  checksum: 10/8a239924135f0c4717d24b0b97491a1cbba3eedab38563e287709d03b76a9ef9786ba14b3ea399d85e27bc5f6c3fb80231e84e71bf157c5b2e3c1343911c8c12
+"@tma.js/sdk-react@npm:^3.0.23":
+  version: 3.0.23
+  resolution: "@tma.js/sdk-react@npm:3.0.23"
+  dependencies:
+    "@tma.js/sdk": "npm:^3.3.0"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/d32c87a9c691933714c1363aaecc22ac2af2debec8cbac9669b2b155bc4cd6c033b68bfd7a984a44358621fbd7fa2888974500f1a2b8c820a839f5a42666c831
+  languageName: node
+  linkType: hard
+
+"@tma.js/sdk@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@tma.js/sdk@npm:3.3.0"
+  dependencies:
+    "@tma.js/bridge": "npm:^2.3.3"
+    "@tma.js/signals": "npm:^1.0.1"
+    "@tma.js/toolkit": "npm:^1.0.4"
+    "@tma.js/transformers": "npm:^1.2.0"
+    "@tma.js/types": "npm:^1.0.2"
+    better-promises: "npm:^1.0.0"
+    error-kid: "npm:^2.0.0"
+    fp-ts: "npm:^2.16.11"
+    valibot: "npm:^1.1.0"
+  checksum: 10/68d69895f655c6b5dbeb878321756c055cebd2dc1d656511724d188fb7b98621f76487141a521ef3f0fec4b0323e129a0d92efc11ddeb216fb88543de6ab6557
+  languageName: node
+  linkType: hard
+
+"@tma.js/signals@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@tma.js/signals@npm:1.0.1"
+  checksum: 10/283bbade23b9b6bdf60bd1419086263d63dafa93cfa549be8cbe1973a4913655fe6d45ec014d2c5bbb899e2fd7cfdccbfd83d57ff52df13f9f4af41234a15752
+  languageName: node
+  linkType: hard
+
+"@tma.js/toolkit@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@tma.js/toolkit@npm:1.0.4"
+  dependencies:
+    better-promises: "npm:^1.0.0"
+    fp-ts: "npm:^2.16.11"
+  checksum: 10/a850dc0a5f97e3ca7d2be5acc261ef765f65c9a721c28cdfa0dff4ecc056e47fc51bbd0ac7171894875b0d50634bb7192f817a653b641a363fe9c85e33b1a1cf
+  languageName: node
+  linkType: hard
+
+"@tma.js/transformers@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@tma.js/transformers@npm:1.2.0"
+  dependencies:
+    "@tma.js/toolkit": "npm:^1.0.4"
+    "@tma.js/types": "npm:^1.0.2"
+    fp-ts: "npm:^2.16.11"
+    valibot: "npm:^1.1.0"
+  checksum: 10/27666a417a85914a81f3c0cd88e2981e1dd22ce27614b2636d2b1123ac86b74ba7bebcad340a5b89087ddb7039a27c707ef372e758cf7e3076744670363d3b04
+  languageName: node
+  linkType: hard
+
+"@tma.js/types@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@tma.js/types@npm:1.0.2"
+  checksum: 10/8a30a82e86892c0f859e645171ef7e33be227e7cd40eefbaef99b75583c9a29f6f7b843471be0a25d757d09366a1e6a46253b3fb5cc93326a45f03ba1126ee18
   languageName: node
   linkType: hard
 
@@ -1288,6 +1355,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"better-promises@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "better-promises@npm:1.0.0"
+  dependencies:
+    error-kid: "npm:^1.0.1"
+  checksum: 10/be9a72102aac4a5cbc4c3577cb87a63c50185514224a3a7df971582043d78fabefe3d308224e7ccdec08c082852b4612ad2182f6c47dc6e3d9a306116c18c128
+  languageName: node
+  linkType: hard
+
 "bidi-js@npm:^1.1.0":
   version: 1.1.0
   resolution: "bidi-js@npm:1.1.0"
@@ -1582,6 +1658,20 @@ __metadata:
   bin:
     errno: cli.js
   checksum: 10/93076ed11bedb8f0389cbefcbdd3445f66443159439dccbaac89a053428ad92147676736235d275612dc0296d3f9a7e6b7177ed78a566b6cd15dacd4fa0d5888
+  languageName: node
+  linkType: hard
+
+"error-kid@npm:^1.0.1":
+  version: 1.1.0
+  resolution: "error-kid@npm:1.1.0"
+  checksum: 10/5f52ff5a797a6d00829b4d9ede3ccbc921078638e4a11f76ed868af108550afed326f0fdd944e3ba5e8f6ae39cb4861e6e5b896fea6c53b647235a1d422f1aa7
+  languageName: node
+  linkType: hard
+
+"error-kid@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "error-kid@npm:2.1.1"
+  checksum: 10/ee86c6ced7d50a16abea9784071f77f8a835a004baeb6f8af84881cca82395472016765e80bbeb7b567b81cee4b9e4f105ba1f5977eac92fa80ce3ca83533a00
   languageName: node
   linkType: hard
 
@@ -1999,6 +2089,13 @@ __metadata:
   version: 3.4.4
   resolution: "flatted@npm:3.4.4"
   checksum: 10/5a6682ab87ed15e125419c61352c4bef26f310adceece03eae5f22c119d64ed47bfc0ee1948a77d0122559eaa86395ea06ef45b59bfe3db4fb13fb4cdff876de
+  languageName: node
+  linkType: hard
+
+"fp-ts@npm:^2.16.11":
+  version: 2.16.11
+  resolution: "fp-ts@npm:2.16.11"
+  checksum: 10/4c034326728c43a28b3a0f3a88c1218bca13c69ee3c420ab7a52636aa0d68cb68990308e72d93b3e5cc952e998019f7e3ba16389bb1ecc0174574536c29d3ab3
   languageName: node
   linkType: hard
 
@@ -2624,7 +2721,7 @@ __metadata:
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^7.0.1"
     "@testing-library/react": "npm:^16.3.3"
-    "@twa-dev/sdk": "npm:^8.0.2"
+    "@tma.js/sdk-react": "npm:^3.0.23"
     "@types/node": "npm:^26.6.5"
     "@types/react": "npm:^19.3.0"
     "@types/react-dom": "npm:^19.3.0"
@@ -2645,7 +2742,6 @@ __metadata:
     prettier: "npm:^3.9.10"
     react: "npm:^19.3.1"
     react-dom: "npm:^19.3.1"
-    react-fast-marquee: "npm:^1.6.5"
     react-i18next: "npm:^17.1.0"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.72.0"
@@ -2686,6 +2782,13 @@ __metadata:
   dependencies:
     minipass: "npm:^7.1.2"
   checksum: 10/f47365cc2cb7f078cbe7e046eb52655e2e7e97f8c0a9a674f4da60d94fb0624edfcec9b5db32e8ba5a99a5f036f595680ae6fe02a262beaa73026e505cc52f99
+  languageName: node
+  linkType: hard
+
+"mitt@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "mitt@npm:3.0.1"
+  checksum: 10/287c70d8e73ffc25624261a4989c783768aed95ecb60900f051d180cf83e311e3e59865bfd6e9d029cdb149dc20ba2f128a805e9429c5c4ce33b1416c65bbd14
   languageName: node
   linkType: hard
 
@@ -2987,16 +3090,6 @@ __metadata:
   peerDependencies:
     react: ^19.3.1
   checksum: 10/0b44dcb3352d85b9e27d32018b92a511b8982bf1133d83a8644eae54b26f0d86361ae3cc5f3802c80f21233c15bbd13ff26584ba0b95317f03e0371a96134e2e
-  languageName: node
-  linkType: hard
-
-"react-fast-marquee@npm:^1.6.5":
-  version: 1.6.5
-  resolution: "react-fast-marquee@npm:1.6.5"
-  peerDependencies:
-    react: ">= 16.8.0 || ^18.0.0"
-    react-dom: ">= 16.8.0 || ^18.0.0"
-  checksum: 10/ac77bc21060c359df1d56864f355dbe46422c58fdcab47c24763a17e50ab40f6ba8506b209f6e076e0ab06500edf86bb011781559d105c65421e7f681fabaaa4
   languageName: node
   linkType: hard
 
@@ -3422,6 +3515,18 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10/b40ad2847ba220695bff2d4ba4f4d60391c0fb4fb012faa7a4c18eb38b69181936f5edc55a522c4d20a788d1a879b73c3810952c9d0fd128d01cb3f22042c09e
+  languageName: node
+  linkType: hard
+
+"valibot@npm:^1.1.0":
+  version: 1.5.0
+  resolution: "valibot@npm:1.5.0"
+  peerDependencies:
+    typescript: ">=5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/87714d10c13d78202cbc01cdff3595921010a7e40a0b3cd1aa76ea78e5b394c901d5151db76be9d3233938ef26d50e3441c9733e876a497ee6b4cd932f41ab4c
   languageName: node
   linkType: hard
 

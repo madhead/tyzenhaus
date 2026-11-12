@@ -38,3 +38,27 @@ docker run -p 5000:5000 -e PORT=5000 web
 ----
 
 Don't forget to set other environment variables.
+
+=== Tunnel
+
+Telegram needs a public HTTPS URL to deliver webhooks.
+To receive updates locally, expose port 5000 with a https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-local-tunnel/[Cloudflare Tunnel].
+Follow the linked guide to create a named tunnel, route a subdomain to it, and point its ingress at `http://localhost:5000`.
+
+The tunnel is not installed as a service, so it is down unless you open it.
+
+Open the tunnel (press `Ctrl+C` to close it):
+
+[source,bash]
+----
+cloudflared tunnel run <tunnel name>
+----
+
+Point Telegram at it (see link:requests.http[]):
+
+[source,bash]
+----
+curl "https://api.telegram.org/bot$TELEGRAM_TOKEN/setWebhook" \
+  -d "url=https://<subdomain>/$TELEGRAM_TOKEN" \
+  -d "drop_pending_updates=true"
+----

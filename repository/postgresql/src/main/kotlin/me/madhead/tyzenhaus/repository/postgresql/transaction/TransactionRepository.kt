@@ -1,8 +1,12 @@
 package me.madhead.tyzenhaus.repository.postgresql.transaction
 
+import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.Timestamp
 import javax.sql.DataSource
 import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.transaction.TransactionsPage
+import me.madhead.tyzenhaus.entity.transaction.TransactionsSearchParams
 import me.madhead.tyzenhaus.repository.postgresql.PostgreSqlRepository
 import org.apache.logging.log4j.LogManager
 
@@ -111,23 +115,83 @@ class TransactionRepository(dataSource: DataSource)
         }
     }
 
-    override suspend fun search(groupId: Long): List<Transaction> {
-        logger.debug("search {}", groupId)
+    override suspend fun search(groupId: Long, params: TransactionsSearchParams): TransactionsPage {
+        logger.debug("search {} {}", groupId, params)
 
         return withConnection { connection ->
+            val (sql, binders) = connection.searchQuery(groupId, params)
+
             connection
-                .prepareStatement("""
-                    SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
-                    FROM "transaction"
-                    WHERE "group_id" = ?
-                    ORDER BY "timestamp" DESC;
-                """.trimIndent())
+                .prepareStatement(sql)
                 .use { preparedStatement ->
-                    preparedStatement.setLong(@Suppress("MagicNumber") 1, groupId)
+                    binders.forEachIndexed { index, binder -> binder(preparedStatement, index + 1) }
                     preparedStatement.executeQuery().use { resultSet ->
-                        resultSet.toTransactions()
+                        resultSet.toTransactionsPage(params.limit)
                     }
                 }
         }
     }
 }
+
+@Suppress("MagicNumber")
+private fun Connection.searchQuery(groupId: Long, params: TransactionsSearchParams): Pair<String, List<(PreparedStatement, Int) -> Unit>> {
+    val conditions = mutableListOf("(\"group_id\" = ?)")
+    val binders = mutableListOf<(PreparedStatement, Int) -> Unit>({ statement, index -> statement.setLong(index, groupId) })
+
+    params.title?.let { title ->
+        conditions += """("title" ILIKE ? ESCAPE '\')"""
+        binders += { statement, index -> statement.setString(index, "%${title.escapeLike()}%") }
+    }
+    if (params.participants.isNotEmpty()) {
+        conditions += """("payer" = ANY(?) OR "recipients" && ?)"""
+
+        val participants = createArrayOf("bigint", params.participants.toTypedArray())
+
+        binders += { statement, index -> statement.setArray(index, participants) }
+        binders += { statement, index -> statement.setArray(index, participants) }
+    }
+    params.amountFrom?.let { amount ->
+        conditions += """("amount" >= ?)"""
+        binders += { statement, index -> statement.setBigDecimal(index, amount) }
+    }
+    params.amountTo?.let { amount ->
+        conditions += """("amount" <= ?)"""
+        binders += { statement, index -> statement.setBigDecimal(index, amount) }
+    }
+    if (params.currencies.isNotEmpty()) {
+        conditions += """("currency" = ANY(?))"""
+
+        val currencies = createArrayOf("varchar", params.currencies.toTypedArray())
+
+        binders += { statement, index -> statement.setArray(index, currencies) }
+    }
+    params.dateFrom?.let { date ->
+        conditions += """("timestamp" >= ?)"""
+        binders += { statement, index -> statement.setTimestamp(index, Timestamp.from(date)) }
+    }
+    params.dateTo?.let { date ->
+        conditions += """("timestamp" <= ?)"""
+        binders += { statement, index -> statement.setTimestamp(index, Timestamp.from(date)) }
+    }
+    params.cursor?.let { cursor ->
+        conditions += """(("timestamp", "id") < (?, ?))"""
+        binders += { statement, index -> statement.setTimestamp(index, Timestamp.from(cursor.timestamp)) }
+        binders += { statement, index -> statement.setLong(index, cursor.id) }
+    }
+    binders += { statement, index -> statement.setInt(index, params.limit + 1) }
+
+    val sql = """
+        SELECT "id", "group_id", "payer", "recipients", "amount", "currency", "title", "timestamp"
+        FROM "transaction"
+        WHERE ${conditions.joinToString(" AND ")}
+        ORDER BY "timestamp" DESC, "id" DESC
+        LIMIT ?;
+    """.trimIndent()
+
+    return sql to binders
+}
+
+private fun String.escapeLike(): String = this
+    .replace("""\""", """\\""")
+    .replace("""%""", """\%""")
+    .replace("""_""", """\_""")

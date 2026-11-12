@@ -1,11 +1,11 @@
-import WebApp from "@twa-dev/sdk";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpBackend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
+import { languageCode } from "../common/telegram";
 import dayjs from "../datetime";
 
-const locale = WebApp.initDataUnsafe.user?.language_code || "en";
+const locale = languageCode() || "en";
 
 document.documentElement.lang = locale;
 dayjs.locale(locale);

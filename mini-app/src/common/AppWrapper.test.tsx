@@ -2,14 +2,14 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import AppWrapper from "./AppWrapper";
 
-const webApp = vi.hoisted(() => ({
-    platform: "ios",
-    initData: "init-data-string",
-    initDataUnsafe: { start_param: "token-123" },
+const telegram = vi.hoisted(() => ({
+    insideTelegram: true,
 }));
 
-vi.mock("@twa-dev/sdk", () => ({
-    default: webApp,
+vi.mock("./telegram", () => ({
+    isInsideTelegram: () => telegram.insideTelegram,
+    startParam: () => "token-123",
+    rawInitData: () => "init-data-string",
 }));
 
 vi.mock("react-i18next", () => ({
@@ -27,9 +27,7 @@ function mockFetch(response: { ok: boolean; headers?: Record<string, string> }) 
 
 describe("AppWrapper", () => {
     beforeEach(() => {
-        webApp.platform = "ios";
-        webApp.initData = "init-data-string";
-        webApp.initDataUnsafe = { start_param: "token-123" };
+        telegram.insideTelegram = true;
     });
 
     afterEach(() => {
@@ -38,7 +36,7 @@ describe("AppWrapper", () => {
     });
 
     it("shows an error and skips authentication when opened outside of Telegram", () => {
-        webApp.platform = "unknown";
+        telegram.insideTelegram = false;
         const fetchMock = mockFetch({ ok: true });
 
         render(

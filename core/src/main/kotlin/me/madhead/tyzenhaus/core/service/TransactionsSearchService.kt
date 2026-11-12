@@ -1,21 +1,8 @@
 package me.madhead.tyzenhaus.core.service
 
-import me.madhead.tyzenhaus.entity.transaction.Transaction
+import me.madhead.tyzenhaus.entity.transaction.TransactionsPage
+import me.madhead.tyzenhaus.entity.transaction.TransactionsSearchParams
 import me.madhead.tyzenhaus.repository.TransactionRepository
-
-/**
- * Transaction search parameters.
- *
- * A Group (Chat) ID is not considered a search parameter; it is supplied as a standalone parameter based on a security token.
- *
- * All parameters are optional. If a parameter is omitted, any transaction will be considered a match. Therefore, using a default, empty
- * TransactionsSearchParams object will result in all transactions being returned.
- *
- * @property title The title to search for.
- */
-data class TransactionsSearchParams(
-    val title: String? = null,
-)
 
 /**
  * Search for transactions.
@@ -24,9 +11,9 @@ class TransactionsSearchService(
     private val transactionRepository: TransactionRepository,
 ) {
     /**
-     * Lists transactions of the [group], matching the given [ignored].
+     * Lists transactions of the [group], matching the given [params], newest first.
      */
-    suspend fun search(group: Long, ignored: TransactionsSearchParams): List<Transaction> {
-        return transactionRepository.search(group)
+    suspend fun search(group: Long, params: TransactionsSearchParams): TransactionsPage {
+        return transactionRepository.search(group, params)
     }
 }

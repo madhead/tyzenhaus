@@ -14,4 +14,10 @@ describe("Error", () => {
 
         expect(container.querySelector("#error")).toHaveTextContent("Boom");
     });
+
+    it("announces the error to assistive tech via role=alert", () => {
+        render(<Error error="Boom" />);
+
+        expect(screen.getByRole("alert")).toHaveTextContent("Boom");
+    });
 });
