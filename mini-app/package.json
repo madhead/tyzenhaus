@@ -14,7 +14,7 @@
         "react": "^19.3.1",
         "react-dom": "^19.3.1",
         "react-fast-marquee": "^1.6.5",
-        "react-i18next": "^17.1.0"
+        "react-i18next": "^18.0.1"
     },
     "devDependencies": {
         "@eslint-react/eslint-plugin": "^5.28.6",
