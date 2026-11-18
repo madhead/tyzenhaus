@@ -2131,15 +2131,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.5.3":
-  version: 26.5.3
-  resolution: "i18next@npm:26.5.3"
+"i18next@npm:^27.1.2":
+  version: 27.1.2
+  resolution: "i18next@npm:27.1.2"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/96d2ee4ea7aff492b6ed8f1c5c134f1e1477b34f8046f2e70fbc88a361829c085b5b4a26ebea91c0479c451c7747449d7af0216bf9cdebc533858ad6d89c352c
+  checksum: 10/772ec738c2ac75d3b1e4bbd1f92d1271ce1b3eeeae4c1d00a91404095067b358707dca9f5469d5d3206e34f78df9c71a953666ba3bc2df08509903dd1f1faefc
   languageName: node
   linkType: hard
 
@@ -2636,7 +2636,7 @@ __metadata:
     eslint-plugin-jsx-a11y-x: "npm:^0.2.0"
     eslint-plugin-react-hooks: "npm:^7.1.1"
     globals: "npm:^17.13.0"
-    i18next: "npm:^26.5.3"
+    i18next: "npm:^27.1.2"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-http-backend: "npm:^4.0.4"
     jsdom: "npm:^30.1.3"
